@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: ./editor-uibase/libs/androidsvg_1.5.jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/editor-uibase/libs/androidsvg_1.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

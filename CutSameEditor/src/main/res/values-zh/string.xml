@@ -1,0 +1,5 @@
+<resources>
+    <string name="cutsame_tips_resource_copying_to_sdcard">正在复制资源到 SD 卡，请稍后</string>
+    <string name="ck_tips_resource_copying">资源复制中...</string>
+    <string name="ck_has_saved_local_and_draft">已保存到本地和草稿箱</string>
+</resources>

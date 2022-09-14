@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CenterMaskView">
+        <attr name="civLineColor" format="color" />
+        <attr name="civLineWidth" format="dimension" />
+        <attr name="civMaskColor" format="color" />
+    </declare-styleable>
+
+
+    <declare-styleable name="PlaySliderView">
+        <attr name="lineColor" format="color" />
+        <attr name="lineHintColor" format="color" />
+        <attr name="handleStrokeColor" format="color" />
+        <attr name="drawDefaultPoint" format="boolean" />
+        <attr name="handleColor" format="color" />
+        <attr name="handle_stroke_width" format="dimension" />
+        <attr name="handle_radius" format="dimension" />
+        <attr name="lineWidth" format="dimension" />
+        <attr name="progressLineWidth" format="dimension" />
+        <attr name="fillWidth" format="boolean" />
+        <attr name="needHandle" format="boolean" />
+        <attr name="floatingBottom" format="boolean" />
+        <attr name="shadowColor" format="color" />
+
+    </declare-styleable>
+</resources>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: artifacts:aar_vesdk:unspecified">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../build/aar_vesdk/.transforms/e26dc3b14ad8006469ae77a9f9ae87d5/jetified-vesdk-11.3.2.1-tob/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../build/aar_vesdk/.transforms/e26dc3b14ad8006469ae77a9f9ae87d5/jetified-vesdk-11.3.2.1-tob/res" />
+      <root url="file://$PROJECT_DIR$/../build/aar_vesdk/.transforms/e26dc3b14ad8006469ae77a9f9ae87d5/jetified-vesdk-11.3.2.1-tob/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

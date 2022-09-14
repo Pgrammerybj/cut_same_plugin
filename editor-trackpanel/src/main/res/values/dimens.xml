@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="track_height">50dp</dimen>
+    <dimen name="track_line_width">2dp</dimen>
+    <dimen name="track_border_width">20dp</dimen>
+    <dimen name="track_transition_width">28dp</dimen>
+
+    <dimen name="corner">2dp</dimen>
+
+</resources>

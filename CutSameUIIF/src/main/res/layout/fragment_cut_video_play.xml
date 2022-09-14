@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/player_background"
+    tools:context=".cut.preview.CutPreviewPlayerActivity">
+
+    <com.cutsame.ui.customview.StickyHolderSurfaceView
+        android:id="@+id/videoSurface"
+        android:layout_marginLeft="@dimen/video_player_left_right_margin"
+        android:layout_marginRight="@dimen/video_player_left_right_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/videoSurfaceCover"
+        android:visibility="gone"
+        android:background="@color/player_background"
+        android:layout_marginLeft="@dimen/video_player_left_right_margin"
+        android:layout_marginRight="@dimen/video_player_left_right_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/videoError"
+        android:layout_centerInParent="true"
+        android:textColor="#F5F5F5"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

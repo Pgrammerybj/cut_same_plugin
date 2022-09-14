@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="frameScroller" format="integer" type="id" />
+
+    <!--    用于占位-->
+    <!--    <item name="tv_vn" type="id" />-->
+    <!--    <item name="tv_in" type="id" />-->
+    <!--    <item name="tv_id" type="id" />-->
+</resources>

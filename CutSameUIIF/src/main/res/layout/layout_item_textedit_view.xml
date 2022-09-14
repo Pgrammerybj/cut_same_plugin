@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".cut.preview.CutPlayerActivity">
+
+    <View
+        android:id="@+id/line_view"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="#33FFFFFF"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            android:id="@+id/thumb_imgview"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@color/video_thumb_invalid"
+            android:scaleType="fitXY"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="0"
+            />
+
+        <LinearLayout
+            android:id="@+id/text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="15sp"/>
+            <View
+                android:id="@+id/line_top_view"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+            <LinearLayout
+                android:id="@+id/text_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_text_edit_edit"
+                    android:layout_marginRight="7dp"
+                    android:layout_marginEnd="7dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="#57FFFFFF"
+                    android:text="@string/cutsame_edit_click_to_edit_hint"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

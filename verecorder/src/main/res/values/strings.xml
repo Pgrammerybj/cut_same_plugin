@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="format_time_limit">%.1fs / %.1fs</string>
+    <string name="ve_record_go_editor">下一步</string>
+</resources>

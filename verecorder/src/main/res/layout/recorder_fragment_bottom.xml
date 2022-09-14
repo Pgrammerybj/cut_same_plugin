@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vg_bottom_menu_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="#000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_menu_container"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_pic_back"
+            android:drawableTop="@drawable/ic_pic_back"
+            android:text="@string/ck_back"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textColor="#fff"
+            android:layout_marginLeft="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_pic_save"
+            android:drawableTop="@drawable/ic_pic_save"
+            android:text="@string/ck_save"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#fff"
+            android:layout_marginRight="27dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <com.vesdk.verecorder.record.demo.view.CircularProgressView
+            android:id="@+id/progress"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bt_pic_selector"
+            app:backColor="@color/transparent"
+            app:backWidth="5dp"
+            app:progColor="@color/cut_same_main_color"
+            app:progWidth="5dp"
+            app:progress1="0" />
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tv_editor"
+            android:layout_below="@+id/progress"
+            android:layout_marginTop="2dp"
+            android:text="@string/ck_import_editing"
+            android:textSize="12sp"
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/ll_left"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ll_sticker"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/v_camera_sticker_ic"
+                    android:src="@drawable/ic_bt_sticker" />
+
+                <TextView
+                    android:id="@+id/tv_camera_sticker_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ck_props"
+                    android:textColor="@color/featureboard_bg"
+                    android:shadowColor="@color/black_all"
+                    android:shadowRadius="1"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_filter"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:src="@drawable/ic_bt_filter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ck_filter"
+                    android:textColor="@color/featureboard_bg"
+                    android:shadowColor="@color/black_all"
+                    android:shadowRadius="1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+
+            android:layout_centerInParent="true"
+
+            android:layout_toRightOf="@+id/progress"
+            android:layout_marginLeft="50dp"
+            android:id="@+id/ll_beauty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+           >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_bt_beauty" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ck_beautify"
+                android:textColor="@color/featureboard_bg"
+                android:shadowColor="@color/black_all"
+                android:shadowRadius="1"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_camera_time_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/rl_bottom_menu_container"
+        android:layout_centerHorizontal="true"
+        tools:text="1.6s/2.6s"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@color/white"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <include layout="@layout/recorder_linearlayout_custom"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

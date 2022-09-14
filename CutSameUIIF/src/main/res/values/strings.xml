@@ -1,0 +1,97 @@
+<resources>
+    <string name="creation_title">剪同款</string>
+
+    <!--common-->
+    <string name="cutsame_common_abandon">Abandon</string>
+    <string name="cutsame_common_cancel">Cancel</string>
+    <string name="cutsame_common_finish">Finish</string>
+    <string name="cutsame_common_media_duration">%.1f s</string>
+    <string name="cutsame_common_video_error">Error（%1$d）</string>
+    <string name="cutsame_common_title_video">Videos</string>
+    <string name="cutsame_common_title_image">Photos</string>
+    <string name="cutsame_albumn_all_photo">All photos</string>
+    <string name="cutsame_common_title_all">Albums</string>
+    <string name="cutsame_common_sure">Sure</string>
+    <string name="cutsame_common_media_duration_s">%.1fs</string>
+<!--    <string name="media_time">%.1f 秒</string>  --> <!-- 无用词条 -->
+    <string name="cutsame_common_open_permission">Please turn on camera, recording and storage permissions for this app</string>
+
+    <!--preview-->
+    <string name="cutsame_edit_title">Video editing</string>
+    <string name="cutsame_export_title">Export</string>
+    <string name="cutsame_common_loading">Loading...</string>
+
+    <!--template-->
+<!--    <string name="template_desc">%1$d个素材 </string>--><!-- 只有1个替代符 1%无意义 -->
+    <string name="cutsame_feed_no_more">No more for now</string>
+    <string name="cutsame_feed_fragment_num">%d material</string>
+    <string name="cutsame_feed_retry">Retry</string>
+    <string name="cutsame_feed_net_error">Network errors</string>
+    <string name="cutsame_feed_net_error_desc">No network currently, please check and try again</string>
+    <string name="cutsame_feed_no_category">No category</string>
+
+    <!--export-->
+    <string name="cutsame_export_save_album">Saved to device</string>
+    <string name="cutsame_export_tip_termination">Exporting video. \n Please do not lock the screen or leave the App.</string>
+
+    <!--template-->
+    <string name="cutsame_feed_select_material">Create New Project</string>
+
+    <!--gallery-->
+    <string name="cutsame_pick_tip_duration_invalid">The duration cannot be less than%s</string>
+    <string name="cutsame_pick_selected">Selected</string>
+    <string name="cutsame_pick_tip_category_restriction">Both video and picture can be selected</string>
+<!--    <string name="pick_most_count">最多选择%s个素材</string>--><!-- 相同的value 统一成%d词条 -->
+    <string name="cutsame_pick_tip_support_preview_video">The current category only supports preview videos</string>
+    <string name="cutsame_pick_tip_support_preview_image">The current category only supports images</string>
+    <string name="cutsame_pick_tip_most_count">Select up to%d materials</string>
+
+    <!--compress-->
+    <string name="cutsame_compose_video_compose_loading">Loading </string>
+
+    <!--edit-->
+    <string name="cutsame_edit_abandon_edit">Abandon editing?</string>
+    <string name="cutsame_edit_title_abandon_edit">Abandon editing</string>
+    <string name="cutsame_edit_tip_abandon_text_edit">Are you sure to abandon all text?</string>
+    <string name="cutsame_pick_tip_album_not_found">The album cannot be found</string>
+    <string name="cutsame_eidt_replace_asset">Change material</string>
+    <string name="cutsame_edit_title_picture_cut">Image cropping</string>
+    <string name="cutsame_edit_title_text_edit">Text</string>
+    <string name="cutsame_edit_tip_text_no_editable">No editable text in this template</string>
+    <string name="cutsame_edit_click_to_edit_hint">Edit</string>
+    <string name="cutsame_edit_tip_no_content">No content</string>
+    <string name="cutsame_edit_multi_video_time_select">%ss selected</string>
+    <string name="cutsame_edit_title_video_cut">Video cutting</string>
+
+    <string name="cutsame_edit_tip_more_edit">Tips: More features require the purchase of the Video Editor SDK (standard version) to enjoy the editing at will.</string>
+    <string name="cutsame_edit_more_edit">More</string>
+    <string name="cutsame_edit_replace">Replace</string>
+    <string name="cutsame_edit_cut">Cut</string>
+    <string name="cutsame_edit_volume">Volumn</string>
+    <string name="cutsame_edit_tip_picture_cut">Drag to select the picture display area</string>
+    <string name="cutsame_edit_tip_not_find_edit_more">No more edit pages found</string>
+    <string name="cutsame_edit_tip_create_json_file_failure">JSON file creation failed</string>
+
+    <!-- other -->
+    <string name="cutsame_common_preview">Preview</string>
+    <string name="cutsame_pick_select">Select</string>
+    <string name="cutsame_common_lable_albumn">Album</string>
+    <string name="cutsame_not_support_emoji">Does not support emoji for now</string>
+    <string name="cutsame_pick_not_support_h265">H265 video with this resolution is not supported temporarily</string>
+    <string name="cutsame_compose_need_template_url">The composite page needs templateUrl</string>
+    <string name="cutsame_edit_export_failed">Failed to export</string>
+    <string name="cutsame_album_next">Next</string>
+
+
+    <string name="ck_record_photo">拍照</string>
+    <string name="ck_record_video">视频</string>
+    <string name="pick_from_album">相册导入</string>
+    <string name="pick_from_camera">直接拍摄</string>
+    <string name="camera_video_confirm">确认并继续拍摄</string>
+    <string name="camera_video_confirm_save">保存到本地相册</string>
+    <string name="pick_tips_format">添加%d段素材</string>
+    <string name="pick_resource_loadding">模版下载中...</string>
+    <string name="pick_record_loadding">Loading...</string>
+    <string name="cutsame_gallery_preview_tip">左右滑动预览其他素材</string>
+
+</resources>
