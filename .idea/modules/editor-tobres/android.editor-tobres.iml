@@ -58,6 +58,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-tobres/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-tobres/src/main/assets" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../editor-tobres/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../editor-tobres/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/editor-tobres/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/editor-tobres/generated/aidl_source_output_dir/debugAndroidTest/out" />

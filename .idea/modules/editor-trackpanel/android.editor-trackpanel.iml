@@ -74,6 +74,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-trackpanel/src/androidTest/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-trackpanel/src/main/res" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../editor-trackpanel/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../editor-trackpanel/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/editor-trackpanel/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/editor-trackpanel/generated/aidl_source_output_dir/debugAndroidTest/out" />

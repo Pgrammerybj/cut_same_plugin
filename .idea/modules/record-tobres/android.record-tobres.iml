@@ -57,6 +57,7 @@
     <content url="file://$MODULE_DIR$/../../../record-tobres">
       <sourceFolder url="file://$MODULE_DIR$/../../../record-tobres/src/main/assets" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../record-tobres/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../record-tobres/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/record-tobres/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/record-tobres/generated/aidl_source_output_dir/debugAndroidTest/out" />

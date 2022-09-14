@@ -73,6 +73,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-btmpanel/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-btmpanel/src/main/res" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../editor-btmpanel/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../editor-btmpanel/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/editor-btmpanel/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/editor-btmpanel/generated/aidl_source_output_dir/debugAndroidTest/out" />

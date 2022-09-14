@@ -60,6 +60,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../CutSameEditor/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../CutSameEditor/src/main/res" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../CutSameEditor/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../CutSameEditor/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/CutSameEditor/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/CutSameEditor/generated/aidl_source_output_dir/debugAndroidTest/out" />

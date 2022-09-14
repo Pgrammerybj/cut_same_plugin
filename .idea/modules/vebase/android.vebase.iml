@@ -58,6 +58,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../vebase/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../vebase/src/main/res" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../vebase/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../vebase/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/vebase/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/vebase/generated/aidl_source_output_dir/debugAndroidTest/out" />

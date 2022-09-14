@@ -33,6 +33,7 @@
     <content url="file://$MODULE_DIR$/../../../library-res">
       <sourceFolder url="file://$MODULE_DIR$/../../../library-res/src/main/res" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../library-res/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../library-res/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/library-res/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/library-res/generated/aidl_source_output_dir/debugAndroidTest/out" />

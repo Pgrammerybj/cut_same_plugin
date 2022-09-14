@@ -76,6 +76,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-uibase/src/main/assets" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../editor-uibase/src/main/res" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../editor-uibase/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../editor-uibase/build" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/editor-uibase/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/editor-uibase/generated/aidl_source_output_dir/debugAndroidTest/out" />
