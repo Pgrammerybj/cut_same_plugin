@@ -18,9 +18,10 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/editor-tobres/android.editor-tobres.iml" filepath="$PROJECT_DIR$/.idea/modules/editor-tobres/android.editor-tobres.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/editor-trackpanel/android.editor-trackpanel.iml" filepath="$PROJECT_DIR$/.idea/modules/editor-trackpanel/android.editor-trackpanel.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/editor-uibase/android.editor-uibase.iml" filepath="$PROJECT_DIR$/.idea/modules/editor-uibase/android.editor-uibase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fragment-rigge/android.fragment-rigge.iml" filepath="$PROJECT_DIR$/.idea/modules/fragment-rigge/android.fragment-rigge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fragment-rigger/android.fragment-rigger.iml" filepath="$PROJECT_DIR$/.idea/modules/fragment-rigger/android.fragment-rigger.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-ola/android.library-ola.iml" filepath="$PROJECT_DIR$/.idea/modules/library-ola/android.library-ola.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-res/android.library-res.iml" filepath="$PROJECT_DIR$/.idea/modules/library-res/android.library-res.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library_ola/android.library_ola.iml" filepath="$PROJECT_DIR$/.idea/modules/library_ola/android.library_ola.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/record-tobres/android.record-tobres.iml" filepath="$PROJECT_DIR$/.idea/modules/record-tobres/android.record-tobres.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/small-window/android.small-window.iml" filepath="$PROJECT_DIR$/.idea/modules/small-window/android.small-window.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/vebase/android.vebase.iml" filepath="$PROJECT_DIR$/.idea/modules/vebase/android.vebase.iml" />

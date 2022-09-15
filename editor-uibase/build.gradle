@@ -30,6 +30,8 @@ dependencies {
     api fileTree(dir: "libs", include: ["*.jar"])
 
     api project(':editor-core')
+    api project(':aar_nleeditor_ck')
+    api project(':aar_vesdk')
 
 //    公用资源在base中依赖
 

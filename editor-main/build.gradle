@@ -56,6 +56,7 @@ dependencies {
     api project(':editor-trackpanel')
     api project(':editor-btmpanel')
     api project(':editor-preview')
+    api project(':aar_list')
 
     api project(':editor-uibase')
     implementation 'androidx.exifinterface:exifinterface:1.3.3'

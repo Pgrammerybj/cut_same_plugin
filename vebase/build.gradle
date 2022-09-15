@@ -53,8 +53,8 @@ dependencies {
     //权限
     api rootProject.ext.dependencies["easy-permission"]
     api 'com.github.bumptech.glide:glide:4.13.2'
-//    api rootProject.ext.dependencies["fragment-rigger"]
-    api 'com.justkiddingbaby:fragment-rigger:1.4.4'
+//    api 'com.justkiddingbaby:fragment-rigger:1.4.4'
+    api project(':fragment-rigger')
 
     api rootProject.ext.dependencies["smoothprogressbar"]
 

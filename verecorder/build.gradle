@@ -30,10 +30,8 @@ dependencies {
     // 引用base库
     api project(':vebase')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//    compileOnly(name: 'list-1.0.1-alpha.24', ext: 'aar')
     implementation project(':record-tobres')//内置素材
 //    api project(':library-core')
-//    implementation project(":library_ola")
 
 //    implementation project(":aar_cutsamef")
     implementation project(":aar_list")

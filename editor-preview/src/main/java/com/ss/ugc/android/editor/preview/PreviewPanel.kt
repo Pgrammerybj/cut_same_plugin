@@ -4,41 +4,24 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
-import android.view.LayoutInflater
-import android.view.SurfaceHolder
-import android.view.SurfaceView
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.view.WindowManager
+import android.view.*
 import android.widget.FrameLayout
 import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import com.bytedance.ies.nle.editor_jni.NLETrackSlot
 import com.ss.ugc.android.editor.base.monitior.ReportUtils.nleModel
 import com.ss.ugc.android.editor.base.theme.ThemeStore
-import com.ss.ugc.android.editor.base.utils.LogUtils
 import com.ss.ugc.android.editor.base.viewmodel.PreviewStickerViewModel
 import com.ss.ugc.android.editor.base.viewmodel.VideoMaskViewModel
 import com.ss.ugc.android.editor.core.NLEEditorContext
 import com.ss.ugc.android.editor.core.toMilli
 import com.ss.ugc.android.editor.core.utils.DLog
 import com.ss.ugc.android.editor.core.vm.EditViewModelFactory.Companion.viewModelProvider
-import com.ss.ugc.android.editor.preview.infosticker.InfoStickerGestureAdapter
-import com.ss.ugc.android.editor.preview.infosticker.InfoStickerGestureListener
-import com.ss.ugc.android.editor.preview.infosticker.InfoStickerGestureManager
-import com.ss.ugc.android.editor.preview.infosticker.InfoStickerGestureView
-import com.ss.ugc.android.editor.preview.infosticker.OnInfoStickerDisPlayChangeListener
+import com.ss.ugc.android.editor.preview.infosticker.*
 import com.ss.ugc.android.editor.preview.mask.VideoMaskDrawPresenter
-import com.ss.ugc.android.editor.preview.subvideo.IVideoChecker
-import com.ss.ugc.android.editor.preview.subvideo.OnVideoDisplayChangeListener
-import com.ss.ugc.android.editor.preview.subvideo.SubVideoGestureManager
-import com.ss.ugc.android.editor.preview.subvideo.SubVideoViewModel
-import com.ss.ugc.android.editor.preview.subvideo.VideoGestureAdapter
-import com.ss.ugc.android.editor.preview.subvideo.VideoGestureLayout
+import com.ss.ugc.android.editor.preview.subvideo.*
 
 class PreviewPanel : Fragment(), IPreviewPanel {
 

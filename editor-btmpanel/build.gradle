@@ -31,6 +31,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':editor-uibase')
+    implementation project(':aar_list')
     implementation rootProject.ext.support["appcompat"]
 
     testImplementation 'junit:junit:4.13.2'

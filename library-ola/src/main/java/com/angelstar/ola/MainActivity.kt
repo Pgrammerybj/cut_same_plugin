@@ -1,5 +1,6 @@
-package com.angelstar.library_ola
+package com.angelstar.ola
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -12,7 +13,7 @@ import com.ss.ugc.android.editor.core.utils.Toaster
 import com.vesdk.RecordInitHelper
 import com.vesdk.vebase.task.UnzipTask
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

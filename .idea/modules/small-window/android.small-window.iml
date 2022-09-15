@@ -62,7 +62,10 @@
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/aidl_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/aidl_source_output_dir/debugAndroidTest/out" />
-    <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/ap_generated_sources/debug/out" />
+    <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/ap_generated_sources/debug/out">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/small-window/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/small-window/generated/ap_generated_sources/debug/out" isTestSource="false" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/ap_generated_sources/debugAndroidTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/ap_generated_sources/debugUnitTest/out" />
     <content url="file://$MODULE_DIR$/../../../../build/small-window/generated/renderscript_source_output_dir/debug/out" />

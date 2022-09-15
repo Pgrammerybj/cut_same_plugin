@@ -16,7 +16,6 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 
-import com.dmcbig.mediapicker.utils.ScreenUtils;
 import com.ss.android.ttvecamera.TECameraSettings;
 import com.ss.android.vesdk.VECameraCapture;
 import com.ss.android.vesdk.VEDisplaySettings;
@@ -33,6 +32,7 @@ import com.vesdk.vebase.LogUtils;
 import com.vesdk.vebase.util.AutoPlusCircleInteger;
 import com.vesdk.vebase.util.GsonUtil;
 import com.vesdk.verecorder.R;
+import com.vesdk.verecorder.record.ScreenUtils;
 import com.vesdk.verecorder.record.preview.model.CountDown;
 import com.vesdk.verecorder.record.preview.model.PreviewConfig;
 import com.vesdk.verecorder.record.preview.model.Resolution;

@@ -39,18 +39,18 @@ ext {
             "retrofit2_adapter-rxjava2": "com.squareup.retrofit2:adapter-rxjava2:2.9.0",
             "retrofit2_converter-gson" : "com.squareup.retrofit2:converter-gson:2.9.0",
             "videocache"               : "com.danikula:videocache:2.7.1",
-            "fragment-rigger"          : "com.justkiddingbaby:fragment-rigger:1.4.4",
+//            "fragment-rigger"          : "com.justkiddingbaby:fragment-rigger:1.4.4",
     ]
 
     // 依赖的内部库
-    versions = [
-            "vesdk"         : "11.3.2.1-tob",
-            "nleplatform"   : "11.6.1.0-rc.5-ck",
-            "effectplatform": "760.0.0.175-cktob",
-            "editor"        : "0.5.0-alpha.87-ck",
-            "cutsameconsumer": "2.0.6-alpha.12-ck",
-            'veRecorder'     : '0.0.1-alpha.19'
-    ]
-    vesdk_version = versions['vesdk']
-    VESDK_VERSION = versions['vesdk']//NLE源码依赖版本
+//    versions = [
+//            "vesdk"         : "11.3.2.1-tob",
+//            "nleplatform"   : "11.6.1.0-rc.5-ck",
+//            "effectplatform": "760.0.0.175-cktob",
+//            "editor"        : "0.5.0-alpha.87-ck",
+//            "cutsameconsumer": "2.0.6-alpha.12-ck",
+//            'veRecorder'     : '0.0.1-alpha.19'
+//    ]
+//    vesdk_version = versions['vesdk']
+//    VESDK_VERSION = versions['vesdk']//NLE源码依赖版本
 }

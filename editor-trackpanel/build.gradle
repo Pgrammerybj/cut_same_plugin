@@ -30,7 +30,6 @@ dependencies {
     api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation project(':editor-uibase')
 //    implementation project(':library-core')
-//    implementation project(":library_ola")
 
 //    implementation project(":aar_cutsamef")
 //    implementation project(":aar_list_1.0.1")

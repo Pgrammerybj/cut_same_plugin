@@ -1,6 +1,4 @@
 package com.vesdk.vebase.demo.fragment;
-
-
 import com.jkb.fragment.rigger.annotation.Puppet;
 import com.vesdk.vebase.demo.base.BaseFragment;
 import com.vesdk.vebase.demo.base.IPresenter;

@@ -37,7 +37,7 @@ object EditorManager {
             EditorSDK.EDITOR_SP,
             AppCompatActivity.MODE_PRIVATE
         ).getBoolean("copy", false)
-        val isShowDialog = false
+        val isShowDialog = true
         if (!resReady) {
             val dialog = WaitingDialog(context)
             // 设置ProgressDialog 标题

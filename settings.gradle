@@ -9,12 +9,12 @@ localPropertiesFile.withReader("UTF-8") { reader -> properties.load(reader) }
 def flutterSdkPath = properties.getProperty("flutter.sdk")
 assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
 apply from: "$flutterSdkPath/packages/flutter_tools/gradle/app_plugin_loader.gradle"
-include ':library_ola'
 
 include ':aar_cutsamef'
 include ':aar_list'
 include ':aar_nleeditor_ck'
 include ':aar_vesdk'
+include ':fragment-rigge'
 
 include ':CutSameEditor'
 include ':editor-main'
@@ -32,3 +32,4 @@ include ':editor-trackpanel'
 include ':editor-preview'
 include ':editor-tobres'
 include ':library-res'
+include ':fragment-rigger'

@@ -30,7 +30,6 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dmcbig.mediapicker.utils.ScreenUtils;
 import com.ss.android.ttve.model.VEFrame;
 import com.ss.android.vesdk.VECameraCapture;
 import com.ss.android.vesdk.VECameraSettings;
@@ -52,6 +51,7 @@ import com.vesdk.vebase.ToastUtils;
 import com.vesdk.vebase.fragment.BaseFragment;
 import com.vesdk.vebase.old.util.FileUtil;
 import com.vesdk.verecorder.R;
+import com.vesdk.verecorder.record.ScreenUtils;
 import com.vesdk.verecorder.record.demo.adapter.VideoAdapter;
 import com.vesdk.verecorder.record.demo.view.CircularProgressView;
 import com.vesdk.verecorder.record.demo.view.CountDownDialog;

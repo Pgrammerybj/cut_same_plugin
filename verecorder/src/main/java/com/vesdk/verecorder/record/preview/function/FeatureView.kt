@@ -11,9 +11,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.FrameLayout
-import com.dmcbig.mediapicker.utils.ScreenUtils
 import com.ss.android.vesdk.VEFocusSettings
 import com.vesdk.vebase.LogUtils
+import com.vesdk.verecorder.record.ScreenUtils
 import com.vesdk.verecorder.record.preview.function.CameraViewHelper.SimpleChangeListener
 import com.vesdk.verecorder.record.preview.model.Resolution
 import com.vesdk.verecorder.record.preview.viewmodel.PreviewModel
