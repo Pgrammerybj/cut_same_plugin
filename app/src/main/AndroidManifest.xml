@@ -7,9 +7,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".APP"
+        android:name=".AppApplication"
         android:icon="@mipmap/ic_launcher"
-        android:label="cut_same_plugin_example">
+        android:label="剪同款插件">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

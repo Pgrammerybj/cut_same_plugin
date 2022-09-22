@@ -5,6 +5,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.ss.android.vesdk.VEAuth;
+import com.ss.android.vesdk.VEConfigCenter;
+import com.ss.android.vesdk.VEConfigKeys;
 import com.ss.android.vesdk.VELogProtocol;
 import com.ss.android.vesdk.VESDK;
 import com.vesdk.vebase.LogUtils;
@@ -22,24 +24,20 @@ import static com.ss.android.vesdk.VELogUtil.LOG_LEVEL_D;
  * 基础库自身初始化操作
  */
 public class BaseModuleInit implements IModuleInit {
-    public static final String TAG = "------";
+    public static final String TAG = "---JackYang---";
 
     @Override
     public boolean onInitAhead(Application application) {
-
         Log.e(TAG, "基础层初始化 BaseModuleInit onInitAhead.....");
-
         initVESDK(application);
         return false;
     }
 
     private static final String LICENSE_PATH = "resource/LicenseBag.bundle";
-    private static final String LICENSE_NAME = "labcv_test_20211210_20220630_com.bytedance.solution.ck_4.0.4.0.licbag";
+    private static final String LICENSE_NAME = "labcv_test_20220608_20221231_com.bytedance.solution.ck_4.0.2.5.licbag";
+
     private void initVESDK(Application application) {
         VESDK.setAssetManagerEnable(true);
-        // 设置算法（人脸、手势、物体识别...）模型目录
-//        VESDK.setEffectResourceFinder(new AssetResourceFinder( application.getAssets(), "model/"));
-//        VESDK.setEffectResourceFinder(new FileResourceFinder(ResourceHelper.getInstance().getModelPath()));
         // 初始化vesdk 环境
         VESDK.init(application, Environment.getExternalStorageDirectory().getAbsolutePath());
 
@@ -74,6 +72,10 @@ public class BaseModuleInit implements IModuleInit {
 
         //开启sticker新引擎
         VESDK.setEnableStickerAmazing(true);
+
+        // 解决导入16：9的视频或图片出现黑边的问题
+        VEConfigCenter.getInstance()
+                .updateValue(VEConfigKeys.KEY_ENABLE_RENDER_ENCODE_RESOLUTION_ALIGN4, true);
     }
 
     @Override

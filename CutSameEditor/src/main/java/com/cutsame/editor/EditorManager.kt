@@ -49,7 +49,7 @@ object EditorManager {
             var startTime = System.currentTimeMillis()
             EditorResCopyTask(context, object : EditorResCopyTask.IUnzipViewCallback {
                 override fun onStartTask() {
-//                    Toaster.show("正在复制资源到 SD 卡，请稍后，复制完成后会自动跳转到编辑页面")
+                    Toaster.show("正在复制资源到 SD 卡，请稍后，复制完成后会自动跳转到编辑页面")
                     isCopying = true
                     if (isShowDialog) {
                         dialog.show()

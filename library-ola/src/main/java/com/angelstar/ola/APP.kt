@@ -1,10 +1,11 @@
-package com.angelstar.cutsame.cut_same_plugin_example
+package com.angelstar.ola
 
 import android.app.Application
 import android.content.Context
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import com.bef.effectsdk.FileResourceFinder
 import com.bytedance.ies.cutsame.util.SharedPreferencesUtils
 import com.cutsame.editor.EditorManager
 import com.cutsame.solution.AuthorityConfig
@@ -15,18 +16,24 @@ import com.cutsame.ui.ApiUtil
 import com.ss.android.ugc.cut_log.LogConfig
 import com.ss.android.ugc.cut_log.LogIF
 import com.ss.android.ugc.cut_log.LogWrapper
+import com.ss.android.vesdk.VEAuth
+import com.ss.android.vesdk.VEConfigCenter
+import com.ss.android.vesdk.VEConfigKeys
+import com.ss.android.vesdk.VESDK
+import com.vesdk.vebase.Constant
+import com.vesdk.vebase.R
+import com.vesdk.vebase.resource.ResourceHelper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 
-class APP : Application() {
+open class APP : Application() {
+
     private val TAG = "cut_APP"
-    private val LICENSE_NAME = "labcv_test_20220629_20221231_com.bytedance.solution.cutsame_4.0.2.6union.licbag"
     private val AUDIO_AUTH_KEY = "iWwiXvXhlN"
+    private val LICENSE_NAME = "labcv_test_20220629_20221231_com.bytedance.solution.cutsame_4.0.2.6union.licbag"
     private val AUDIO_AUTH_TOKEN = "RFUnZxken6kOX3vPi8qfdVqP398MoG+N3Hz1VfbMLgUl+mH1O/uA/lvxITb6T/8orIt3jsH0+3tlX2vlyM9F+To/cCIctLgX6GbSzOXGmUEHnHfkAljqN6/KpRZkqQ4zrQGsewFmdqH68vuazV8qKLRFsuiVoKNU0xd0jDuvAQ8HqHLrWWVwU6vP+AdDlXB9mOnql34Q25aZWb95XTpJJpAEr3OZTNSep7J1TgECuv+8thrOZl/8ZighHbgub/5PH1cfjX1UboZwQNV6guJQOd6+T13CYxffg7cLGfS74ulJc5h4yYX/M3wd5WVfsfqqIv5QSq6T2yjM5zOEIc/lSKzLZTvXcSYr+QB4eW5Fg39PpEEpxc1ZsTqCxTvsQZ/vmVWA9Zt790bngbHKG7I31Bzm8qHikFV5s8ldVmWliGrYh+u51l/MPIwaGDkFr5e+qIl79gKCUJY9jOgXX2K4Lu1Dm1eE1HARRv2EA675ZgePKRtM8tirrQEwdEzGc1XROKlTvMNfF7Zel8HiaCHndfyAIwT+QjPDDT7D3IwL/2L+pvJ8tt7DqaZApqBNs1rYry7DUlR1NdERLbXPLNUq5kDNlULLFyVoMuDt3JkpnJYd7L4x0w81c77bHPOrkmT2VCxOmxy/5wa4PWXOVZVcCSGykQk3wKz21y7AaOQNvpQ4iqCF87bBiqdfo82b/6eaMr+/sRJYZlZ9D5fVUbveGj6D5lQBz/ob1on6XozWSHTrwjQDKE1YG7Eykq5aQ5i1fCsR6tgfSayGH6KySkja0547mBMJsjnYeuWX0oJ8gCNFWXFkdEjH46Hs447eheQWDmLVWr/eYnxsB1ShN8oeGPi5hXvY2fkaAjcn34Rg59NfUKhEbhvGOjEYpM74RO2lvckJnJMFP2PeEl1P7LHJFFWISSDSDhSBvuRzuPjZvF3rv9TbrBkJ+Pdch7SnUGjiNIVN7/jX5bSXhYRvkVIh+PUxIgvDa31Fujy6PcjHMEJiLg4L6UFyvQY1BgXe5NwPNHozw3ujjvMVN+7TQIkiNdsG9ZHdftKZlBJmi1uomN5x8nXcRAyj7P+8g1Y9JdM0CS3xh9IBF6g+oPYd1P38XMK2LqDXNxBkyL8pQgYdjmBHJ/X4PFSsPPGcXiwpK9Gwq4DxLI0P104e4Lhsn5yRrThy5xb+mXx/phHv2zKyOPPtXuD/Pw36EP38No/Jqm4r2hdeQK908ouYaTnGllukfp96voPFZNmlQzhyT6Ayv4bekruJjsBy/HF05cbcquRSdfLb8rBK07CR/oYpcSgZtivG0+7jmXF4jf8Z7ktTJ/RNroK2X1uDoC44nsYfRxNG3pEPSNYlEDQfYw6BuoJ4dg=="
-
-
 
     override fun onCreate() {
         super.onCreate()
@@ -43,6 +50,7 @@ class APP : Application() {
                     .build()
             )
         }
+
         Log.d(TAG, "order_id: ${ApiUtil.extra_param_order_id}")
         CutSameSolution.setLogIf(logWrapper)
         CutSameSolution.init(

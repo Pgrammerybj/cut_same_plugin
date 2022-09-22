@@ -42,7 +42,6 @@ class MainActivity : Activity() {
                     override fun onEndTask(result: Boolean) {
                         startActivity(CutSameUiIF.createTemplateUIIntent(this@MainActivity))
                     }
-
                 })
             }
         }
