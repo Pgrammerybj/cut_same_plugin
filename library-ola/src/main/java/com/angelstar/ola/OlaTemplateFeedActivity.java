@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ybj.xbanner.OlaBannerView;
+import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.ss.ugc.android.editor.base.theme.ThemeStore;
 import com.ss.ugc.android.editor.base.utils.CommonUtils;
@@ -19,7 +20,7 @@ import com.ss.ugc.android.editor.core.NLEEditorContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OlaTemplateFeedActivity extends AppCompatActivity implements View.OnClickListener {
+public class OlaTemplateFeedActivity extends AppCompatActivity implements View.OnClickListener, OlaBannerView.ScrollPageListener {
 
     NLEEditorContext nleEditorContext;
     private IPlayerActivityDelegate editorActivityDelegate;
@@ -53,7 +54,17 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
         bannerData.add("https://photo.tuchong.com/392724/f/16858773.jpg");
         bannerData.add("https://photo.tuchong.com/408963/f/18401047.jpg");
         bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fmobile%2F2020-04-14%2F5e9563a01a89c.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666854399&t=69a35ee9f901a27fbad75e23e8911893");
-        mBannerView.setBannerData(bannerData);
+
+        mBannerView.setBannerData(createVideoItem(bannerData), mSurfaceView);
+        mBannerView.setScrollPageListener(this);
+    }
+
+    private ArrayList<VideoItemView> createVideoItem(List<String> bannerData) {
+        ArrayList<VideoItemView> itemList = new ArrayList<>();
+        for (int i = 0; i < bannerData.size(); i++) {
+            itemList.add(new VideoItemView(this).bindData(bannerData.get(i), "页面：" + i));
+        }
+        return itemList;
     }
 
     private void initPlayerView() {
@@ -85,14 +96,25 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
         if (CommonUtils.isFastClick()) {
             return;
         }
-        if (v.getId() == com.ss.ugc.android.editor.main.R.id.iv_play) {
+        if (v.getId() == R.id.iv_play) {
             if (v.isActivated()) {
                 nleEditorContext.getVideoPlayer().setPlayingInFullScreen(false);
                 nleEditorContext.getVideoPlayer().pause();
             } else {
-                nleEditorContext.getVideoPlayer().setPlayingInFullScreen(true);
-                nleEditorContext.getVideoPlayer().play();
+                startPlay();
             }
         }
+    }
+
+    private void startPlay() {
+        if (null != nleEditorContext && null != nleEditorContext.getVideoPlayer()) {
+            nleEditorContext.getVideoPlayer().setPlayingInFullScreen(true);
+            nleEditorContext.getVideoPlayer().play();
+        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        startPlay();
     }
 }

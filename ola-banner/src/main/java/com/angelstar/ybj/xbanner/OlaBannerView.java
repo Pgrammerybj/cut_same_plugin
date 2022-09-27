@@ -3,9 +3,12 @@ package com.angelstar.ybj.xbanner;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -31,6 +34,8 @@ import static android.view.Gravity.CENTER_HORIZONTAL;
  **/
 public class OlaBannerView extends FrameLayout {
 
+    private static final int MAX_VALUE = Integer.MAX_VALUE;
+
     /**
      * 轮播图ViewPager
      */
@@ -43,15 +48,11 @@ public class OlaBannerView extends FrameLayout {
     /**
      * 轮播图地址集合
      */
-    private List<String> mBannerUrlList;
+    private ArrayList<VideoItemView> mBannerUrlList;
     /**
      * 轮播内部Adapter,实现无限轮播
      */
-    private InnerPagerAdapter mAdapter;
-    /**
-     * 当前真正的下标，初始值为MAX的一半，以解决初始无法左滑的问题
-     */
-    private int mCurrentIndex = Integer.MAX_VALUE / 2;
+    private VideoPagerAdapter mAdapter;
     /**
      * 图片之间的边距
      */
@@ -60,10 +61,7 @@ public class OlaBannerView extends FrameLayout {
      * 是否启用边距模式（同时显示部分左右Item）
      */
     private boolean mIsMargin;
-    /**
-     * Banner圆角
-     */
-    private float mBannerRadius;
+    private SurfaceView mSurfaceView;
 
     public OlaBannerView(Context context) {
         this(context, null);
@@ -91,7 +89,10 @@ public class OlaBannerView extends FrameLayout {
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.BannerView, defStyle, 0);
         try {
             mPageMargin = ta.getDimensionPixelSize(R.styleable.BannerView_banner_page_margin, 0);
-            mBannerRadius = ta.getDimensionPixelSize(R.styleable.BannerView_banner_radius, 0);
+            /**
+             * Banner圆角
+             */
+            float mBannerRadius = ta.getDimensionPixelSize(R.styleable.BannerView_banner_radius, 0);
             if (mPageMargin > 0) {
                 mIsMargin = true;
             }
@@ -114,12 +115,12 @@ public class OlaBannerView extends FrameLayout {
         addView(mBannerViewPager, bannerParams);
         mBannerViewPager.addOnPageChangeListener(mPageListener);
         mBannerUrlList = new ArrayList<>();
-        mAdapter = new InnerPagerAdapter(context, mBannerUrlList);
+        mAdapter = new VideoPagerAdapter(context, mBannerUrlList);
         mBannerViewPager.setAdapter(mAdapter);
         mBannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
         mBannerViewPager.setPageTransformer(true, new ScalePageTransformer());
         if (mIsMargin) {
-            mBannerViewPager.setOffscreenPageLimit(5);
+            mBannerViewPager.setOffscreenPageLimit(2);
             mBannerViewPager.setPageMargin(mPageMargin / 2);
             mBannerViewPager.setClipChildren(false);
         }
@@ -161,9 +162,9 @@ public class OlaBannerView extends FrameLayout {
             if (currentPosition == 0 || mBannerUrlList.isEmpty()) {
                 return;
             }
-            Log.i("jackyang_onPageSelected 前一个页面lastPagePosition=" + lastPagePosition, " | 当前页面是=" + (currentPosition % mBannerUrlList.size()));
-            setScrollPosition(currentPosition);
             int smallPos = currentPosition % mBannerUrlList.size();
+            changeSurfaceView(smallPos);
+            Log.i("jackyang_onPageSelected 前一个页面lastPagePosition=" + lastPagePosition, " | 当前页面是=" + smallPos);
             mIndicator.setCurrentPosition(smallPos);
             if (mScrollPageListener != null) {
                 mScrollPageListener.onPageSelected(smallPos);
@@ -175,6 +176,17 @@ public class OlaBannerView extends FrameLayout {
         public void onPageScrollStateChanged(int state) {
         }
     };
+
+    private void changeSurfaceView(final int smallPos) {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < mBannerUrlList.size() && (mBannerUrlList.get(i) != null); i++) {
+                    mBannerUrlList.get(i).onSelected(i == smallPos, mSurfaceView);
+                }
+            }
+        }, 200);
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -194,7 +206,10 @@ public class OlaBannerView extends FrameLayout {
     /**
      * 设置Banner图片地址数据
      */
-    public void setBannerData(List<String> bannerData) {
+    public void setBannerData(ArrayList<VideoItemView> bannerData, SurfaceView mSurfaceView) {
+        int currentPos = MAX_VALUE / 2 - (MAX_VALUE / 2) % getRealCount(bannerData);
+        this.mSurfaceView = mSurfaceView;
+        mBannerViewPager.setCurrentItem(currentPos);
         mBannerUrlList.clear();
         mBannerUrlList.addAll(bannerData);
         mIndicator.setCellCount(bannerData.size());
@@ -202,11 +217,14 @@ public class OlaBannerView extends FrameLayout {
     }
 
     /**
-     * 滑动的时候更新下标
+     * 获取广告页面数量
+     *
+     * @return
      */
-    public void setScrollPosition(int position) {
-        mCurrentIndex = position;
+    public int getRealCount(ArrayList<VideoItemView> bannerData) {
+        return bannerData == null ? 0 : bannerData.size();
     }
+
 
     @Override
     protected void onDetachedFromWindow() {
