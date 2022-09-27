@@ -114,7 +114,7 @@ public class OlaBannerView extends FrameLayout {
         addView(mBannerViewPager, bannerParams);
         mBannerViewPager.addOnPageChangeListener(mPageListener);
         mBannerUrlList = new ArrayList<>();
-        mAdapter = new InnerPagerAdapter(getContext(), mBannerRadius, mBannerUrlList);
+        mAdapter = new InnerPagerAdapter(context, mBannerUrlList);
         mBannerViewPager.setAdapter(mAdapter);
         mBannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
         mBannerViewPager.setPageTransformer(true, new ScalePageTransformer());

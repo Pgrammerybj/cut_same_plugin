@@ -1,13 +1,14 @@
 package com.angelstar.ybj.xbanner;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
@@ -23,16 +24,16 @@ import java.util.List;
 public class InnerPagerAdapter extends PagerAdapter {
 
     private final Context mContext;
-    private final float mBannerRadius;
     /**
      * 轮播图地址集合
      */
     private final List<String> mBannerUrlList;
 
-    public InnerPagerAdapter(Context context, float bannerRadius, List<String> bannerUrlList) {
+    private OnItemClickListener mOnItemClickListener;
+
+    public InnerPagerAdapter(Context context, List<String> bannerUrlList) {
         this.mBannerUrlList = bannerUrlList;
         this.mContext = context;
-        this.mBannerRadius = bannerRadius;
     }
 
     @Override
@@ -47,39 +48,48 @@ public class InnerPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        CardView cardView = new CardView(mContext);
-        cardView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        cardView.setCardElevation(5);
-        cardView.setRadius(mBannerRadius);
 
-        ImageView bannerIv = new ImageView(mContext);
-        bannerIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        bannerIv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        int size = mBannerUrlList.size();
-        if (size == 0) {
-            return bannerIv;
+        if (getRealCount() == 0) {
+            return null;
         }
+        View itemView;
+        itemView = LayoutInflater.from(mContext).inflate(R.layout.layout_video_view, container, false);
+        if (mOnItemClickListener != null && !mBannerUrlList.isEmpty()) {
+            final int finalPosition = position;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(v, finalPosition);
+                    Toast.makeText(mContext, "点击了：" + finalPosition, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        ImageView ivVideoCover = itemView.findViewById(R.id.iv_video_cover);
+        TextView tvPagePosition = itemView.findViewById(R.id.tv_page_position);
+        FrameLayout surfaceViewContainer = itemView.findViewById(R.id.fl_surfaceView_container);
+
+        int size = mBannerUrlList.size();
         position %= size;
         if (position < 0) {
             position = size + position;
         }
-        Glide.with(mContext).load(mBannerUrlList.get(position)).into(bannerIv);
+        Glide.with(mContext).load(mBannerUrlList.get(position)).into(ivVideoCover);
+        tvPagePosition.setText(String.valueOf(position));
 
+        container.addView(itemView);
+        return itemView;
+    }
 
-        //文字
-        TextView textView = new TextView(mContext);
-        textView.setText(String.valueOf(position));
-        textView.setTextColor(mContext.getResources().getColor(android.R.color.holo_blue_light));
-        textView.setTextSize(30);
-
-        cardView.addView(bannerIv);
-        cardView.addView(textView);
-        container.addView(cardView);
-        return cardView;
+    public int getRealCount() {
+        return mBannerUrlList == null ? 0 : mBannerUrlList.size();
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
     }
 }

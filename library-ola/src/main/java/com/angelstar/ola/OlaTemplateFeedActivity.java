@@ -1,22 +1,17 @@
 package com.angelstar.ola;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
-import com.angelstar.ola.entity.CustomViewsInfo;
-import com.angelstar.ola.holder.BannerHolderCreator;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
-import com.angelstar.ybj.xbanner.XBanner;
-import com.angelstar.ybj.xbanner.transformers.Transformer;
+import com.angelstar.ybj.xbanner.OlaBannerView;
+import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.ss.ugc.android.editor.base.theme.ThemeStore;
 import com.ss.ugc.android.editor.base.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
@@ -33,6 +28,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_ola_template_homepage);
 
 
@@ -46,72 +42,18 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
     }
 
     private void initView(SurfaceView mSurfaceView) {
-        XBanner banner = findViewById(R.id.banner);
-        List<CustomViewsInfo> data = new ArrayList<>();
-        data.add(new CustomViewsInfo("https://photo.tuchong.com/250829/f/31548923.jpg"));
-        data.add(new CustomViewsInfo("http://lf3-ck.bytetos.com/obj/template-bucket/7117128998756794382/baiyueguangzhushazhi_7002448424021524488/cover.png"));
-        data.add(new CustomViewsInfo("https://photo.tuchong.com/392724/f/16858773.jpg"));
-        data.add(new CustomViewsInfo("https://photo.tuchong.com/408963/f/18401047.jpg"));
-        final BannerHolderCreator holderCreator = new BannerHolderCreator(mSurfaceView);
-        banner.setBannerData(data, holderCreator);
-        //设置轮播缩放效果
-        banner.setPageTransformer(Transformer.Scale);
-        banner.setOnItemClickListener(new XBanner.OnItemClickListener() {
-            @Override
-            public void onItemClick(XBanner banner, Object model, View view, int position) {
-                Toast.makeText(OlaTemplateFeedActivity.this, "点击了" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+        OlaBannerView mBannerView = findViewById(R.id.banner_view);
+        mBannerView.setIndicator(new RectangleIndicator(this));
 
-
-        banner.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            int lastPagePosition = 0;
-
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onPageSelected(int currentPosition) {
-                super.onPageSelected(currentPosition);
-                Log.i("jackyang_onPageSelected 前一个页面lastPagePosition=" + lastPagePosition, " | 当前页面是=" + currentPosition);
-//                if (holderCreator.videoViewHolder.surfaceViewContainer.getChildCount() == 0) {
-////                        holderCreator.videoViewHolder.surfaceViewContainer.addView(mSurfaceView);
-//                }
-//                banner.getViewPager().getAdapter();
-                lastPagePosition = currentPosition;
-            }
-        });
-
-//        banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//
-//            int lastPagePosition = 0;
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onPageScrolled(int lastPosition, float v, int i1) {
-//                Log.i("jackyang_onPageScrolled=", lastPosition + "");
-////                lastPagePosition = lastPosition;
-//            }
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onPageSelected(int currentPosition) {
-//                Log.i("jackyang_onPageSelected 前一个页面lastPagePosition=" + lastPagePosition, " | 当前页面是=" + currentPosition);
-//                if (currentPosition == 0) {
-//                    if (holderCreator.videoViewHolder.surfaceViewContainer.getChildCount() == 0) {
-////                        holderCreator.videoViewHolder.surfaceViewContainer.addView(mSurfaceView);
-//                    }
-//                } else {
-////                    holderCreator.videoViewHolder.videoView.pause();
-//                }
-//
-//                lastPagePosition = currentPosition;
-//            }
-//
-//            @SuppressLint("LongLogTag")
-//            @Override
-//            public void onPageScrollStateChanged(int i) {
-//                Log.i("jackyang_ScrollStateChanged=", i + "");
-//            }
-//        });
+        List<String> bannerData = new ArrayList<>();
+        bannerData.add("https://img2.baidu.com/it/u=3871466532,4184504555&fm=253&fmt=auto&app=138&f=JPEG?w=420&h=672");
+        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fmobile%2F2018-11-02%2F5bdbfaa772b74.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666854321&t=328f07614130a0c57da081fe71971f35");
+        bannerData.add("https://pics0.baidu.com/feed/77c6a7efce1b9d16ea9a0f497a8ffa878c546416.jpeg?token=fa7b61af9c9600dacdd91d593c08f4e7");
+        bannerData.add("https://photo.tuchong.com/250829/f/31548923.jpg");
+        bannerData.add("https://photo.tuchong.com/392724/f/16858773.jpg");
+        bannerData.add("https://photo.tuchong.com/408963/f/18401047.jpg");
+        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fmobile%2F2020-04-14%2F5e9563a01a89c.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666854399&t=69a35ee9f901a27fbad75e23e8911893");
+        mBannerView.setBannerData(bannerData);
     }
 
     private void initPlayerView() {

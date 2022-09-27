@@ -36,12 +36,12 @@ public class RectangleIndicator extends BaseIndicator {
 
         @Override
         public void select() {
-            mPaint.setColor(Color.parseColor("#2b2b2b2b"));
+            mPaint.setColor(Color.parseColor("#F0BF42"));
         }
 
         @Override
         public void unSelect() {
-            mPaint.setColor(Color.parseColor("#F0BF42"));
+            mPaint.setColor(Color.parseColor("#ffffff"));
         }
 
         @Override
