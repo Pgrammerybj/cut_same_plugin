@@ -4,7 +4,6 @@
 
     <application android:theme="@android:style/Theme.Light.NoTitleBar">
         <activity android:name=".OlaTemplateFeedActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

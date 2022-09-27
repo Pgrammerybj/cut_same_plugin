@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fl_root"
     android:orientation="vertical">
 
     <com.angelstar.ybj.xbanner.XBanner
@@ -24,4 +25,14 @@
         app:pointSelect="@drawable/shape_point_select"
         app:pointsPosition="CENTER"
         app:viewpagerMargin="16dp" />
-</LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_play"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_player_start" />
+
+</FrameLayout>
