@@ -51,7 +51,7 @@
         android:layout_marginRight="9dp"
         android:layout_marginBottom="6dp"
         android:gravity="center"
-        android:textColor="#80000000"
+        android:textColor="#80ffffff"
         android:textSize="12sp"
         tools:text="00:21" />
 

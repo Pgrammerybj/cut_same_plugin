@@ -17,7 +17,7 @@
     <com.angelstar.ybj.xbanner.OlaBannerView
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="536dp"
         app:banner_auto_scroll="false"
         app:banner_page_margin="56dp" />
 

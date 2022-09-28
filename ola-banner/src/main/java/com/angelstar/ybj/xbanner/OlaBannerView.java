@@ -127,19 +127,23 @@ public class OlaBannerView extends FrameLayout {
     }
 
     /**
-     * 初始化指示器
+     * 初始化默认指示器
      */
     private void initIndicatorView(Context context) {
         mIndicator = new RectangleIndicator(context);
-        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp2px(60));
+        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp2px(6));
         indicatorParams.gravity = BOTTOM | CENTER_HORIZONTAL;
         addView(mIndicator, indicatorParams);
     }
 
+    /**
+     * 外部传入的指示器
+     *
+     */
     public void setIndicator(BaseIndicator indicator) {
         removeView(mIndicator);
         mIndicator = indicator;
-        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp2px(10));
+        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp2px(6));
         indicatorParams.gravity = BOTTOM | CENTER_HORIZONTAL;
         addView(mIndicator, indicatorParams);
         invalidate();
@@ -198,8 +202,7 @@ public class OlaBannerView extends FrameLayout {
         } else {
             height = hSize;
         }
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,
-                MeasureSpec.EXACTLY);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -218,8 +221,6 @@ public class OlaBannerView extends FrameLayout {
 
     /**
      * 获取广告页面数量
-     *
-     * @return
      */
     public int getRealCount(ArrayList<VideoItemView> bannerData) {
         return bannerData == null ? 0 : bannerData.size();
