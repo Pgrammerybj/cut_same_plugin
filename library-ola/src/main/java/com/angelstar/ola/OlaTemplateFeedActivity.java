@@ -39,7 +39,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
         nleEditorContext = editorActivityDelegate.getNleEditorContext();
 
         initView(mSurfaceView);
-        initPlayerView();
+//        initPlayerView();
     }
 
     private void initView(SurfaceView mSurfaceView) {
@@ -62,18 +62,18 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
     private ArrayList<VideoItemView> createVideoItem(List<String> bannerData) {
         ArrayList<VideoItemView> itemList = new ArrayList<>();
         for (int i = 0; i < bannerData.size(); i++) {
-            itemList.add(new VideoItemView(this).bindData(bannerData.get(i), "页面：" + i));
+            itemList.add(new VideoItemView(this).bindData(bannerData.get(i)));
         }
         return itemList;
     }
 
-    private void initPlayerView() {
-        ImageView iv_play = findViewById(com.ss.ugc.android.editor.main.R.id.iv_play);
-        if (ThemeStore.INSTANCE.getPlayIconRes() != null && ThemeStore.INSTANCE.getPlayIconRes() > 0) {
-            iv_play.setImageResource(ThemeStore.INSTANCE.getPlayIconRes());
-        }
-        iv_play.setOnClickListener(this);
-    }
+//    private void initPlayerView() {
+//        ImageView iv_play = findViewById(com.ss.ugc.android.editor.main.R.id.iv_play);
+//        if (ThemeStore.INSTANCE.getPlayIconRes() != null && ThemeStore.INSTANCE.getPlayIconRes() > 0) {
+//            iv_play.setImageResource(ThemeStore.INSTANCE.getPlayIconRes());
+//        }
+//        iv_play.setOnClickListener(this);
+//    }
 
     @Override
     protected void onResume() {
@@ -96,14 +96,14 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements View.O
         if (CommonUtils.isFastClick()) {
             return;
         }
-        if (v.getId() == R.id.iv_play) {
-            if (v.isActivated()) {
-                nleEditorContext.getVideoPlayer().setPlayingInFullScreen(false);
-                nleEditorContext.getVideoPlayer().pause();
-            } else {
-                startPlay();
-            }
-        }
+//        if (v.getId() == R.id.iv_play) {
+//            if (v.isActivated()) {
+//                nleEditorContext.getVideoPlayer().setPlayingInFullScreen(false);
+//                nleEditorContext.getVideoPlayer().pause();
+//            } else {
+//                startPlay();
+//            }
+//        }
     }
 
     private void startPlay() {

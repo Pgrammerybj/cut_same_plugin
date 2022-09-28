@@ -3,6 +3,7 @@ package com.angelstar.ybj.xbanner;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,10 +21,18 @@ import com.bumptech.glide.Glide;
  * @E-Mail: pgrammer.ybj@outlook.com
  * @Description: android
  */
-public class VideoItemView extends CardView {
+public class VideoItemView extends FrameLayout {
     private Context context;
-    private ImageView bannerIv;
-    private TextView textView;
+    //视频封面
+    private ImageView mIvVideoCover;
+    //当前视频播放状态
+    private ImageView mIvVideState;
+    //当前视频时长
+    private TextView mTvVideoTime;
+    //视频编辑按钮
+    private TextView mTvEditVideo;
+    //surfaceView的插入视图
+    private FrameLayout mFlSurfaceViewContainer;
 
     public VideoItemView(@NonNull Context context) {
         this(context, null);
@@ -38,28 +47,22 @@ public class VideoItemView extends CardView {
         init(context);
     }
 
-    private VideoItemView init(Context context) {
+    private void init(Context context) {
         this.context = context;
-        setCardElevation(5);
-        setRadius(18);
-        //图片
-        bannerIv = new ImageView(context);
-        bannerIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        bannerIv.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        //surfaceView
-
-        //文字
-        textView = new TextView(context);
-        textView.setTextColor(context.getResources().getColor(android.R.color.holo_blue_light));
-        textView.setTextSize(30);
-        addView(bannerIv);
-        addView(textView);
-        return this;
+        FrameLayout cardView = (FrameLayout) inflate(context, R.layout.layout_item_video, this);
+        if (null == cardView) {
+            return;
+        }
+        mIvVideoCover = cardView.findViewById(R.id.iv_video_cover);
+        mIvVideState = cardView.findViewById(R.id.iv_video_player_state);
+        mTvVideoTime = cardView.findViewById(R.id.tv_video_time);
+        mTvEditVideo = cardView.findViewById(R.id.tv_edit_video);
+        mFlSurfaceViewContainer = cardView.findViewById(R.id.fl_surfaceView_container);
     }
 
-    public VideoItemView bindData(String url, String text) {
-        Glide.with(this.context).load(url).into(bannerIv);
-        textView.setText(text);
+    public VideoItemView bindData(String url) {
+        Glide.with(this.context).load(url).into(mIvVideoCover);
+        mTvVideoTime.setText("00：30");
         return this;
     }
 
@@ -67,11 +70,13 @@ public class VideoItemView extends CardView {
         if (isSelected) {
             //选中添加mSurfaceView
             //防止在添加的时候，别的View还持有
-            CardView parent = (CardView) mSurfaceView.getParent();
+            FrameLayout parent = (FrameLayout) mSurfaceView.getParent();
             if (null != parent) {
                 parent.removeView(mSurfaceView);
             }
-            addView(mSurfaceView);
+            if (null != mFlSurfaceViewContainer) {
+                mFlSurfaceViewContainer.addView(mSurfaceView);
+            }
         } else {
             //非选中态需要移除mSurfaceView
             removeView(mSurfaceView);

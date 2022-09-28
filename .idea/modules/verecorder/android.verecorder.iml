@@ -68,16 +68,22 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/verecorder/generated/ap_generated_sources/debug/out" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/ap_generated_sources/debugAndroidTest/out" />
-    <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/ap_generated_sources/debugUnitTest/out" />
+    <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/ap_generated_sources/debugUnitTest/out">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/verecorder/generated/ap_generated_sources/debugUnitTest/out" isTestSource="true" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/renderscript_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/renderscript_source_output_dir/debugAndroidTest/out" />
-    <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/resValues/androidTest/debug" />
+    <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/resValues/androidTest/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/resValues/androidTest/debug" type="java-test-resource" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/resValues/debug">
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/resValues/debug" type="java-resource" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/rs/androidTest/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/res/rs/debug" />
-    <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/source/buildConfig/androidTest/debug" />
+    <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/source/buildConfig/androidTest/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../build/verecorder/generated/source/buildConfig/androidTest/debug" isTestSource="true" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../build/verecorder/generated/source/buildConfig/debug">
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/verecorder/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
     </content>
