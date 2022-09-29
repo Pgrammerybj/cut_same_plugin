@@ -40,7 +40,7 @@ class FloatSliderView @JvmOverloads constructor(
         }
 
     @ColorInt
-    private var lineHintColor = Color.parseColor("#66FFFFFF")
+    private var lineHintColor = Color.parseColor("#acbeb5")
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val handlePaint = Paint(Paint.ANTI_ALIAS_FLAG)

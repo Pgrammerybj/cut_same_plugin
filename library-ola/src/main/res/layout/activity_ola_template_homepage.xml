@@ -21,13 +21,9 @@
         app:banner_auto_scroll="false"
         app:banner_page_margin="56dp" />
 
-
-<!--    <ImageView-->
-<!--        android:id="@+id/iv_play"-->
-<!--        android:layout_width="20dp"-->
-<!--        android:layout_height="20dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:scaleType="centerInside"-->
-<!--        android:src="@drawable/ic_player_start" />-->
+    <include
+        layout="@layout/layout_template_video_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
 
 </LinearLayout>

@@ -19,7 +19,6 @@ import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.angelstar.ybj.xbanner.transformers.ScalePageTransformer;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER_HORIZONTAL;
@@ -138,7 +137,6 @@ public class OlaBannerView extends FrameLayout {
 
     /**
      * 外部传入的指示器
-     *
      */
     public void setIndicator(BaseIndicator indicator) {
         removeView(mIndicator);
@@ -170,9 +168,6 @@ public class OlaBannerView extends FrameLayout {
             changeSurfaceView(smallPos);
             Log.i("jackyang_onPageSelected 前一个页面lastPagePosition=" + lastPagePosition, " | 当前页面是=" + smallPos);
             mIndicator.setCurrentPosition(smallPos);
-            if (mScrollPageListener != null) {
-                mScrollPageListener.onPageSelected(smallPos);
-            }
             lastPagePosition = currentPosition;
         }
 
@@ -187,6 +182,9 @@ public class OlaBannerView extends FrameLayout {
             public void run() {
                 for (int i = 0; i < mBannerUrlList.size() && (mBannerUrlList.get(i) != null); i++) {
                     mBannerUrlList.get(i).onSelected(i == smallPos, mSurfaceView);
+                    if (i == smallPos && mScrollPageListener != null) {
+                        mScrollPageListener.onPageSelected(smallPos, mBannerUrlList.get(i));
+                    }
                 }
             }
         }, 200);
@@ -209,13 +207,25 @@ public class OlaBannerView extends FrameLayout {
     /**
      * 设置Banner图片地址数据
      */
-    public void setBannerData(ArrayList<VideoItemView> bannerData, SurfaceView mSurfaceView) {
+    public void setBannerData(final ArrayList<VideoItemView> bannerData, SurfaceView mSurfaceView) {
         int currentPos = MAX_VALUE / 2 - (MAX_VALUE / 2) % getRealCount(bannerData);
         this.mSurfaceView = mSurfaceView;
         mBannerViewPager.setCurrentItem(currentPos);
         mBannerUrlList.clear();
         mBannerUrlList.addAll(bannerData);
         mIndicator.setCellCount(bannerData.size());
+        final int realPosition = (MAX_VALUE / 2) % getRealCount(bannerData);
+        if (realPosition < bannerData.size()) {
+            //首次进入mSurfaceView应添加到默认显示的条目
+            bannerData.get(realPosition).onSelected(true, mSurfaceView);
+            //临时写法，模拟网络耗时
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScrollPageListener.onPageSelected(realPosition, bannerData.get(realPosition));
+                }
+            }, 100);
+        }
         mAdapter.notifyDataSetChanged();
     }
 
@@ -230,6 +240,7 @@ public class OlaBannerView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        mBannerViewPager.removeOnPageChangeListener(mPageListener);
     }
 
     /**
@@ -261,6 +272,6 @@ public class OlaBannerView extends FrameLayout {
     }
 
     public interface ScrollPageListener {
-        void onPageSelected(int position);
+        void onPageSelected(int position, VideoItemView videoItemView);
     }
 }

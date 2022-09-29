@@ -3,7 +3,7 @@ package com.ss.ugc.android.editor.core.utils
 import android.util.Log
 import com.ss.ugc.android.editor.core.BuildConfig
 
-const val DEFAULT_TAG = "DavinciEditor"
+const val DEFAULT_TAG = "JackYang-Ola"
 
 open interface ILogger {
     fun i(msg: String)

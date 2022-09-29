@@ -2,6 +2,7 @@ package com.angelstar.ybj.xbanner;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import com.bumptech.glide.Glide;
  * @E-Mail: pgrammer.ybj@outlook.com
  * @Description: android
  */
-public class VideoItemView extends FrameLayout {
+public class VideoItemView extends FrameLayout implements View.OnClickListener {
     private Context context;
     //视频封面
     private ImageView mIvVideoCover;
@@ -62,8 +63,13 @@ public class VideoItemView extends FrameLayout {
 
     public VideoItemView bindData(String url) {
         Glide.with(this.context).load(url).into(mIvVideoCover);
-        mTvVideoTime.setText("00：30");
+        mTvVideoTime.setText("00:30");
+        mIvVideState.setOnClickListener(this);
         return this;
+    }
+
+    public ImageView getVideStateView(){
+        return mIvVideState;
     }
 
     public void onSelected(boolean isSelected, SurfaceView mSurfaceView) {
@@ -81,5 +87,21 @@ public class VideoItemView extends FrameLayout {
             //非选中态需要移除mSurfaceView
             removeView(mSurfaceView);
         }
+    }
+
+
+    private OnClickPlayStateListener mOnClickPlayStateListener;
+
+    public void setOnClickPlayListener(OnClickPlayStateListener mOnClickPlayStateListener) {
+        this.mOnClickPlayStateListener = mOnClickPlayStateListener;
+    }
+
+    public interface OnClickPlayStateListener{
+        void onVideoClick(View view);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mOnClickPlayStateListener.onVideoClick(v);
     }
 }

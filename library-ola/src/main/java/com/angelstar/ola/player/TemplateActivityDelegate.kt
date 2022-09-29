@@ -1,16 +1,22 @@
 package com.angelstar.ola.player
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.SurfaceView
 import androidx.fragment.app.FragmentActivity
+import com.angelstar.ola.ITemplateVideoStateListener
 import com.bytedance.ies.nle.editor_jni.NLEEditorListener
 import com.bytedance.ies.nle.editor_jni.NLEModel
 import com.bytedance.ies.nle.editor_jni.TemplateInfo
 import com.ss.ugc.android.editor.base.EditorSDK
+import com.ss.ugc.android.editor.base.utils.FileUtil
 import com.ss.ugc.android.editor.base.utils.runOnUiThread
+import com.ss.ugc.android.editor.core.Constants
 import com.ss.ugc.android.editor.core.NLEEditorContext
 import com.ss.ugc.android.editor.core.api.video.EditMedia
 import com.ss.ugc.android.editor.core.utils.DLog
+import com.ss.ugc.android.editor.core.utils.LiveDataBus
 import com.ss.ugc.android.editor.core.vm.EditViewModelFactory
 import com.ss.ugc.android.editor.main.EditorHelper
 import java.util.*
@@ -44,6 +50,10 @@ class TemplateActivityDelegate (
 
     override var nleEditorContext: NLEEditorContext? = null
 
+    override var viewStateListener: ITemplateVideoStateListener? = null
+
+    private val mHandler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         nleEditorContext = EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
         nleEditorContext!!.nleEditor.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
@@ -56,6 +66,7 @@ class TemplateActivityDelegate (
             initImport()//1️⃣
         }
         DLog.d(TAG, "EditorActivityDelegate initImport costTime:$costMill")
+        registerEvent()
     }
 
     //2️⃣
@@ -77,7 +88,7 @@ class TemplateActivityDelegate (
         val rootPath = activity.filesDir.absolutePath
         if (surfaceView == null) {
             //日志上报
-            return;
+            return
         }
         nleEditorContext!!.init(rootPath, surfaceView)
         nleEditorContext!!.videoEditor.importMedia(
@@ -105,13 +116,68 @@ class TemplateActivityDelegate (
                 return
             }
             //日志耗时约50ms
-            if (model?.stage != null) {
+            if (model.stage != null) {
                 nleModel = model
                 runOnUiThread {
                     handleVEEditor()
                 }
             }
         }
+    }
+
+    private var runnable: Runnable = object : Runnable {
+        override fun run() {
+            viewStateListener?.onPlayTimeChanged(
+                FileUtil.stringForTime(getCurrentPosition()),
+                FileUtil.stringForTime(getTotalDuration()),
+                false
+            )
+            mHandler.postDelayed(this, 50)
+        }
+    }
+
+    private fun registerEvent() {
+        LiveDataBus.getInstance().with(Constants.KEY_MAIN, Int::class.java)
+            .observe(activity, { position ->
+                when (position) {
+                    NLEEditorContext.STATE_PLAY -> { //代表播放
+                        mHandler.removeCallbacks(runnable) // 防止多次调play的时候 有重复
+                        nleEditorContext!!.stopTrack()
+                        mHandler.post(runnable)
+                        viewStateListener?.onPlayViewActivate(true)
+                    }
+                    NLEEditorContext.STATE_PAUSE -> { //代表暂停 统一处理ui状态
+                        DLog.d("editorModel.STATE_PAUSE....")
+                        mHandler.removeCallbacks(runnable)
+                        viewStateListener?.onPlayViewActivate(false)
+                        nleEditorContext!!.stopTrack()
+                        viewStateListener?.onPlayTimeChanged(
+                            FileUtil.stringForTime(getCurrentPosition()),
+                            FileUtil.stringForTime(getTotalDuration()),
+                            true
+                        )
+                        if (nleEditorContext!!.videoPlayer.isPlayingInFullScreen) {
+                            nleEditorContext!!.videoPlayer.isPlayingInFullScreen = false
+                        }
+                        DLog.d("暂停了,当前播放位置：" + getCurrentPosition())
+                    }
+                    NLEEditorContext.STATE_BACK -> { // 点击关闭转场面板按钮
+                        DLog.d("取消转场按钮的选中态和所选slot....")
+                    }
+                    NLEEditorContext.STATE_SEEK -> { // seek了
+                        DLog.d("editorModel.STATE_SEEK....")
+                        mHandler.removeCallbacks(runnable)
+                        viewStateListener?.onPlayViewActivate(false)
+                        nleEditorContext!!.stopTrack()
+                        DLog.d("seek了: " + getCurrentPosition())
+                        viewStateListener?.onPlayTimeChanged(
+                            FileUtil.stringForTime(getCurrentPosition()),
+                            FileUtil.stringForTime(getTotalDuration()),
+                            false
+                        )
+                    }
+                }
+            })
     }
 
     /**
@@ -121,7 +187,7 @@ class TemplateActivityDelegate (
         if (nleEditorContext != null) {
             nleEditorContext!!.videoPlayer.player!!.dataSource = nleEditorContext!!.nleModel
             if ((type == DRAFT_RESTORE || type == EditorHelper.EXTRA_FROM_TEMPLATE || type == FILE_DRAFT) && !hasLoaded) {
-                val mainTrack = nleModel!!.getMainTrack()
+                val mainTrack = nleModel!!.mainTrack
                 nleEditorContext!!.nleMainTrack = mainTrack!!
             }
             hasLoaded = true
@@ -147,6 +213,10 @@ class TemplateActivityDelegate (
 
     override fun pause() {
         nleEditorContext!!.videoPlayer.pause()
+    }
+
+    override fun onDestroy() {
+        mHandler.removeCallbacksAndMessages(null)
     }
 
     private fun getCurrentPosition(): Int {
