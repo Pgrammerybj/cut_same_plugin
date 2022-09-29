@@ -194,12 +194,7 @@ class FloatSliderView @JvmOverloads constructor(
 
         // 歌曲选中区域（94d6b6）
         linePaint.color = lineChooseColor
-        val oval2 = RectF(
-            (lineStart * 1.4).toFloat(),
-            moveY,
-            (lineEnd * 0.76).toFloat(),
-            lineWidth.toFloat() + moveY
-        )
+        val oval2 = RectF((lineEnd * 0.46).toFloat(), moveY, (lineEnd * 0.76).toFloat(), lineWidth.toFloat() + moveY)
         canvas.drawRoundRect(oval2, roundRectRadius, roundRectRadius, linePaint)
 
         val progressStart = when {
