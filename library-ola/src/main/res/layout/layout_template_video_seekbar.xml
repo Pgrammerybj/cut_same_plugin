@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
     android:layout_marginTop="34dp"
-    android:layout_marginEnd="20dp"
     android:orientation="vertical">
 
     <com.ss.ugc.android.editor.main.FloatSliderView
@@ -16,14 +14,15 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
         <TextView
             android:id="@+id/tv_current_play_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="8dp"
             android:text="00:00"
             android:textColor="#99ffffff"
             android:textSize="12sp" />
@@ -33,7 +32,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
             android:text="00:00"
             android:textColor="#99ffffff"
             android:textSize="12sp" />

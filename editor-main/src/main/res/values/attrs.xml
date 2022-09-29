@@ -13,6 +13,7 @@
     <declare-styleable name="SliderView">
         <attr name="lineColor" format="color"/>
         <attr name="lineHintColor" format="color"/>
+        <attr name="lineChooseColor" format="color"/>
         <attr name="handleStrokeColor" format="color"/>
         <attr name="drawDefaultPoint" format="boolean"/>
         <attr name="handleColor" format="color"/>

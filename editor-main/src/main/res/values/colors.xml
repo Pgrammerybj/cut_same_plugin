@@ -44,8 +44,9 @@
     <color name="off_selected_next_step">#2f2f2f</color>
     <color name="style_btn_enable">@color/style_theme</color>
 
-    <color name="style_slider_line" >@color/style_theme</color>
-
+    <color name="style_slider_line">#a7c3b5</color>
     <color name="light_grey">#C4C4C4</color>
+<!--    <color name="line_choose_color">#94d6b6</color>-->
+    <color name="line_choose_color">#FBCD60</color>
 
 </resources>

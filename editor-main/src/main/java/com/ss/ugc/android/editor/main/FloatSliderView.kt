@@ -2,16 +2,10 @@ package com.ss.ugc.android.editor.main
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_CANCEL
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_MOVE
-import android.view.MotionEvent.ACTION_UP
+import android.view.MotionEvent.*
 import android.view.View
 import androidx.annotation.ColorInt
 import com.ss.ugc.android.editor.base.utils.SizeUtil
@@ -22,6 +16,7 @@ import kotlin.math.min
  * 因为SliderView的position是整数，所以作为进度条的时候不流畅
  * 为此，复刻一个position为Float类型的SliderView
  */
+@SuppressLint("CustomViewStyleable")
 class FloatSliderView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -40,20 +35,17 @@ class FloatSliderView @JvmOverloads constructor(
         }
 
     @ColorInt
-    private var lineHintColor = Color.parseColor("#acbeb5")
+    private var handleColor = Color.TRANSPARENT
+
+    @ColorInt
+    private var lineHintColor = Color.TRANSPARENT
+
+    @ColorInt
+    private var lineChooseColor = Color.TRANSPARENT
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val handlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    private var progressLinePaint: Paint? = null
-
-    @ColorInt
-    private var handleStrokeColor = Color.TRANSPARENT
-
-    @ColorInt
-    private var handleColor = Color.TRANSPARENT
-
-    private var handleStrokeWidth = 0F
 
     private var lineStart: Float = 0F
     private var lineEnd: Float = 0F
@@ -62,6 +54,7 @@ class FloatSliderView @JvmOverloads constructor(
     private var decorateSize: Float = 0F
     private var lineLen: Float = 0F
     private var valueDiff: Float = 0F
+    private var roundRectRadius: Float = 8F
 
     var currPosition: Float = 0F
         set(value) {
@@ -71,7 +64,7 @@ class FloatSliderView @JvmOverloads constructor(
             }
         }
 
-    private var lineWidth: Int = 1
+    private var lineWidth: Int = 6
     private var handleRadius: Float = 0F
 
     private var isSliding = false
@@ -104,55 +97,39 @@ class FloatSliderView @JvmOverloads constructor(
             textPaint.getTextBounds("0", 0, 1, textBounds)
             textBounds.height()
         }
-        private val floatingMarginBottom = SizeUtil.dp2px(10.5F)
+        private val floatingMarginBottom = SizeUtil.dp2px(20F)
     }
 
     init {
-        var progressLineWidth: Int
         context.obtainStyledAttributes(attrs, R.styleable.SliderView).apply {
+            //当前进度进度条颜色（美团黄）
             lineColor = getColor(
                 R.styleable.SliderView_lineColor,
                 resources.getColor(R.color.style_slider_line)
             )
-            handleColor = getColor(R.styleable.SliderView_handleColor, Color.BLACK)
-            handleStrokeColor = getColor(R.styleable.SliderView_handleStrokeColor, Color.WHITE)
-            lineHintColor =
-                getColor(R.styleable.SliderView_lineHintColor, Color.parseColor("#66FFFFFF"))
-            handleRadius =
-                getDimensionPixelSize(
-                    R.styleable.SliderView_handle_radius,
-                    SizeUtil.dp2px(5.5F)
-                ).toFloat()
-            handleStrokeWidth =
-                getDimensionPixelSize(
-                    R.styleable.SliderView_lv_handle_stroke_width,
-                    SizeUtil.dp2px(2F)
-                ).toFloat()
-            lineWidth =
-                getDimensionPixelSize(R.styleable.SliderView_lineWidth, SizeUtil.dp2px(2F))
-            progressLineWidth =
-                getDimensionPixelSize(R.styleable.SliderView_progressLineWidth, SizeUtil.dp2px(2F))
+            lineHintColor = getColor(
+                R.styleable.SliderView_lineHintColor,
+                resources.getColor(R.color.light_grey)
+            )
+            lineChooseColor = getColor(
+                R.styleable.SliderView_lineChooseColor,
+                resources.getColor(R.color.line_choose_color)
+            )
+            //中心小圆球的颜色
+            handleColor = getColor(R.styleable.SliderView_handleColor, Color.WHITE)
+            //小圆球半径
+            handleRadius = getDimensionPixelSize(
+                R.styleable.SliderView_handle_radius,
+                SizeUtil.dp2px(5F)
+            ).toFloat()
+            //总进度条的高度
+            lineWidth = getDimensionPixelSize(R.styleable.SliderView_lineWidth, SizeUtil.dp2px(6F))
             fillWidth = getBoolean(R.styleable.SliderView_fillWidth, false)
             floatingBottom = getBoolean(R.styleable.SliderView_floatingBottom, false)
             recycle()
         }
 
         linePaint.style = Paint.Style.FILL_AND_STROKE
-        linePaint.strokeWidth = lineWidth.toFloat()
-        linePaint.setShadowLayer(SizeUtil.dp2px(1F).toFloat(), 0F, 0F, shadowColor)
-
-        if (progressLineWidth > 0 && progressLineWidth != lineWidth) {
-            progressLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.FILL_AND_STROKE
-                strokeWidth = progressLineWidth.toFloat()
-                color = lineColor
-            }
-        }
-
-        handlePaint.style = Paint.Style.FILL
-        handlePaint.color = handleColor
-        handlePaint.strokeWidth = handleStrokeWidth
-        handlePaint.setShadowLayer(SizeUtil.dp2px(3F).toFloat(), 0F, 0F, shadowColor)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -175,10 +152,9 @@ class FloatSliderView @JvmOverloads constructor(
             MeasureSpec.UNSPECIFIED -> desireHeight
             else -> desireHeight
         }
-
         setMeasuredDimension(width, height)
-
-        decorateSize = if (fillWidth) 0F else max(handleRadius, SizeUtil.dp2px(14F).toFloat())
+        //应该是左右间距
+        decorateSize = if (fillWidth) 0F else max(handleRadius, SizeUtil.dp2px(20F).toFloat())
     }
 
     private fun setDimenParams() {
@@ -198,6 +174,7 @@ class FloatSliderView @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas ?: return
@@ -206,10 +183,24 @@ class FloatSliderView @JvmOverloads constructor(
         }
         val t = (currPosition - minValue) / valueDiff
         val handleCenterX = lineStart + t * lineLen
+        //矩形进度条和小圈球需要对齐
+        val moveY = (lineCenterY - lineWidth / 2)
 
-        // 画总进度
-        linePaint.color = lineHintColor
-        canvas.drawLine(lineStart, lineCenterY, lineEnd, lineCenterY, linePaint)
+
+        // 画圆角矩形总进度
+        linePaint.color = lineHintColor;
+        val oval = RectF(lineStart, moveY, lineEnd, lineWidth.toFloat() + moveY)
+        canvas.drawRoundRect(oval, roundRectRadius, roundRectRadius, linePaint)
+
+        // 歌曲选中区域（94d6b6）
+        linePaint.color = lineChooseColor
+        val oval2 = RectF(
+            (lineStart * 1.4).toFloat(),
+            moveY,
+            (lineEnd * 0.76).toFloat(),
+            lineWidth.toFloat() + moveY
+        )
+        canvas.drawRoundRect(oval2, roundRectRadius, roundRectRadius, linePaint)
 
         val progressStart = when {
             0 < minValue -> {
@@ -224,36 +215,15 @@ class FloatSliderView @JvmOverloads constructor(
         }
         // 画当前进度
         if (drawColorProgress) {
-            val paint = progressLinePaint ?: linePaint.apply { color = lineColor }
-            canvas.drawLine(
-                progressStart,
-                lineCenterY,
-                handleCenterX,
-                lineCenterY,
-                paint
-            )
+            linePaint.color = lineColor
+            val oval3 = RectF(progressStart, moveY, handleCenterX, lineWidth.toFloat() + moveY)
+            canvas.drawRoundRect(oval3, roundRectRadius, roundRectRadius, linePaint)
         }
 
-        handlePaint.color = handleColor
+        //圆球进度
+        handlePaint.color = Color.WHITE
         handlePaint.style = Paint.Style.FILL
-        canvas.drawCircle(
-            handleCenterX,
-            lineCenterY,
-            handleRadius - handleStrokeWidth,
-            handlePaint
-        )
-
-        // 画控制按钮
-        if (handleStrokeWidth != 0F) {
-            handlePaint.color = handleStrokeColor
-            handlePaint.style = Paint.Style.STROKE
-            canvas.drawCircle(
-                handleCenterX,
-                lineCenterY,
-                handleRadius - handleStrokeWidth / 2,
-                handlePaint
-            )
-        }
+        canvas.drawCircle(handleCenterX, lineCenterY, handleRadius, handlePaint)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -284,7 +254,7 @@ class FloatSliderView @JvmOverloads constructor(
                     if (fillWidth) {
                         // 在SlideView铺满时，无法拖动滑块到边缘
                         // 这里设置一个阈值，超过则吸附到边缘
-                        val t = (currPosition - minValue) / (maxValue - minValue).toFloat()
+                        val t = (currPosition - minValue) / (maxValue - minValue)
                         if (t < 0.05F) {
                             currPosition = minValue
                         } else if (t > 0.95F) {
@@ -327,9 +297,6 @@ class FloatSliderView @JvmOverloads constructor(
 }
 
 abstract class OnFloatSliderChangeListener {
-
-    open fun getShowText(value: Int): String? = null
-
     /**
      * 时间触发前是否响应
      * true - 响应事件
