@@ -1,9 +1,8 @@
 package com.angelstar.ola.player
 
 import android.os.Bundle
-import com.angelstar.ola.ITemplateVideoStateListener
+import com.angelstar.ola.interfaces.ITemplateVideoStateListener
 import com.ss.ugc.android.editor.core.NLEEditorContext
-import com.ss.ugc.android.editor.main.IEditorViewStateListener
 
 interface IPlayerActivityDelegate {
 

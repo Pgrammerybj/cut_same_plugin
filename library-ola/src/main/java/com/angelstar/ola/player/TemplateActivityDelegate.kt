@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.SurfaceView
 import androidx.fragment.app.FragmentActivity
-import com.angelstar.ola.ITemplateVideoStateListener
+import com.angelstar.ola.interfaces.ITemplateVideoStateListener
 import com.bytedance.ies.nle.editor_jni.NLEEditorListener
 import com.bytedance.ies.nle.editor_jni.NLEModel
 import com.bytedance.ies.nle.editor_jni.TemplateInfo

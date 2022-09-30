@@ -7,9 +7,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.angelstar.ola.adapter.MixerRecyclerViewAdapter;
+import com.angelstar.ola.entity.MixerItemEntry;
+import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
+import com.angelstar.ola.interfaces.OnMixerItemClickListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ybj.xbanner.OlaBannerView;
@@ -18,6 +25,7 @@ import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
 import com.ss.ugc.android.editor.main.FloatSliderView;
+import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +64,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private TextView mTvVideoTotalTime;
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
+    private RecyclerView mMixerRecyclerView;
+    private List<MixerItemEntry> mixerList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +126,46 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mFloatSliderView = findViewById(R.id.temp_video_player_seekbar);
         mTvCurrentPlayTime = findViewById(R.id.tv_current_play_time);
         mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
+        mMixerRecyclerView = findViewById(R.id.recyclerview_video_mixer);
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        initAnimals();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mMixerRecyclerView.setLayoutManager(linearLayoutManager);
+        MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mixerList);
+        mMixerRecyclerView.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
+        mMixerRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnMixerItemClickListener() {
+            @Override
+            public void onItemClick(View view, MixerItemEntry data, int position) {
+                Toast.makeText(OlaTemplateFeedActivity.this, data.getMixerTitle() + "+" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //初始化调音台模拟数据
+    private void initAnimals() {
+        MixerItemEntry defaultItem = new MixerItemEntry("", "调音", "label", false);
+        mixerList.add(defaultItem);
+        MixerItemEntry xiangCun = new MixerItemEntry("imag", "乡村", "label", true);
+        mixerList.add(xiangCun);
+        MixerItemEntry jiedao = new MixerItemEntry("imag", "街道", "label", false);
+        mixerList.add(jiedao);
+        MixerItemEntry tianYuan = new MixerItemEntry("imag", "田园", "label", false);
+        mixerList.add(tianYuan);
+        MixerItemEntry dianZi = new MixerItemEntry("imag", "电子", "label", false);
+        mixerList.add(dianZi);
+        MixerItemEntry jueShi = new MixerItemEntry("imag", "爵士", "label", false);
+        mixerList.add(jueShi);
+        MixerItemEntry shuoChang = new MixerItemEntry("imag", "说唱", "label", false);
+        mixerList.add(shuoChang);
+        MixerItemEntry yaoGun = new MixerItemEntry("imag", "摇滚", "label", false);
+        mixerList.add(yaoGun);
+        MixerItemEntry guoFeng = new MixerItemEntry("imag", "国风", "label", false);
+        mixerList.add(guoFeng);
     }
 
     @Override

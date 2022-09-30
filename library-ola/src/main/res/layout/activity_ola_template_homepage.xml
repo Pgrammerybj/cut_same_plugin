@@ -14,6 +14,7 @@
         android:layout_marginTop="46dp"
         android:layout_marginBottom="10dp" />
 
+    <!-- 模版轮播-->
     <com.angelstar.ybj.xbanner.OlaBannerView
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
@@ -21,10 +22,29 @@
         app:banner_auto_scroll="false"
         app:banner_page_margin="56dp" />
 
+    <!-- 视频播放进度条-->
     <include
         layout="@layout/layout_template_video_seekbar"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="20dp" />
+
+    <!--素材选择list-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_video_mixer"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="15dp"
+        android:background="@null"
+        android:paddingHorizontal="20dp"
+        android:scrollbars="none" />
+
+    <!-- 视频播放进度条-->
+    <include
+        layout="@layout/layout_template_page_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="45dp"
+        android:layout_marginTop="22dp" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.angelstar.ola;
+package com.angelstar.ola.interfaces;
 
 /**
  * @Author：yangbaojiang
