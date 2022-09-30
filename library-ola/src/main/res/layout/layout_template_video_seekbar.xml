@@ -6,7 +6,7 @@
     android:layout_marginTop="34dp"
     android:orientation="vertical">
 
-    <com.ss.ugc.android.editor.main.FloatSliderView
+    <com.angelstar.ola.view.FloatSliderView
         android:id="@+id/temp_video_player_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

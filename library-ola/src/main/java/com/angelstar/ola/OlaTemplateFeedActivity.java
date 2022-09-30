@@ -2,6 +2,7 @@ package com.angelstar.ola;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,12 +20,13 @@ import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.OnMixerItemClickListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
+import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ybj.xbanner.OlaBannerView;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
-import com.ss.ugc.android.editor.main.FloatSliderView;
 import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -109,7 +111,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             videoItemView.setOnClickPlayListener(new VideoItemView.OnClickPlayStateListener() {
                 @Override
                 public void onVideoClick(View view) {
-                    Log.i("JackYang-ola", "OlaTemplateFeedActivity-onClick: " + nleEditorContext.getVideoPlayer().isPlaying());
                     if (mVideoItemView.getVideStateView().isActivated()) {
                         nleEditorContext.getVideoPlayer().pause();
                     } else {
@@ -141,9 +142,24 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         adapter.setOnItemClickListener(new OnMixerItemClickListener() {
             @Override
             public void onItemClick(View view, MixerItemEntry data, int position) {
-                Toast.makeText(OlaTemplateFeedActivity.this, data.getMixerTitle() + "+" + position, Toast.LENGTH_SHORT).show();
+                //弹出调音面板
+                if (position == 0) {
+                    showMixerMenu();
+                }
+                Toast.makeText(OlaTemplateFeedActivity.this, position == 0 ? "弹出调音面板" : data.getMixerTitle() + "+" + position, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showMixerMenu() {
+        BottomSheetDialog answerSheetDialog = new BottomSheetDialog(this,R.style.MixerBottomSheetDialogTheme);
+        View inflate = LayoutInflater.from(this).inflate(R.layout.layout_mixer_menu, null, false);
+        answerSheetDialog.setContentView(inflate);
+        answerSheetDialog.setCanceledOnTouchOutside(true);
+        answerSheetDialog.setCancelable(true);
+        answerSheetDialog.show();
+        //设置透明背景
+        answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
     }
 
     //初始化调音台模拟数据
