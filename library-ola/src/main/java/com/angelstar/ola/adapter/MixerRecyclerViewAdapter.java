@@ -13,6 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.angelstar.ola.R;
 import com.angelstar.ola.entity.MixerItemEntry;
 import com.angelstar.ola.interfaces.OnMixerItemClickListener;
+import com.angelstar.ola.utils.SizeUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -22,6 +27,8 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
     private List<MixerItemEntry> mixerList;
     public static final int DEFAULT_ITEM = 0;
     public static final int MIXER_ITEM = 1;
+
+    String url_test = "https://img2.baidu.com/it/u=552452605,2067380431&fm=253&fmt=auto&app=138&f=JPEG?w=160&h=100";
 
     public MixerRecyclerViewAdapter(Context context, List<MixerItemEntry> mixerList) {
         this.mixerList = mixerList;
@@ -47,9 +54,14 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
             holder.itemImage.setImageResource(R.mipmap.mixer_item_test);
             holder.itemTitle.setText("调音");
         } else {
-            holder.itemImage.setImageResource(R.mipmap.mixer_item_test);
+//            holder.itemImage.setImageResource(R.mipmap.mixer_item_test);
+
+            RequestOptions options = new RequestOptions()
+                    .placeholder(R.mipmap.mixer_item_test)
+                    .bitmapTransform(new RoundedCorners(SizeUtil.INSTANCE.dp2px(8)));
+
             //用来加载网络
-            //Glide.with(this.mContext).load(itemEntry.getMixerImage()).into(holder.itemImage);
+            Glide.with(this.mContext).load(url_test).apply(options).into(holder.itemImage);
             holder.itemTitle.setText(itemEntry.getMixerTitle());
         }
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(holder.itemView, itemEntry, position));

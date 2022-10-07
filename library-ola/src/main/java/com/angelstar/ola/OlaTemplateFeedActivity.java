@@ -1,12 +1,15 @@
 package com.angelstar.ola;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,12 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.angelstar.ola.adapter.MixerRecyclerViewAdapter;
+import com.angelstar.ola.adapter.SlideAdapter;
 import com.angelstar.ola.entity.MixerItemEntry;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.OnMixerItemClickListener;
+import com.angelstar.ola.interfaces.ScaleSlideBarListener;
+import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ola.view.FloatSliderView;
+import com.angelstar.ola.view.ScaleSlideBar;
 import com.angelstar.ybj.xbanner.OlaBannerView;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
@@ -68,6 +75,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
     private List<MixerItemEntry> mixerList = new ArrayList<>();
+    private ScaleSlideBar mScaleSlideBar;
+    private RecyclerView mRcMenuMulti;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +141,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     private void initRecyclerView() {
-        initAnimals();
+        initMockData();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mMixerRecyclerView.setLayoutManager(linearLayoutManager);
@@ -151,8 +160,43 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         });
     }
 
+    private void initMixerMenuView() {
+
+        //初始化带刻度的AISlideBar
+        Resources resources = getResources();
+        String[] slideContent = new String[]{"关", "低度", "中度", "高度"};
+        SlideAdapter mAdapter = new SlideAdapter(resources, slideContent, R.drawable.selector_slide_bg);
+
+        mScaleSlideBar.setAdapter(mAdapter);
+
+        mScaleSlideBar.setPosition(2);
+
+        mScaleSlideBar.setOnGbSlideBarListener(new ScaleSlideBarListener() {
+            @Override
+            public void onPositionSelected(int position) {
+                Toast.makeText(OlaTemplateFeedActivity.this, "selected " + position, Toast.LENGTH_SHORT).show();
+                Log.d("edanelx", "selected " + position);
+            }
+        });
+
+
+        //调音面板内部混响条目
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRcMenuMulti.setLayoutManager(linearLayoutManager);
+        MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mixerList);
+        mRcMenuMulti.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
+        mRcMenuMulti.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnMixerItemClickListener() {
+            @Override
+            public void onItemClick(View view, MixerItemEntry data, int position) {
+                Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data.getMixerTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void showMixerMenu() {
-        BottomSheetDialog answerSheetDialog = new BottomSheetDialog(this,R.style.MixerBottomSheetDialogTheme);
+        BottomSheetDialog answerSheetDialog = new BottomSheetDialog(this, R.style.MixerBottomSheetDialogTheme);
         View inflate = LayoutInflater.from(this).inflate(R.layout.layout_mixer_menu, null, false);
         answerSheetDialog.setContentView(inflate);
         answerSheetDialog.setCanceledOnTouchOutside(true);
@@ -160,10 +204,44 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         answerSheetDialog.show();
         //设置透明背景
         answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+
+        mScaleSlideBar = inflate.findViewById(R.id.scale_slide_bar);
+        mRcMenuMulti = inflate.findViewById(R.id.recyclerview_mixer_menu_multi);
+        FrameLayout mSeekBarMixerPeople = inflate.findViewById(R.id.seekbar_mixer_people);
+        FrameLayout mSeekBarMixerAccompany = inflate.findViewById(R.id.seekbar_mixer_accompany);
+        initMixerSeekBar(mSeekBarMixerPeople, mSeekBarMixerAccompany);
+        initMixerMenuView();
+    }
+
+    private void initMixerSeekBar(FrameLayout mSeekBarMixerPeople, FrameLayout mSeekBarMixerAccompany) {
+        SeekBar peopleSeekBar = mSeekBarMixerPeople.findViewById(R.id.seekbar_mixer_people_voice);
+        SeekBar accompanySeekBar = mSeekBarMixerAccompany.findViewById(R.id.seekbar_mixer_people_voice);
+        TextView tvPProgress = mSeekBarMixerPeople.findViewById(R.id.tv_progress);
+        TextView tvPProgressT = mSeekBarMixerPeople.findViewById(R.id.tv_progress_title);
+        TextView tvAProgress = mSeekBarMixerAccompany.findViewById(R.id.tv_progress);
+        TextView tvAProgressT = mSeekBarMixerAccompany.findViewById(R.id.tv_progress_title);
+        peopleSeekBar.setProgress(68);
+        tvPProgress.setText(String.valueOf(peopleSeekBar.getProgress()));
+        accompanySeekBar.setProgress(47);
+        tvAProgress.setText(String.valueOf(accompanySeekBar.getProgress()));
+        tvPProgressT.setText("人声音量");
+        tvAProgressT.setText("伴奏音量");
+        peopleSeekBar.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvPProgress.setText(String.valueOf(progress));
+            }
+        });
+        accompanySeekBar.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvAProgress.setText(String.valueOf(progress));
+            }
+        });
     }
 
     //初始化调音台模拟数据
-    private void initAnimals() {
+    private void initMockData() {
         MixerItemEntry defaultItem = new MixerItemEntry("", "调音", "label", false);
         mixerList.add(defaultItem);
         MixerItemEntry xiangCun = new MixerItemEntry("imag", "乡村", "label", true);

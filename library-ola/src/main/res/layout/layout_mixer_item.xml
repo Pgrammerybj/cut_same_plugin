@@ -6,6 +6,7 @@
     <ImageView
         android:id="@+id/iv_mixer_item_img"
         android:layout_width="66dp"
+        android:scaleType="fitXY"
         android:layout_height="66dp"
         android:src="@mipmap/mixer_item_test" />
 
