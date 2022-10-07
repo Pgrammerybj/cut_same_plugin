@@ -39,7 +39,7 @@ import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
+public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener, View.OnClickListener {
 
     NLEEditorContext nleEditorContext;
     private IPlayerActivityDelegate editorActivityDelegate;
@@ -120,11 +120,17 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             videoItemView.setOnClickPlayListener(new VideoItemView.OnClickPlayStateListener() {
                 @Override
                 public void onVideoClick(View view) {
+                    //点击视频播放/暂停按钮
                     if (mVideoItemView.getVideStateView().isActivated()) {
                         nleEditorContext.getVideoPlayer().pause();
                     } else {
                         startPlay(videoItemView.getVideStateView());
                     }
+                }
+
+                @Override
+                public void onEditVideoClick(View view) {
+                    //点击视频编辑按钮
                 }
             });
             itemList.add(videoItemView);
@@ -137,6 +143,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mTvCurrentPlayTime = findViewById(R.id.tv_current_play_time);
         mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
         mMixerRecyclerView = findViewById(R.id.recyclerview_video_mixer);
+        TextView mTvChooseAlbum = findViewById(R.id.tv_choose_album);
+        mTvChooseAlbum.setOnClickListener(this);
         initRecyclerView();
     }
 
@@ -294,5 +302,13 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         //切换ViewPager前先恢复播放器参数
         nleEditorContext.getVideoPlayer().resume();
         startPlay(videoItemView.getVideStateView());
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.tv_choose_album) {
+            //打开相册
+            Toast.makeText(this, "打开相册", Toast.LENGTH_SHORT).show();
+        }
     }
 }

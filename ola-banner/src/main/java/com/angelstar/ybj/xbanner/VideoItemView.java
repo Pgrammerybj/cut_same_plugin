@@ -65,6 +65,7 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
         Glide.with(this.context).load(url).into(mIvVideoCover);
         mTvVideoTime.setText("00:30");
         mIvVideState.setOnClickListener(this);
+        mTvEditVideo.setOnClickListener(this);
         return this;
     }
 
@@ -98,10 +99,16 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
 
     public interface OnClickPlayStateListener{
         void onVideoClick(View view);
+        void onEditVideoClick(View view);
     }
 
     @Override
     public void onClick(View v) {
-        mOnClickPlayStateListener.onVideoClick(v);
+        int id = v.getId();
+        if (id == R.id.iv_video_player_state) {
+            mOnClickPlayStateListener.onVideoClick(v);
+        } else if (id == R.id.tv_edit_video) {
+            mOnClickPlayStateListener.onEditVideoClick(v);
+        }
     }
 }
