@@ -54,24 +54,25 @@ class DefaultMaterialViewHolder(
         materialViewHolderConfig?.let { config ->
             if (config.showSelectIcon) {
                 itemView.selectImageView.visibility = View.VISIBLE
+                itemView.selectedMask.visibility = View.VISIBLE
                 if (state.materialSelectedState.isSelected()) {
-                    config.selectedIcon?.let { selectedIcon ->
-                        itemView.selectImageView.visibility = View.VISIBLE;
-                    }
+                    itemView.selectImageView.visibility = View.VISIBLE
+                    itemView.selectedMask.visibility = View.VISIBLE
                 } else {
-                    itemView.selectImageView.visibility = View.GONE;
+                    itemView.selectImageView.visibility = View.GONE
+                    itemView.selectedMask.visibility = View.GONE
                 }
             } else {
                 itemView.selectImageView.visibility = View.GONE
+                itemView.selectedMask.visibility = View.GONE
             }
         }
 
-        if ((!state.enableSelect && !state.materialSelectedState.isSelected() && materialViewHolderConfig?.showNonSelectableMask == true)
-            || (isEnableMaskForTimeLimit) && mediaData.isVideo()
-        ) {
-            itemView.selectedMask.visibility = View.VISIBLE
+        //不可选择时，白色透明遮罩
+        if ((!state.enableSelect && !state.materialSelectedState.isSelected() && materialViewHolderConfig?.showNonSelectableMask == true) || (isEnableMaskForTimeLimit) && mediaData.isVideo()) {
+            itemView.notSelectMask.visibility = View.VISIBLE
         } else {
-            itemView.selectedMask.visibility = View.GONE
+            itemView.notSelectMask.visibility = View.GONE
         }
     }
 

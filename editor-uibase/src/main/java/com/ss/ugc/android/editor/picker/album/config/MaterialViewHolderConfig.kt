@@ -12,6 +12,6 @@ import androidx.annotation.DrawableRes
 class MaterialViewHolderConfig(
     val showSelectIcon: Boolean = true,
     val showNonSelectableMask: Boolean = true,
-    @DrawableRes val noSelectIcon: Int,
-    @DrawableRes val selectedIcon: Int? = null,
+//    @DrawableRes val noSelectIcon: Int,
+//    @DrawableRes val selectedIcon: Int? = null,
 )

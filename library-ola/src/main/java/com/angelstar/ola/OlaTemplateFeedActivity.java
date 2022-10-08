@@ -40,8 +40,6 @@ import com.ss.ugc.android.editor.picker.mediapicker.PickType;
 import com.ss.ugc.android.editor.picker.mediapicker.PickerActivity;
 import com.ss.ugc.android.editor.picker.mediapicker.PickerConfig;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -318,7 +316,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             Intent intent = new  Intent(this, PickerActivity.class);
             long maxSize = 388743680L; //long long long LONG类型
             intent.putExtra(PickerConfig.MAX_SELECT_SIZE, maxSize); //default 180MB (Optional)
-            intent.putExtra(PickerConfig.MAX_SELECT_COUNT, 100); //default 40 (Optional)
+            intent.putExtra(PickerConfig.MAX_SELECT_COUNT, 7); //default 40 (Optional)
             intent.putExtra(PickerConfig.PICK_TYPE, PickType.SELECT.getType());
             startActivity(intent);
         }

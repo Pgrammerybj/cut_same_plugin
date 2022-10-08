@@ -244,8 +244,8 @@ class PickerActivity : AppCompatActivity() {
                 //如果最大选择数量大于1，则显示选择icon
                 showSelectIcon = maxSelect > 1,
                 showNonSelectableMask = true,
-                noSelectIcon = R.drawable.ic_no_select,
-                selectedIcon = R.drawable.ic_selected
+//                noSelectIcon = R.drawable.ic_no_select,
+//                selectedIcon = R.drawable.ic_selected
             )
         )
 
