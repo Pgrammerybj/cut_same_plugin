@@ -48,8 +48,7 @@ class GlideImageLoader : IImageLoader {
         imageView: ImageView,
         option: ImageOption
     ) {
-        Glide.with(context).load(path).apply(option.toGlideRequestOption())
-            .into(imageView)
+        Glide.with(context).load(path).apply(option.toGlideRequestOption()).into(imageView)
         val gifDrawable = imageView.drawable as? GifDrawable
         gifDrawable?.apply {
             start()

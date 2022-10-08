@@ -21,7 +21,7 @@ data class MaterialListViewConfig(
     val materialViewHolderConfig: MaterialViewHolderConfig?,
     val imageQueryParams: QueryParam? = null,
     val videoQueryParams: QueryParam? = null,
-    val listSpanCount: Int = 4,
+    val listSpanCount: Int = 3,
     val itemClickListener: ((list: List<MediaItem>, position: Int) -> Unit)? = null,
     val selectorClickListener: ((list: List<MediaItem>, position: Int) -> Unit)? = null,
     val createViewHolder: ((

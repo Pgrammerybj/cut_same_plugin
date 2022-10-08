@@ -28,10 +28,10 @@ class SpacesItemDecoration(
 
                 // horizontal
                 val layoutPosition = parent.getChildLayoutPosition(view)
-                if (layoutPosition + 1 % columnCountLimit == 0) { // the end of row
+                if (layoutPosition + 1 % columnCountLimit == 0) { // 一行最后一个，the end of row
                     outRect.left = horizontalSpace / 2
                 }
-                if (layoutPosition % columnCountLimit == 0) { // the first of row
+                if (layoutPosition % columnCountLimit == 0) { // 一行的第一个 the first of row
                     outRect.right = horizontalSpace / 2
                 }
                 if (layoutPosition % columnCountLimit != 0 && layoutPosition + 1 % columnCountLimit != 0) { // the middle of row

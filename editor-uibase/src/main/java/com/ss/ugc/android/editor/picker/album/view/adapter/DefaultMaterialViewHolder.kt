@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.ss.ugc.android.editor.base.R
 import com.ss.ugc.android.editor.base.imageloder.ImageOption
+import com.ss.ugc.android.editor.base.utils.SizeUtil
 import com.ss.ugc.android.editor.picker.PickComponentConfig
 import com.ss.ugc.android.editor.picker.album.config.MaterialViewHolderConfig
 import com.ss.ugc.android.editor.picker.data.model.MediaItem
@@ -23,15 +24,15 @@ class DefaultMaterialViewHolder(
     private val materialViewHolderConfig: MaterialViewHolderConfig?
 ) : RecyclerView.ViewHolder(itemView) {
     private var data: MediaItem? = null
-    private var minVideoTimeThreshold:Long = -1
+    private var minVideoTimeThreshold: Long = -1
     var position: Int? = null
 
     init {
-        itemView.setOnClickListener {
+        itemView.previewImageView.setOnClickListener {
             position?.let(contentClickListener)
         }
 
-        itemView.selectLayout.setOnClickListener {
+        itemView.setOnClickListener {
             position?.let(selectorClickListener)
         }
     }
@@ -55,10 +56,10 @@ class DefaultMaterialViewHolder(
                 itemView.selectImageView.visibility = View.VISIBLE
                 if (state.materialSelectedState.isSelected()) {
                     config.selectedIcon?.let { selectedIcon ->
-                        itemView.selectImageView.setImageResource(selectedIcon)
+                        itemView.selectImageView.visibility = View.VISIBLE;
                     }
                 } else {
-                    itemView.selectImageView.setImageResource(config.noSelectIcon)
+                    itemView.selectImageView.visibility = View.GONE;
                 }
             } else {
                 itemView.selectImageView.visibility = View.GONE
@@ -66,10 +67,11 @@ class DefaultMaterialViewHolder(
         }
 
         if ((!state.enableSelect && !state.materialSelectedState.isSelected() && materialViewHolderConfig?.showNonSelectableMask == true)
-            || (isEnableMaskForTimeLimit) && mediaData.isVideo()) {
-            itemView.maskView.visibility = View.VISIBLE
+            || (isEnableMaskForTimeLimit) && mediaData.isVideo()
+        ) {
+            itemView.selectedMask.visibility = View.VISIBLE
         } else {
-            itemView.maskView.visibility = View.GONE
+            itemView.selectedMask.visibility = View.GONE
         }
     }
 
@@ -80,7 +82,10 @@ class DefaultMaterialViewHolder(
     }
 
     private fun bindData(mediaData: MediaItem, position: Int, state: SelectedState) {
-        if(minVideoTimeThreshold != -1.toLong()) enableMaskForTimeLimt(mediaData.duration,this.minVideoTimeThreshold)
+        if (minVideoTimeThreshold != -1.toLong()) enableMaskForTimeLimt(
+            mediaData.duration,
+            this.minVideoTimeThreshold
+        )
         loadThumbnail(mediaData, itemView.thumbIv)
         if (mediaData.isVideo()) {
             itemView.durationTv.visibility = View.VISIBLE
@@ -116,9 +121,12 @@ class DefaultMaterialViewHolder(
         val requestOptions = if (resWidth > 0 && resHeight > 0) {
             val overrideWidth = Math.min(view.measuredWidth, resWidth)
             val overrideHeight = Math.min(view.measuredHeight, resHeight)
-            ImageOption.Builder().width(overrideWidth).height(overrideHeight).build()
+            ImageOption.Builder().scaleType(ImageView.ScaleType.CENTER_CROP)
+                .roundCorner(SizeUtil.dp2px(8f)).width(overrideWidth).height(overrideHeight).build()
         } else {
-            ImageOption.Builder().width(view.measuredWidth).height(view.measuredHeight).build()
+            ImageOption.Builder().scaleType(ImageView.ScaleType.CENTER_CROP)
+                .roundCorner(SizeUtil.dp2px(8f)).width(view.measuredWidth)
+                .height(view.measuredHeight).build()
         }
         pickComponentConfig.imageLoader.loadBitmap(
             view.context,

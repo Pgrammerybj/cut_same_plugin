@@ -33,16 +33,14 @@ class MaterialListView(
     }
 
     private fun initView() {
-        contentView =
-            LayoutInflater.from(context).inflate(R.layout.layout_material_list_view, null, false)
+        contentView = LayoutInflater.from(context).inflate(R.layout.layout_material_list_view, null, false)
         recyclerView = contentView.findViewById(R.id.materialListView)
-        val layoutManager =
-            GridLayoutManager(context, materialListViewConfig.listSpanCount)
+        val layoutManager = GridLayoutManager(context, materialListViewConfig.listSpanCount)
         recyclerView.layoutManager = layoutManager
         recyclerView.addItemDecoration(
             SpacesItemDecoration(
-                SizeUtil.dp2px(2f),
-                SizeUtil.dp2px(2f),
+                SizeUtil.dp2px(8f),
+                SizeUtil.dp2px(8f),
                 columnCountLimit = materialListViewConfig.listSpanCount
             )
         )
