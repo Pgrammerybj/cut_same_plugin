@@ -94,7 +94,7 @@ class MaterialSelectorView(
             confirmClickListener()
         }
 
-        imageSelectedRVAdapter = ImageSelectedRVAdapter(root.context, materialSelectModel.selectedList)
+        imageSelectedRVAdapter = ImageSelectedRVAdapter(root.context,maxSelectedCount,materialSelectModel)
         rvPickerSelected.adapter = imageSelectedRVAdapter
     }
 

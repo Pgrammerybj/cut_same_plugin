@@ -12,14 +12,16 @@
         android:layout_height="match_parent"
         android:background="@drawable/selector_picker_selected"
         android:gravity="center"
-        android:text="0.8秒"
+        android:clickable="true"
+        android:text="@string/ck_picker_anchor_time"
         android:textColor="#1a313131"
-        android:textSize="13sp" />
+        android:textSize="13sp"/>
 
     <ImageView
         android:id="@+id/iv_selected_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitXY"
         android:src="@drawable/default_album_art"
         android:visibility="gone"
         tools:visibility="visible" />
