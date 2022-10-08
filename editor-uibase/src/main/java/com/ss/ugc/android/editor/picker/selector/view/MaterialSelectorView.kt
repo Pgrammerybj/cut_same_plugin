@@ -55,21 +55,19 @@ class MaterialSelectorView(
                     )
                     //通知Adapter更新列表
                     imageSelectedRVAdapter.updateSelectedList(materialSelectModel.selectedList)
-                }
-            })
 
-            enableConfirm.observe(lifecycleOwner, { enableConfirm ->
-                //控制相册的「开始创作」按钮的样式
-                if (enableConfirm == false) {
-                    confirmTV.isEnabled = false
-                    confirmTV.setTextColor(Color.parseColor("#858585"))
-                    confirmTV.background =
-                        root.resources.getDrawable(R.drawable.bg_finish_select_disable_btn, null)
-                } else {
-                    confirmTV.setTextColor(Color.WHITE)
-                    confirmTV.isEnabled = true
-                    confirmTV.background =
-                        root.resources.getDrawable(R.drawable.bg_finish_select_enable_btn, null)
+                    //控制相册的「开始创作」按钮的样式
+                    if (count != maxSelectedCount) {
+                        confirmTV.isEnabled = false
+                        confirmTV.setTextColor(Color.parseColor("#858585"))
+                        confirmTV.background =
+                            root.resources.getDrawable(R.drawable.bg_finish_select_disable_btn, null)
+                    } else {
+                        confirmTV.setTextColor(Color.WHITE)
+                        confirmTV.isEnabled = true
+                        confirmTV.background =
+                            root.resources.getDrawable(R.drawable.bg_finish_select_enable_btn, null)
+                    }
                 }
             })
         }
