@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@null">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/pagerTab"
         style="@style/font_size_30"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="60dp"
+        android:background="@null"
         android:visibility="visible"
         app:tabBackground="@null"
         app:tabGravity="center"
@@ -17,18 +19,24 @@
         app:tabMinWidth="20dp"
         app:tabPaddingEnd="10dp"
         app:tabPaddingStart="10dp"
-        app:tabSelectedTextColor="@android:color/black"
-        app:tabTextAppearance="@style/CKCustomTextAppearance"
-        app:tabTextColor="#808080" />
+        app:tabSelectedTextColor="#1F1F1F"
+        app:tabTextColor="#858585" />
 
     <ImageView
         android:id="@+id/backIv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_alignTop="@id/pagerTab"
         android:layout_alignBottom="@id/pagerTab"
-        android:layout_marginStart="30dp"
+        android:layout_marginLeft="20dp"
+        android:background="@null"
         android:src="@drawable/ic_page_close" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/pagerTab"
+        android:background="#E0E0E0" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/materialViewPager"
@@ -36,7 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/pagerTab"
         android:layout_gravity="center"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp" />
+        android:layout_marginTop="18dp"
+        android:background="@null"
+        android:paddingHorizontal="20dp" />
 
 </RelativeLayout>

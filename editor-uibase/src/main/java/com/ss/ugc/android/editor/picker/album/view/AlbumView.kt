@@ -80,8 +80,7 @@ class AlbumView(
     }
 
     private fun initContentView(root: ViewGroup) {
-        contentView = LayoutInflater.from(root.context)
-            .inflate(R.layout.layout_album, root, true) as ViewGroup
+        contentView = LayoutInflater.from(root.context).inflate(R.layout.layout_album, root, true) as ViewGroup
         viewPager = contentView.findViewById<ViewPager>(R.id.materialViewPager).apply {
             offscreenPageLimit = 3
         }

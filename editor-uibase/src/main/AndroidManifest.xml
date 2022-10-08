@@ -15,7 +15,7 @@
         <activity
             android:name="com.ss.ugc.android.editor.picker.mediapicker.PickerActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/PickerImageTranslation"
             android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
