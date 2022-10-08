@@ -81,7 +81,7 @@ class MaterialListViewAdapter(
         // 动态设置图片大小 保证宽高相等
         //条目中间分割的间距,一行3个所以2个间距
         val itemDecorationSize = dp2px(8F) * 2
-        val itemPaddingHorizontal = dp2px(20F) * 2   //计算的部分放到外面，这样可以优化耗时
+        val itemPaddingHorizontal = dp2px(18F) * 2   //计算的部分放到外面，这样可以优化耗时
         val ivSize =
             (ScreenUtils.getScreenWidth(parent.context) - itemDecorationSize - itemPaddingHorizontal) / materialListViewConfig.listSpanCount
         itemView.layoutParams.height = ivSize

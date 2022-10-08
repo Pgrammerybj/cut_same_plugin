@@ -512,6 +512,7 @@
     <string name="ck_squat_profile">侧面下蹲</string>
     <string name="ck_standard">标准</string>
     <string name="ck_start">开始创作</string>
+    <string name="ck_confirm_picker">确定(%1$d/%2$d)</string>
     <string name="ck_start_recognizing">开始识别</string>
     <string name="ck_std_check_and_retry">请检查网络链接后重试</string>
     <string name="ck_std_network_error">网络链接错误</string>

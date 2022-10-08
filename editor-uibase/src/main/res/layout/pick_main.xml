@@ -8,10 +8,10 @@
 
     <FrameLayout
         android:id="@+id/album_root"
-        android:paddingBottom="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_image_picker"/>
+        android:background="@drawable/bg_image_picker"
+        android:paddingBottom="100dp" />
 
     <FrameLayout
         android:id="@+id/preview_root"
@@ -22,6 +22,7 @@
         android:id="@+id/selector_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

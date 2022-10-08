@@ -301,21 +301,8 @@ class PickerActivity : AppCompatActivity() {
             lifecycleOwner = this,
             materialSelectModel = materialSelectModel,
             selectorViewConfig = config,
-            selectorMeasureListener = { height ->
-                album_root.layoutParams.apply {
-                    this.height = SizeUtil.getScreenHeight(this@PickerActivity) - height
-                }
-            },
             confirmClickListener = confirmClickListener,
-            addClickListener = {
-                materialPreViewModel.selectedPage.value?.let { addItem ->
-                    val isSelected = materialSelectModel.getSelectState(addItem).isSelected()
-                    if (!isSelected) {
-                        materialSelectModel.changeSelectState(addItem)
-                    }
-                    done(materialSelectModel.selectedList)
-                }
-            }
+            maxSelectedCount = maxSelect
         )
         //当最大选择数大于1，才需要在素材展示列表页面显示选择页面。
         if (maxSelect > 1) {
