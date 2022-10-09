@@ -272,14 +272,14 @@ class PickerActivity : AppCompatActivity() {
             lifecycleOwner = this,
             materialPreViewModel = materialPreViewModel,
             pickComponentConfig = pickComponentConfig,
-            viewStateChangeListener = { visible ->
-                if (visible) {
-                    //在preview场景下，选择view为添加功能类型
-                    materialSelectorView.changeViewType(SelectViewType.ADD)
-                } else {
-                    materialSelectorView.changeViewType(SelectViewType.CONFIRM)
-                }
-            }
+//            viewStateChangeListener = { visible ->
+//                if (visible) {
+//                    //在preview场景下，选择view为添加功能类型
+//                    materialSelectorView.changeViewType(SelectViewType.ADD)
+//                } else {
+//                    materialSelectorView.changeViewType(SelectViewType.CONFIRM)
+//                }
+//            }
         )
     }
 

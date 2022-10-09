@@ -20,7 +20,6 @@ open class MaterialPreView(
     private val lifecycleOwner: LifecycleOwner,
     private val materialPreViewModel: MaterialPreViewModel,
     private val pickComponentConfig: PickComponentConfig,
-    private val viewStateChangeListener: ((visible: Boolean) -> Unit)? = null
 ) {
     private lateinit var contentView: ViewGroup
     private lateinit var preViewViewPager: ViewPager
@@ -49,7 +48,6 @@ open class MaterialPreView(
         } else if (position == 0) {
             pageChangeListener.onPageSelected(0)
         }
-        viewStateChangeListener?.invoke(true)
     }
 
     private fun initContentView(root: ViewGroup) {
@@ -67,7 +65,6 @@ open class MaterialPreView(
 
     private fun hide() {
         root.removeAllViews()
-        viewStateChangeListener?.invoke(false)
     }
 
     protected open fun providePagerViewProvider(

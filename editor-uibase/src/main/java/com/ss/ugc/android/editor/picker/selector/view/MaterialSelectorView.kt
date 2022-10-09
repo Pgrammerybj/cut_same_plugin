@@ -56,7 +56,7 @@ class MaterialSelectorView(
                     //通知Adapter更新列表
                     imageSelectedRVAdapter.updateSelectedList(materialSelectModel.selectedList)
 
-                    //控制相册的「开始创作」按钮的样式
+                    //控制相册的「确定选择」按钮的样式
                     if (count != maxSelectedCount) {
                         confirmTV.isEnabled = false
                         confirmTV.setTextColor(Color.parseColor("#858585"))
