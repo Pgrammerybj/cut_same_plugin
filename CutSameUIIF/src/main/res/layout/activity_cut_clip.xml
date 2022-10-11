@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,17 +8,18 @@
     tools:context=".cut.preview.CutPlayerActivity">
 
     <Space
+        app:layout_constraintTop_toBottomOf="@+id/rl_title"
         android:id="@+id/glClipSurface"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="parent" />
+        android:layout_height="0dp" />
 
     <SurfaceView
+        android:layout_marginTop="40dp"
         android:id="@+id/clipSurface"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/controlPanel"
-        app:layout_constraintTop_toTopOf="@id/glClipSurface" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_title" />
 
     <com.cutsame.ui.cut.videoedit.customview.CenterMaskView
         android:id="@+id/clipMask"
@@ -42,6 +42,55 @@
         app:layout_constraintRight_toRightOf="@id/clipSurface"
         app:layout_constraintTop_toTopOf="@id/clipSurface" />
 
+
+    <RelativeLayout
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical">
+
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_back"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/bottomTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/cutsame_edit_title_picture_cut"
+            android:textColor="@color/text_white"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/sureBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_clip_confirm"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="@string/cutsame_common_sure"
+            android:textColor="@color/text_white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
     <ImageView
         android:id="@+id/playIv"
         android:layout_width="45dp"
@@ -60,28 +109,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <TextView
-            android:id="@+id/editPictureTipTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cutsame_edit_tip_picture_cut"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="100dp"
-            />
-
         <View
             android:id="@+id/base"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="26dp"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/timeClipLayout"
@@ -111,44 +144,6 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:id="@+id/backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
-        <TextView
-            android:id="@+id/bottomTitleTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cutsame_edit_title_picture_cut"
-            android:textColor="@color/text_white"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
-            app:layout_constraintTop_toTopOf="@+id/backBtn" />
-
-        <TextView
-            android:id="@+id/sureBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingVertical="6dp"
-            android:paddingHorizontal="12dp"
-            android:text="@string/cutsame_common_sure"
-            android:textSize="12sp"
-            android:background="@drawable/bg_pick_sure"
-            android:textColor="@color/text_white"
-            android:textStyle="bold"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
-            app:layout_constraintTop_toTopOf="@+id/backBtn"
-            app:layout_constraintRight_toRightOf="parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -47,7 +47,7 @@
     <!--    <string name="pick_most_count">最多选择%s个素材</string>--><!-- 相同的value 统一成%d词条 -->
     <string name="cutsame_pick_tip_support_preview_video">当前分类仅支持预览视频</string>
     <string name="cutsame_pick_tip_support_preview_image">当前分类仅支持图片</string>
-    <string name="cutsame_pick_tip_most_count">最多选择%d个素材</string>
+    <string name="cutsame_pick_tip_most_count">最多选择%d张图片或视频</string>
 
     <!--compress-->
     <string name="cutsame_compose_video_compose_loading">视频合成中</string>

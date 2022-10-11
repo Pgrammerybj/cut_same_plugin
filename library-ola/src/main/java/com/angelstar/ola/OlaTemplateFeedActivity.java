@@ -52,7 +52,7 @@ import com.ss.ugc.android.editor.picker.mediapicker.PickerConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener, View.OnClickListener {
+public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
     private static final String TAG = "ola-jackyang";
     NLEEditorContext nleEditorContext;
@@ -179,8 +179,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mTvCurrentPlayTime = findViewById(R.id.tv_current_play_time);
         mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
         mMixerRecyclerView = findViewById(R.id.recyclerview_video_mixer);
-        TextView mTvChooseAlbum = findViewById(R.id.tv_choose_album);
-        mTvChooseAlbum.setOnClickListener(this);
         initRecyclerView();
     }
 
@@ -338,19 +336,5 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         //切换ViewPager前先恢复播放器参数
         nleEditorContext.getVideoPlayer().resume();
         startPlay(videoItemView.getVideStateView());
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.tv_choose_album) {
-            //打开相册
-            Toast.makeText(this, "打开相册", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, PickerActivity.class);
-            long maxSize = 388743680L; //long long long LONG类型
-            intent.putExtra(PickerConfig.MAX_SELECT_SIZE, maxSize); //default 180MB (Optional)
-            intent.putExtra(PickerConfig.MAX_SELECT_COUNT, 7); //default 40 (Optional)
-            intent.putExtra(PickerConfig.PICK_TYPE, PickType.SELECT.getType());
-            startActivity(intent);
-        }
     }
 }

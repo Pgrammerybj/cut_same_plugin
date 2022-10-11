@@ -244,10 +244,8 @@ class CutClipActivity : AppCompatActivity(), CoroutineScope {
     private fun initTimeClip(mediaItem: MediaItem) {
         if (mediaItem.type == MediaItem.TYPE_PHOTO) { // photo time clip disable
             timeClipLayout.visibility = View.GONE
-            editPictureTipTv.visibility = View.VISIBLE
         } else {
             timeClipLayout.visibility = View.VISIBLE
-            editPictureTipTv.visibility = View.GONE
             val videoInfo = this.videoInfo
             videoInfo ?: return
 

@@ -1,5 +1,6 @@
 package com.cutsame.ui.gallery.album.preview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -9,7 +10,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.gallery.album.adapter.DeleteClickListener
@@ -19,10 +19,15 @@ import com.cutsame.ui.gallery.album.adapter.PickingListAdapter
 import com.cutsame.ui.gallery.album.model.MediaData
 import com.cutsame.ui.gallery.album.model.TitleMediaType
 import com.cutsame.ui.gallery.viewmodel.GalleryPickerViewModel
+import com.cutsame.ui.utils.SizeUtil
+import com.cutsame.ui.utils.SpaceItemDecoration
 import com.cutsame.ui.utils.showErrorTipToast
 import com.ss.android.ugc.cut_ui.MediaItem
+import kotlinx.android.synthetic.main.activity_default_picker.*
+import kotlinx.android.synthetic.main.view_gallery_preview.view.*
 import java.util.*
 
+@SuppressLint("ViewConstructor")
 class GalleryPreviewView(
     context: Context,
     private val galleryPickerViewModel: GalleryPickerViewModel,
@@ -33,7 +38,7 @@ class GalleryPreviewView(
     private lateinit var previewViewPager: androidx.viewpager.widget.ViewPager
     private lateinit var pickingRecycleView: androidx.recyclerview.widget.RecyclerView
     private lateinit var nextTv: TextView
-    private lateinit var selectImageView: ImageView
+    private lateinit var selectImageView: TextView
     private lateinit var pickingListAdapter: PickingListAdapter
     private var controlListener: ControlListener? = null
     private var viewType: String = VIEW_TYPE_GALLERY
@@ -43,12 +48,11 @@ class GalleryPreviewView(
             controlListener?.onBackClick()
         }
     }
-    private var galleryPreviewAdapter: GalleryPreviewAdapter =
-        GalleryPreviewAdapter(context, previewListener)
+    private var galleryPreviewAdapter: GalleryPreviewAdapter = GalleryPreviewAdapter(context, previewListener)
 
     companion object {
-        val VIEW_TYPE_GALLERY = "gallery"//从相册素材列表跳转进来
-        val VIEW_TYPE_PICK = "pick" //从已经选择的列表跳转进来，
+        const val VIEW_TYPE_GALLERY = "gallery"//从相册素材列表跳转进来
+        const val VIEW_TYPE_PICK = "pick" //从已经选择的列表跳转进来，
     }
 
     init {
@@ -105,25 +109,27 @@ class GalleryPreviewView(
             }
 
         pickingRecycleView.setHasFixedSize(true)
+        pickingRecycleView.addItemDecoration(SpaceItemDecoration(0, 0, 0, SizeUtil.dp2px(8F)))
         pickingRecycleView.adapter = pickingListAdapter
         initComponent()
         initListener(rootPreViewView)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initComponent() {
-        galleryPickerViewModel.pickFull.observe(lifeCycleOwner, Observer {
+        galleryPickerViewModel.pickFull.observe(lifeCycleOwner, {
             nextTv.isSelected = it == true
             if (it == true) {
                 nextTv.background = resources.getDrawable(R.drawable.bg_ok_btn, null)
-                selectImageView.setImageResource(R.drawable.ic_add)
+                selectLayout.visibility = View.GONE
             } else {
                 nextTv.background = resources.getDrawable(R.drawable.bg_ok_noselect, null)
-                selectImageView.setImageResource(R.drawable.ic_select)
+                selectLayout.visibility = View.VISIBLE
             }
         })
 
         galleryPickerViewModel.currentPickIndex.observe(lifeCycleOwner,
-            Observer<Int> { index ->
+            { index ->
                 index?.apply {
                     pickingRecycleView.smoothScrollToPosition(index)
                 }
