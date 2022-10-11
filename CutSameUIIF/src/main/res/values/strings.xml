@@ -13,6 +13,10 @@
     <string name="cutsame_common_title_all">Albums</string>
     <string name="cutsame_common_sure">Sure</string>
     <string name="cutsame_common_media_duration_s">%.1fs</string>
+
+    <string name="ck_confirm_picker">确定(%1$d/%2$d)</string>
+    <string name="ck_picker_anchor_time">%1$d秒</string>
+
 <!--    <string name="media_time">%.1f 秒</string>  --> <!-- 无用词条 -->
     <string name="cutsame_common_open_permission">Please turn on camera, recording and storage permissions for this app</string>
 

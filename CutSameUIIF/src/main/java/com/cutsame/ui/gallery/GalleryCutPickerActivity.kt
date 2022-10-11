@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -36,6 +37,8 @@ import com.cutsame.ui.gallery.data.TabFragmentPagerAdapter
 import com.cutsame.ui.gallery.data.TabType
 import com.cutsame.ui.gallery.viewmodel.GalleryDataViewModel
 import com.cutsame.ui.gallery.viewmodel.GalleryPickerViewModel
+import com.cutsame.ui.utils.SizeUtil
+import com.cutsame.ui.utils.SpaceItemDecoration
 import com.cutsame.ui.utils.showErrorTipToast
 import com.ss.android.ugc.cut_log.LogUtil
 import com.ss.android.ugc.cut_ui.MediaItem
@@ -72,7 +75,8 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        val templateItem = intent.getParcelableExtra<TemplateItem>(CutSameUiIF.ARG_TEMPLATE_ITEM)?.also { templateItem = it }
+        val templateItem = intent.getParcelableExtra<TemplateItem>(CutSameUiIF.ARG_TEMPLATE_ITEM)
+            ?.also { templateItem = it }
         val data = CutSameUiIF.getGalleryPickDataByIntent(intent)
         if (data != null) {
             checkPermission(
@@ -131,85 +135,50 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
 
     private fun initView() {
         previewRootLayout = findViewById(R.id.previewRootLayout)
-        tv_pick_tips.text = String.format(
-            resources.getString(R.string.pick_tips_format),
+        confirmTV.text = String.format(
+            resources.getString(R.string.ck_confirm_picker), 0,
             galleryPickerViewModel.processPickItem.value?.size ?: 0
         )
         //picking
         pickingListAdapter = PickingListAdapter(galleryPickerViewModel, this)
-        pickingRecyclerView.layoutManager =
-            object : LinearLayoutManager(this, HORIZONTAL, false) {
-                override fun smoothScrollToPosition(
-                    recyclerView: RecyclerView,
-                    state: RecyclerView.State?,
-                    position: Int
-                ) {
-                    val linearSmoothScroller =
-                        object :
-                            LinearSmoothScroller(recyclerView.context) {
-                            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
-                                return super.calculateSpeedPerPixel(displayMetrics) * 6
-                            }
+        pickingRecyclerView.layoutManager = object : LinearLayoutManager(this, HORIZONTAL, false) {
+            override fun smoothScrollToPosition(
+                recyclerView: RecyclerView,
+                state: RecyclerView.State?,
+                position: Int
+            ) {
+                val linearSmoothScroller = object : LinearSmoothScroller(recyclerView.context) {
+                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+                        return super.calculateSpeedPerPixel(displayMetrics) * 6
+                    }
 
-                            // scroll to center
-                            override fun calculateDxToMakeVisible(
-                                view: View,
-                                snapPreference: Int
-                            ): Int {
-                                val layoutManager = this.layoutManager
-                                return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
-                                    val params =
-                                        view.layoutParams as RecyclerView.LayoutParams
-                                    val left =
-                                        layoutManager.getDecoratedLeft(view) - params.leftMargin
-                                    val right =
-                                        layoutManager.getDecoratedRight(view) + params.rightMargin
-                                    val start = layoutManager.paddingLeft
-                                    val end = layoutManager.width - layoutManager.paddingRight
-                                    return start + (end - start) / 2 - (right - left) / 2 - left
-                                } else {
-                                    0
-                                }
-                            }
+                    // scroll to center
+                    override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
+                        val layoutManager = this.layoutManager
+                        return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
+                            val params = view.layoutParams as RecyclerView.LayoutParams
+                            val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
+                            val right = layoutManager.getDecoratedRight(view) + params.rightMargin
+                            val start = layoutManager.paddingLeft
+                            val end = layoutManager.width - layoutManager.paddingRight
+                            return start + (end - start) / 2 - (right - left) / 2 - left
+                        } else {
+                            0
                         }
-                    linearSmoothScroller.targetPosition = position
-                    startSmoothScroll(linearSmoothScroller)
+                    }
                 }
+                linearSmoothScroller.targetPosition = position
+                startSmoothScroll(linearSmoothScroller)
             }
+        }
         pickingRecyclerView.setHasFixedSize(true)
+        pickingRecyclerView.addItemDecoration(SpaceItemDecoration(0, 0, 0, SizeUtil.dp2px(8F)))
         pickingRecyclerView.adapter = pickingListAdapter
 
         val tabList = listOf(TabType.Album)
         viewPager.adapter = TabFragmentPagerAdapter(tabList, this, galleryPickerViewModel)
         viewPager.isUserInputEnabled = false
         viewPager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                val isOnCamera = tabList[position] == TabType.Camera
-                galleryPickerViewModel.onSelectChange(isOnCamera)
-                if (isOnCamera) {
-                    tv_pick_tips.setTextColor(resources.getColor(R.color.white))
-                    galleryPickerViewModel.loadTemplateRes(
-                        SourceInfo(
-                            templateItem.templateUrl,
-                            templateItem.md5,
-                            templateItem.template_type
-                        )
-                    )
-                } else {
-                    tv_pick_tips.setTextColor(resources.getColor(R.color.white_50))
-                }
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
     }
 
 
@@ -231,11 +200,23 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
 
         galleryPickerViewModel.pickFull.observe(this, {
             val isFull = it == true
-            nextTv.isSelected = isFull
+            confirmTV.isSelected = isFull
+            val maxPickSize = galleryPickerViewModel.processPickItem.value?.size ?: 0
             if (isFull) {
-                nextTv.background = resources.getDrawable(R.drawable.bg_ok_btn, null)
+                confirmTV.background = resources.getDrawable(R.drawable.bg_ok_btn, null)
+                confirmTV.setTextColor(Color.WHITE)
+                confirmTV.text = String.format(
+                    resources.getString(R.string.ck_confirm_picker), maxPickSize,
+                    maxPickSize
+                )
             } else {
-                nextTv.background = resources.getDrawable(R.drawable.bg_ok_noselect, null)
+                confirmTV.background = resources.getDrawable(R.drawable.bg_ok_noselect, null)
+                confirmTV.setTextColor(Color.parseColor("#858585"))
+                confirmTV.text = String.format(
+                    resources.getString(R.string.ck_confirm_picker),
+                    galleryPickerViewModel.processPickMediaData.size,
+                    maxPickSize
+                )
             }
         })
     }
@@ -294,15 +275,19 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
             }
         })
 
-
-        nextTv.setGlobalDebounceOnClickListener {
+        confirmTV.setGlobalDebounceOnClickListener {
             if (galleryPickerViewModel.pickFull.value == true) {
                 startPublishEditPage()
             }
         }
     }
 
-    override fun showPreview(position: Int, datas: List<MediaData>, mediaType: String, viewType: String) {
+    override fun showPreview(
+        position: Int,
+        datas: List<MediaData>,
+        mediaType: String,
+        viewType: String
+    ) {
         showPreview = true
         galleryPreviewView = GalleryPreviewView(this, galleryPickerViewModel, this)
         galleryPreviewView?.setData(datas, mediaType, viewType)

@@ -13,7 +13,7 @@
     <string name="cutsame_common_title_all">所有内容</string>
     <string name="cutsame_common_sure">确定</string>
     <string name="cutsame_common_media_duration_s">%.1fs</string>
-<!--    <string name="media_time">%.1f 秒</string>  --> <!-- 无用词条 -->
+    <!--    <string name="media_time">%.1f 秒</string>  --> <!-- 无用词条 -->
     <string name="cutsame_common_open_permission">请开启此应用相机、录音、存储权限</string>
 
     <!--preview-->
@@ -22,7 +22,7 @@
     <string name="cutsame_common_loading">加载中...</string>
 
     <!--template-->
-<!--    <string name="template_desc">%1$d个素材 </string>--><!-- 只有1个替代符 1%无意义 -->
+    <!--    <string name="template_desc">%1$d个素材 </string>--><!-- 只有1个替代符 1%无意义 -->
     <string name="cutsame_feed_no_more">暂时没有更多了</string>
     <string name="cutsame_feed_fragment_num">%d个素材</string>
     <string name="cutsame_feed_retry">重试</string>
@@ -41,7 +41,10 @@
     <string name="cutsame_pick_tip_duration_invalid">视频不能小于%s</string>
     <string name="cutsame_pick_selected">已选</string>
     <string name="cutsame_pick_tip_category_restriction">视频和图片均可勾选</string>
-<!--    <string name="pick_most_count">最多选择%s个素材</string>--><!-- 相同的value 统一成%d词条 -->
+
+    <string name="ck_confirm_picker">确定(%1$d/%2$d)</string>
+
+    <!--    <string name="pick_most_count">最多选择%s个素材</string>--><!-- 相同的value 统一成%d词条 -->
     <string name="cutsame_pick_tip_support_preview_video">当前分类仅支持预览视频</string>
     <string name="cutsame_pick_tip_support_preview_image">当前分类仅支持图片</string>
     <string name="cutsame_pick_tip_most_count">最多选择%d个素材</string>

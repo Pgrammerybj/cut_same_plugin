@@ -12,7 +12,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
@@ -23,7 +22,6 @@ import com.cutsame.ui.gallery.album.model.CheckBoxMediaData
 import com.cutsame.ui.gallery.album.model.MediaData
 import com.cutsame.ui.gallery.viewmodel.GalleryPickerViewModel
 import com.cutsame.ui.utils.ScreenUtil
-import com.cutsame.ui.utils.SizeUtil
 import com.cutsame.ui.utils.showErrorTipToast
 import com.ss.android.ugc.cut_ui.MediaItem
 import kotlinx.android.synthetic.main.activity_default_picker_item.view.*
