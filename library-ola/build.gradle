@@ -35,4 +35,7 @@ dependencies {
     api project(":ola-banner")
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
+    implementation rootProject.ext.dependencies["retrofit2_adapter-rxjava2"]
+    implementation rootProject.ext.dependencies["retrofit2_converter-gson"]
+    implementation rootProject.ext.dependencies["videocache"]
 }

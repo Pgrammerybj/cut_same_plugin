@@ -9,6 +9,8 @@ enum class Environment {
 object ApiUtil {
     var ENV: Environment = Environment.PRODUCT_CN
 
+    //http://ck-common.byteintl.com 海外域名
+    //http://common.voleai.com  国内域名
     val host = when (ENV) {
         Environment.PRODUCT_CN -> "http://common.voleai.com"
         Environment.PRODUCT_OVER_SEA -> "http://ck-common.byteintl.com"

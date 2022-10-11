@@ -98,7 +98,7 @@
 
     <com.cutsame.ui.customview.LoadingView
         android:id="@+id/loadingView"
-        tools:visibility="gone"
+        tools:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.cutsame.ui.customview.LoadingView>

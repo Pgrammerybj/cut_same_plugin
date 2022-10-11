@@ -41,7 +41,7 @@ class TemplatePreviewFragment : Fragment() {
         LogUtil.d(TAG, "playRunnable")
         videoPlayer.run {
             if (!isPlaying()) {
-                if(!videoPlayer.isPrepared){
+                if (!videoPlayer.isPrepared) {
                     loadingView.show()
                 }
                 play()
@@ -95,7 +95,7 @@ class TemplatePreviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        LogUtil.d(TAG,"onResume")
+        LogUtil.d(TAG, "onResume")
         if (templateItem == templatePreviewModel?.selectedPage?.value) {
             playVideoActual()
         } else {
@@ -105,7 +105,7 @@ class TemplatePreviewFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        LogUtil.d(TAG,"onPause")
+        LogUtil.d(TAG, "onPause")
         pauseVideoActual()
     }
 
@@ -233,7 +233,7 @@ class TemplatePreviewFragment : Fragment() {
 
     private fun initListener() {
         rootView.setGlobalDebounceOnClickListener {
-            if(!renderStart){
+            if (!renderStart) {
                 return@setGlobalDebounceOnClickListener
             }
             if (videoPlayer.isPlaying()) {
@@ -245,6 +245,9 @@ class TemplatePreviewFragment : Fragment() {
             }
         }
 
+        /**
+         * 跳转剪同款页面，在剪同款页面里面会先跳转到图片选择页
+         */
         jumpToCutSameTv.setGlobalDebounceOnClickListener {
             val videoCache = httpProxyCacheServer?.getProxyUrl(templateItem.videoInfo?.url!!)
             CutSameUiIF.createCutUIIntent(requireContext(), templateItem, videoCache!!)
@@ -343,12 +346,12 @@ class TemplatePreviewFragment : Fragment() {
     }
 
     private fun playVideoActual() {
-        LogUtil.d(TAG,"playVideoActual")
+        LogUtil.d(TAG, "playVideoActual")
         uiHandler.postDelayed(playRunnable, 50)
     }
 
     private fun pauseVideoActual(reset: Boolean = false) {
-        LogUtil.d(TAG,"pauseVideoActual")
+        LogUtil.d(TAG, "pauseVideoActual")
         uiHandler.removeCallbacks(playRunnable)
         videoPlayer.run {
             if (isPlaying()) pause()

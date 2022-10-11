@@ -43,13 +43,13 @@ abstract class BasePickerFragment(
         )
         materialListAdapter.setItemClickListener(itemClickListener)
         val layoutManager =
-            androidx.recyclerview.widget.GridLayoutManager(context, 4)
+            androidx.recyclerview.widget.GridLayoutManager(context, 3)
         materialRecycleView.layoutManager = layoutManager
         materialRecycleView.addItemDecoration(
             SpacesItemDecoration(
-                SizeUtil.dp2px(2f),
-                SizeUtil.dp2px(2f),
-                columnCountLimit = 4
+                SizeUtil.dp2px(8f),
+                SizeUtil.dp2px(8f),
+                columnCountLimit = 3
             )
         )
         materialRecycleView.recycledViewPool.setMaxRecycledViews(0, 30)

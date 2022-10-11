@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import com.bef.effectsdk.FileResourceFinder
 import com.bytedance.ies.cutsame.util.SharedPreferencesUtils
 import com.cutsame.editor.EditorManager
 import com.cutsame.solution.AuthorityConfig
@@ -16,13 +15,6 @@ import com.cutsame.ui.ApiUtil
 import com.ss.android.ugc.cut_log.LogConfig
 import com.ss.android.ugc.cut_log.LogIF
 import com.ss.android.ugc.cut_log.LogWrapper
-import com.ss.android.vesdk.VEAuth
-import com.ss.android.vesdk.VEConfigCenter
-import com.ss.android.vesdk.VEConfigKeys
-import com.ss.android.vesdk.VESDK
-import com.vesdk.vebase.Constant
-import com.vesdk.vebase.R
-import com.vesdk.vebase.resource.ResourceHelper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -75,7 +67,6 @@ open class APP : Application() {
                 .pageSize(20)
                 .build(),
 
-            //effectFetcherConfig: 特效拉取配置
             effectFetcherConfig = EffectFetcherConfig.Builder()
                 .host(ApiUtil.host)
                 .modelPath("/api/modellistinfo")

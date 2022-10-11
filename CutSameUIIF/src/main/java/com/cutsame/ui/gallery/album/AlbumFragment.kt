@@ -1,15 +1,14 @@
 package com.cutsame.ui.gallery.album
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.gallery.PickerCallback

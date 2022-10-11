@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gallery_import_color">
+    android:background="@null"
+    android:paddingTop="40dp">
 
     <!--相册、相机承载-->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:layout_height="match_parent"
+        android:background="@drawable/bg_image_picker"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--图片列表选择-->
@@ -19,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/preview_info_bg"
         android:layout_gravity="bottom"
+        android:background="@drawable/preview_info_bg"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -43,31 +46,31 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/pickingRecyclerView"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
                 android:paddingStart="4dp"
-                tools:listitem="@layout/activity_default_picker_segment"
                 tools:itemCount="13"
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                android:clipToPadding="false"
-                android:clipChildren="false"
-                android:layout_height="match_parent"/>
+                tools:listitem="@layout/activity_default_picker_segment" />
 
             <TextView
                 android:id="@+id/nextTv"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/bg_pick_sure"
                 android:gravity="center"
                 android:paddingLeft="12dp"
                 android:paddingTop="6dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="6dp"
                 android:text="@string/cutsame_album_next"
-                android:textSize="12dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:background="@drawable/bg_pick_sure"
                 android:textColor="@color/pick_sure_text_color"
+                android:textSize="12dp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -76,7 +79,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="34dp"
-            app:tabTextAppearance="@style/textappearance_design_tab_30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +88,7 @@
             app:tabMode="scrollable"
             app:tabRippleColor="@null"
             app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@style/textappearance_design_tab_30"
             app:tabTextColor="@color/white_80" />
     </LinearLayout>
 

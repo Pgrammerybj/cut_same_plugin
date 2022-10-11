@@ -54,12 +54,7 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
             holder.itemImage.setImageResource(R.mipmap.mixer_item_test);
             holder.itemTitle.setText("调音");
         } else {
-//            holder.itemImage.setImageResource(R.mipmap.mixer_item_test);
-
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.mipmap.mixer_item_test)
-                    .bitmapTransform(new RoundedCorners(SizeUtil.INSTANCE.dp2px(8)));
-
+            RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(SizeUtil.INSTANCE.dp2px(8)));
             //用来加载网络
             Glide.with(this.mContext).load(url_test).apply(options).into(holder.itemImage);
             holder.itemTitle.setText(itemEntry.getMixerTitle());

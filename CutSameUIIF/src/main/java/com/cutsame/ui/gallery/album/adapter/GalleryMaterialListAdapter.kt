@@ -1,28 +1,41 @@
 package com.cutsame.ui.gallery.album.adapter
 
-import androidx.lifecycle.LifecycleOwner
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.transition.Transition
+import com.bytedance.ies.cutsame.util.MediaUtil
 import com.cutsame.ui.R
+import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.gallery.album.model.CheckBoxMediaData
 import com.cutsame.ui.gallery.album.model.MediaData
 import com.cutsame.ui.gallery.viewmodel.GalleryPickerViewModel
-import kotlinx.android.synthetic.main.activity_default_picker_item.view.*
-import kotlin.collections.ArrayList
-import com.bytedance.ies.cutsame.util.MediaUtil
-import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
+import com.cutsame.ui.utils.ScreenUtil
+import com.cutsame.ui.utils.SizeUtil
 import com.cutsame.ui.utils.showErrorTipToast
 import com.ss.android.ugc.cut_ui.MediaItem
+import kotlinx.android.synthetic.main.activity_default_picker_item.view.*
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.min
 
+/**
+ * 素材列表Adapter，负责适配具体的Item样式，
+ * 优先使用自定义ViewHolder，如果没有则使用默认ViewHolder
+ * 如果使用自定义ViewHolder，需要在MaterialListViewConfig中实现bindViewHolder接口
+ */
 class GalleryMaterialListAdapter(
     private val context: Context,
     lifecycleOwner: LifecycleOwner,
@@ -39,7 +52,8 @@ class GalleryMaterialListAdapter(
 
     init {
         setHasStableIds(true)
-        preProcessDataList = galleryPickerViewModel.preProcessPickItem.value ?: Collections.emptyList()
+        preProcessDataList =
+            galleryPickerViewModel.preProcessPickItem.value ?: Collections.emptyList()
         galleryPickerViewModel.addItem.observe(lifecycleOwner, Observer {
             var addIndex = -1
             mediaDataList.forEachIndexed { index, t ->
@@ -90,8 +104,8 @@ class GalleryMaterialListAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, position: Int): MaterialViewHolder {
-        return MaterialViewHolder(p0)
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int): MaterialViewHolder {
+        return MaterialViewHolder(parent)
     }
 
     override fun getItemId(position: Int): Long {
@@ -103,9 +117,11 @@ class GalleryMaterialListAdapter(
     override fun onBindViewHolder(holder: MaterialViewHolder, position: Int) {
         val data = mediaDataList[position]
         if (data.isSelected) {
-            holder.itemView.selectedTv.visibility = View.VISIBLE
+            holder.itemView.selectImageView.visibility = View.VISIBLE
+            holder.itemView.selectedMask.visibility = View.VISIBLE
         } else {
-            holder.itemView.selectedTv.visibility = View.GONE
+            holder.itemView.selectImageView.visibility = View.GONE
+            holder.itemView.selectedMask.visibility = View.GONE
         }
 
         bindContent(data, holder)
@@ -119,7 +135,8 @@ class GalleryMaterialListAdapter(
         //需要对之前已经选择的素材，显示"已选"标记
         preProcessDataList.forEach {
             if (data.mediaData.path == it.source) {
-                holder.itemView.selectedTv.visibility = View.VISIBLE
+                holder.itemView.selectImageView.visibility = View.VISIBLE
+                holder.itemView.selectedMask.visibility = View.VISIBLE
                 return@forEach
             }
         }
@@ -137,23 +154,24 @@ class GalleryMaterialListAdapter(
     }
 
     private fun bindMask(holder: MaterialViewHolder) {
-        if (needFullMask && holder.itemView.selectedTv.visibility == View.GONE) {
-            holder.itemView.maskView.visibility = View.VISIBLE
+        if (needFullMask && holder.itemView.selectImageView.visibility == View.GONE) {
+            holder.itemView.notSelectMask.visibility = View.VISIBLE
         } else {
-            holder.itemView.maskView.visibility = View.GONE
+            holder.itemView.notSelectMask.visibility = View.GONE
         }
     }
 
     private fun bindListener(data: CheckBoxMediaData, position: Int, holder: MaterialViewHolder) {
-        holder.itemView.addLayout.setGlobalDebounceOnClickListener {
-            val realVideoMetaDataInfo = MediaUtil.getRealVideoMetaDataInfo(context, data.mediaData.path)
+        holder.itemView.setGlobalDebounceOnClickListener {
+            val realVideoMetaDataInfo =
+                MediaUtil.getRealVideoMetaDataInfo(context, data.mediaData.path)
             val minLength = realVideoMetaDataInfo.width.coerceAtMost(realVideoMetaDataInfo.height)
             //暂不支持1080p下的h265的视频
-            if(data.mediaData.isVideo() && minLength > 1100 && realVideoMetaDataInfo.codecInfo != "h264"){
+            if (data.mediaData.isVideo() && minLength > 1100 && realVideoMetaDataInfo.codecInfo != "h264") {
                 showTipToast(context.resources.getString(R.string.cutsame_pick_not_support_h265))
                 return@setGlobalDebounceOnClickListener
             }
-            if(needFullMask){
+            if (needFullMask) {
                 //最多选择n个素材
                 val tipMsg = String.format(
                     context.resources.getString(R.string.cutsame_pick_tip_most_count),
@@ -166,20 +184,25 @@ class GalleryMaterialListAdapter(
             if (!galleryPickerViewModel.pickOne(data.mediaData)) {
                 //素材时长小于要去时长
                 val index = galleryPickerViewModel.currentPickIndex.value ?: 0
-                if(index >= galleryPickerViewModel.processPickItem.value?.size!!){
+                if (index >= galleryPickerViewModel.processPickItem.value?.size!!) {
                     return@setGlobalDebounceOnClickListener
                 }
                 galleryPickerViewModel.processPickItem.value?.get(index)?.let {
                     //视频不能小于xs
-                    val tipMsg = context.resources.getString(R.string.cutsame_pick_tip_duration_invalid,
-                        String.format(Locale.getDefault(), context.resources.getString(R.string.cutsame_common_media_duration_s), it.duration.toFloat() / 1000)
+                    val tipMsg = context.resources.getString(
+                        R.string.cutsame_pick_tip_duration_invalid,
+                        String.format(
+                            Locale.getDefault(),
+                            context.resources.getString(R.string.cutsame_common_media_duration_s),
+                            it.duration.toFloat() / 1000
+                        )
                     )
                     showTipToast(tipMsg)
                 }
             }
         }
 
-        holder.itemView.setOnClickListener {
+        holder.itemView.previewImageView.setOnClickListener {
             itemClickListener?.onItemClick(position, dataLists)
         }
     }
@@ -203,21 +226,28 @@ class GalleryMaterialListAdapter(
         resWidth: Int,
         resHeight: Int
     ): Boolean {
-        if (resWidth > 0 && resHeight > 0) {
-            val overrideWidth = Math.min(view.measuredWidth, resWidth)
-            val overrideHeight = Math.min(view.measuredHeight, resHeight)
-            val requestOptions = RequestOptions().override(overrideWidth, overrideHeight)
-            Glide.with(context)
-                .load(uri)
-                .apply(requestOptions)
-                .into(view)
+        val requestOptions: RequestOptions = if (resWidth > 0 && resHeight > 0) {
+            val overrideWidth = min(view.measuredWidth, resWidth)
+            val overrideHeight = min(view.measuredHeight, resHeight)
+            RequestOptions().override(overrideWidth, overrideHeight)
         } else {
-            val requestOptions = RequestOptions().override(view.measuredWidth, view.measuredHeight)
-            Glide.with(context)
-                .load(uri)
-                .apply(requestOptions)
-                .into(view)
+            RequestOptions().override(view.measuredWidth, view.measuredHeight)
         }
+        Glide.with(view)
+            .asBitmap()
+            .load(uri)
+            .apply(requestOptions)
+            .into(object : CustomViewTarget<ImageView, Bitmap>(view) {
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                }
+
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    view.setImageBitmap(resource)
+                }
+
+                override fun onResourceCleared(placeholder: Drawable?) {
+                }
+            })
         return true
     }
 
@@ -238,13 +268,20 @@ class GalleryMaterialListAdapter(
         this.itemClickListener = listener
     }
 
-    inner class MaterialViewHolder(parent: ViewGroup) : androidx.recyclerview.widget.RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(
-            R.layout.activity_default_picker_item,
-            parent,
-            false
-        )
-    )
+    inner class MaterialViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(getItem(parent))
+
+    private fun getItem(parent: ViewGroup): View {
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.activity_default_picker_item, parent, false)
+        // 动态设置图片大小 保证宽高相等
+        //条目中间分割的间距,一行3个所以2个间距
+        val itemDecorationSize = ScreenUtil.dp2px(8F) * 2
+        val itemPaddingHorizontal = ScreenUtil.dp2px(18F) * 2   //计算的部分放到外面，这样可以优化耗时
+        val ivSize =
+            (ScreenUtil.getScreenWidth(context) - itemDecorationSize - itemPaddingHorizontal) / 3
+        itemView.layoutParams.height = ivSize
+        return itemView
+    }
 
     interface ItemClickListener {
         fun onItemClick(position: Int, datas: List<MediaData>)

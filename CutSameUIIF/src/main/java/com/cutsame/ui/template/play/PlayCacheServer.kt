@@ -25,7 +25,7 @@ object PlayCacheServer {
         )
         return HttpProxyCacheServer.Builder(context)
             .cacheDirectory(externalFilesDir)
-            .maxCacheSize(1024 * 1024 * 1024)  // 1 Gb for cache
+            .maxCacheSize((1024 * 1024 * 1024).toLong())  // 1 Gb for cache
             .build()
     }
 }

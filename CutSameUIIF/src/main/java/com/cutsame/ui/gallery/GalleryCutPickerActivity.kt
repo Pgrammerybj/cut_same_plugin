@@ -1,19 +1,17 @@
 package com.cutsame.ui.gallery
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
-import android.view.SurfaceView
 import android.view.View
-import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,58 +19,36 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-import com.bytedance.ugc.window.SmallWindowView
 import com.cutsame.solution.source.SourceInfo
 import com.cutsame.solution.template.model.TemplateItem
 import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.customwidget.LoadingDialog
-import com.cutsame.ui.exten.FastMain
-import com.cutsame.ui.exten.hide
-import com.cutsame.ui.exten.show
-import com.cutsame.ui.exten.visible
 import com.cutsame.ui.gallery.album.adapter.DeleteClickListener
 import com.cutsame.ui.gallery.album.adapter.ItemClickListener
 import com.cutsame.ui.gallery.album.adapter.PickingListAdapter
 import com.cutsame.ui.gallery.album.model.MediaData
 import com.cutsame.ui.gallery.album.model.TitleMediaType
 import com.cutsame.ui.gallery.album.preview.GalleryPreviewView
-import com.cutsame.ui.gallery.camera.IRecordCamera
-import com.cutsame.ui.gallery.camera.IRecordCamera.CameraCallback.Companion.RECORD_CANCEL
-import com.cutsame.ui.gallery.camera.IRecordCamera.CameraCallback.Companion.RECORD_COMPLETE
-import com.cutsame.ui.gallery.camera.IRecordCamera.CameraCallback.Companion.RECORD_PAUSE
-import com.cutsame.ui.gallery.camera.IRecordCamera.CameraCallback.Companion.RECORD_START
 import com.cutsame.ui.gallery.camera.VideoPreviewActivity
-import com.cutsame.ui.gallery.camera.VideoPreviewHelper
 import com.cutsame.ui.gallery.data.TabFragmentPagerAdapter
 import com.cutsame.ui.gallery.data.TabType
 import com.cutsame.ui.gallery.viewmodel.GalleryDataViewModel
 import com.cutsame.ui.gallery.viewmodel.GalleryPickerViewModel
-import com.cutsame.ui.utils.FileUtil
 import com.cutsame.ui.utils.showErrorTipToast
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.ss.android.ugc.cut_log.LogUtil
 import com.ss.android.ugc.cut_ui.MediaItem
-import com.ss.android.vesdk.VERecorder
 import kotlinx.android.synthetic.main.activity_default_picker.*
 import kotlinx.coroutines.*
-import java.io.File
 import java.util.*
-import kotlin.coroutines.CoroutineContext
-
 
 private const val TAG = "cutui.DefaultPicker"
-
 private const val REQUEST_COMPRESS = 1000
 const val REQUEST_CODE_CLIP = 1001 // 素材替换 exp: 裁剪/录制
 const val REQUEST_CODE_TEMPLATE_PREVIEW = 1002 // 模板效果预览
-private const val TAG_CAMERA = "CAMERA_FRAGMENT"
 
-class GalleryCutPickerActivity : PermissionActivity(),
-    PickerCallback, IRecordCamera.CameraCallback, CoroutineScope {
-    override val coroutineContext: CoroutineContext = FastMain + Job()
+class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     private var preClipMediaItemMap: HashMap<Int, MediaItem> = HashMap()
     private lateinit var pickingListAdapter: PickingListAdapter
     private lateinit var galleryPickerViewModel: GalleryPickerViewModel
@@ -95,11 +71,10 @@ class GalleryCutPickerActivity : PermissionActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
-        val templateItem =
-            intent.getParcelableExtra<TemplateItem>(CutSameUiIF.ARG_TEMPLATE_ITEM)
-                ?.also { templateItem = it }
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        val templateItem = intent.getParcelableExtra<TemplateItem>(CutSameUiIF.ARG_TEMPLATE_ITEM)?.also { templateItem = it }
         val data = CutSameUiIF.getGalleryPickDataByIntent(intent)
-        if (data != null && templateItem != null) {
+        if (data != null) {
             checkPermission(
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -131,7 +106,7 @@ class GalleryCutPickerActivity : PermissionActivity(),
                 }
             }
         ).get(GalleryPickerViewModel::class.java)
-        galleryPickerViewModel.init(mediaItems!!, prePickItems, this, videoCachePath!!)
+        galleryPickerViewModel.init(mediaItems!!, prePickItems, videoCachePath!!)
 
         galleryDataViewModel = ViewModelProvider(
             this@GalleryCutPickerActivity,
@@ -184,7 +159,7 @@ class GalleryCutPickerActivity : PermissionActivity(),
                                 val layoutManager = this.layoutManager
                                 return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
                                     val params =
-                                        view.layoutParams as androidx.recyclerview.widget.RecyclerView.LayoutParams
+                                        view.layoutParams as RecyclerView.LayoutParams
                                     val left =
                                         layoutManager.getDecoratedLeft(view) - params.leftMargin
                                     val right =
@@ -204,7 +179,7 @@ class GalleryCutPickerActivity : PermissionActivity(),
         pickingRecyclerView.setHasFixedSize(true)
         pickingRecyclerView.adapter = pickingListAdapter
 
-        val tabList = listOf(TabType.Album, TabType.Camera)
+        val tabList = listOf(TabType.Album)
         viewPager.adapter = TabFragmentPagerAdapter(tabList, this, galleryPickerViewModel)
         viewPager.isUserInputEnabled = false
         viewPager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
@@ -235,58 +210,10 @@ class GalleryCutPickerActivity : PermissionActivity(),
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        TabLayoutMediator(
-            tabLayout, viewPager
-        ) { _: TabLayout.Tab, _: Int ->
-        }.attach()
-        tabLayout.removeAllTabs()
-        tabLayout.tabMode = TabLayout.MODE_FIXED
-        tabLayout.tabGravity = TabLayout.GRAVITY_CENTER
-        tabLayout.setSelectedTabIndicatorHeight(0)
-        tabList.forEachIndexed { index, tabType ->
-            tabLayout.addTab(
-                tabLayout.newTab().apply {
-                    this.setCustomView(R.layout.layout_cut_same_select_bottom_tab_item)
-                    this.customView?.findViewById<TextView>(R.id.tab_item_tv)?.let {
-                        it.text = tabType.getTabName(this@GalleryCutPickerActivity)
-                        it.alpha = 0.6F
-                    }
-
-                    this.customView?.findViewById<View>(R.id.indicator)?.let {
-                        if (index == 0) {
-                            it.show()
-                        } else {
-                            it.hide()
-                        }
-                    }
-                }
-            )
-        }
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.customView?.let {
-                    it.findViewById<View>(R.id.tab_item_tv)?.alpha = 1F
-                    it.findViewById<View>(R.id.indicator)?.show()
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                tab?.customView?.let {
-                    it.findViewById<View>(R.id.tab_item_tv)?.alpha = 0.6F
-                    it.findViewById<View>(R.id.indicator)?.hide()
-                }
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-        })
-        tabLayout.getTabAt(0)?.customView?.let {
-            it.findViewById<View>(R.id.tab_item_tv)?.alpha = 1F
-        }
     }
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initComponent() {
         galleryPickerViewModel.loadingEvent.observe(this) { show ->
             if (show == true) {
@@ -296,13 +223,13 @@ class GalleryCutPickerActivity : PermissionActivity(),
             }
         }
         galleryPickerViewModel.currentPickIndex.observe(this,
-            Observer<Int> { index ->
+            { index ->
                 index?.apply {
                     pickingRecyclerView.smoothScrollToPosition(index)
                 }
             })
 
-        galleryPickerViewModel.pickFull.observe(this, Observer {
+        galleryPickerViewModel.pickFull.observe(this, {
             val isFull = it == true
             nextTv.isSelected = isFull
             if (isFull) {
@@ -310,7 +237,6 @@ class GalleryCutPickerActivity : PermissionActivity(),
             } else {
                 nextTv.background = resources.getDrawable(R.drawable.bg_ok_noselect, null)
             }
-            galleryPickerViewModel.recordCamera.updatePickFull(isFull)
         })
     }
 
@@ -331,8 +257,8 @@ class GalleryCutPickerActivity : PermissionActivity(),
                         val preClipMediaItem = preClipMediaItemMap[position]
                         preClipMediaItem?.let {
                             //如果要当前要裁剪的素材和之前的素材不一样，则将素材的开始时间至为0
-                            if (it.source != mediaItem?.source) {
-                                mediaItem?.sourceStartTime = 0
+                            if (it.source != mediaItem.source) {
+                                mediaItem.sourceStartTime = 0
                             }
                         }
                         preClipMediaItemMap[position] = mediaItem
@@ -376,12 +302,7 @@ class GalleryCutPickerActivity : PermissionActivity(),
         }
     }
 
-    override fun showPreview(
-        position: Int,
-        datas: List<MediaData>,
-        mediaType: String,
-        viewType: String
-    ) {
+    override fun showPreview(position: Int, datas: List<MediaData>, mediaType: String, viewType: String) {
         showPreview = true
         galleryPreviewView = GalleryPreviewView(this, galleryPickerViewModel, this)
         galleryPreviewView?.setData(datas, mediaType, viewType)
@@ -464,7 +385,6 @@ class GalleryCutPickerActivity : PermissionActivity(),
             //模板槽位效果预览
             REQUEST_CODE_TEMPLATE_PREVIEW -> {
                 VideoPreviewActivity.obtainResult(data)?.let { media ->
-                    galleryPickerViewModel.onConfirmVideoAction(media.isVideo)
                     val success =
                         galleryPickerViewModel.pickOne(media.path, media.isVideo, media.duration)
                     if (media.isVideo && !success) {
@@ -499,139 +419,8 @@ class GalleryCutPickerActivity : PermissionActivity(),
             hidePreview()
             return
         }
-        if (galleryPickerViewModel.onBackPressed()) {
-            return
-        }
         super.onBackPressed()
     }
-
-    private fun showPickerLayout(visible: Boolean) {
-        pickingListLayout?.visible = visible
-    }
-    /**-------相机生命周期回调开始--------**/
-
-    /**
-     * 初始化相机时回调
-     */
-    override fun onCameraInit(
-        recorder: VERecorder,
-        sfView: SurfaceView?,
-        smallWindowContainer: ViewGroup
-    ) {
-        //添加小窗
-        val curFragment = galleryPickerViewModel.getFragmentByType(TabType.Camera)
-        sfView?.let { cameraSfv ->
-            galleryPickerViewModel.onCameraInit(recorder, curFragment!!.lifecycle, sfView)
-
-            val smallWindowView =
-                SmallWindowView(recorder, curFragment!!.lifecycle, cameraSfv, smallWindowContainer)
-            smallWindowContainer.postDelayed({
-                smallWindowView.show()
-
-            }, 2000)
-        }
-
-    }
-
-    /**
-     * 录制接口底层初始化时回调
-     */
-    override fun onRecorderNativeInit(ret: Int, msg: String) {
-        galleryPickerViewModel.onRecorderNativeInit(ret, msg)
-    }
-
-    /**
-     * 相机底栏面板展示变化回调
-     */
-    override fun onBottomPanelVisible(visible: Boolean, hasRecord: Boolean) {
-        showPickerLayout(!visible && !hasRecord)
-    }
-
-    /**
-     * 拍照或者录制回调
-     * @return true-外界已处理结果；false-外界不处理拍照录制结果
-     */
-    override fun onShotOrRecord(path: String, isVideo: Boolean, duration: Long): Boolean {
-        launch(Dispatchers.IO) {
-            //ve录制的视频每次路径都是同一个，需要做一下重命名
-            val reNamePath =
-                cacheDir.absolutePath + File.separator + "temp_${System.currentTimeMillis()}.mp4"
-            if (FileUtil.copyFile(File(path), (File(reNamePath)))) {
-                withContext(Dispatchers.Main) {
-                    galleryPickerViewModel.fillMatch(reNamePath)?.let {
-                        val width = galleryPickerViewModel.curMaterial?.width ?: 100
-                        val height = galleryPickerViewModel.curMaterial?.height ?: 100
-                        VideoPreviewActivity.startPreViewSlotForResult(
-                            this@GalleryCutPickerActivity,
-                            REQUEST_CODE_TEMPLATE_PREVIEW, it,
-                            VideoPreviewHelper.PreMediaData(
-                                reNamePath,
-                                width,
-                                height,
-                                isVideo,
-                                duration
-                            )
-                        )
-                    }
-                }
-
-            }
-        }
-        return true
-    }
-
-
-    /**
-     * 录制状态变化时回调
-     * @see RECORD_START
-     * @see RECORD_PAUSE
-     * @see RECORD_COMPLETE
-     */
-    override fun onRecordState(state: Int) {
-        when (state) {
-            RECORD_START, RECORD_PAUSE -> {
-                showPickerLayout(false)
-            }
-            RECORD_CANCEL, RECORD_COMPLETE -> {
-                showPickerLayout(true)
-            }
-        }
-    }
-
-    /**
-     * 点击返回时回调
-     * @return true-外界已处理结果；false-外界不处理该动作
-     */
-    override fun onHandleBack(): Boolean {
-        if (showPreview) {
-            hidePreview()
-            return true
-        }
-        finish()
-        return true
-    }
-
-
-    /**
-     * 视频视频时回调
-     * @param complete false-开始合并，true-合并完成
-     */
-    override fun onContactVideo(complete: Boolean) {
-        if (!complete) {
-            showLoading(resources.getString(R.string.pick_record_loadding))
-        } else {
-            dismissLoading()
-        }
-    }
-
-    /**
-     * 相机可见状态变化时回调
-     */
-    override fun onCameraHiddenChanged(hidden: Boolean) {
-        galleryPickerViewModel.onCameraHiddenChanged(hidden)
-    }
-
-    /**-------相机生命周期回调结束--------**/
 
     private fun showLoading(msg: CharSequence? = null) {
         loadingDialog = LoadingDialog(this).apply {
@@ -643,14 +432,8 @@ class GalleryCutPickerActivity : PermissionActivity(),
     private fun dismissLoading() {
         loadingDialog?.dismiss()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        coroutineContext.cancel()
-    }
 }
 
 interface PickerCallback {
     fun showPreview(position: Int, datas: List<MediaData>, mediaType: String, viewType: String)
 }
-

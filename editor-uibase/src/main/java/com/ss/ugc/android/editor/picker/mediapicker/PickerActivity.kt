@@ -244,8 +244,6 @@ class PickerActivity : AppCompatActivity() {
                 //如果最大选择数量大于1，则显示选择icon
                 showSelectIcon = maxSelect > 1,
                 showNonSelectableMask = true,
-//                noSelectIcon = R.drawable.ic_no_select,
-//                selectedIcon = R.drawable.ic_selected
             )
         )
 
@@ -272,14 +270,6 @@ class PickerActivity : AppCompatActivity() {
             lifecycleOwner = this,
             materialPreViewModel = materialPreViewModel,
             pickComponentConfig = pickComponentConfig,
-//            viewStateChangeListener = { visible ->
-//                if (visible) {
-//                    //在preview场景下，选择view为添加功能类型
-//                    materialSelectorView.changeViewType(SelectViewType.ADD)
-//                } else {
-//                    materialSelectorView.changeViewType(SelectViewType.CONFIRM)
-//                }
-//            }
         )
     }
 

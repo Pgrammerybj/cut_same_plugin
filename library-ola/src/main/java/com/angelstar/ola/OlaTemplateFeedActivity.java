@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,9 +31,16 @@ import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
+import com.angelstar.ola.viewmodel.TemplateNetPageModel;
+import com.angelstar.ola.viewmodel.TemplateNetPageViewModelFactory;
 import com.angelstar.ybj.xbanner.OlaBannerView;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
+import com.cutsame.solution.template.model.TemplateCategory;
+import com.cutsame.solution.template.model.TemplateItem;
+import com.cutsame.ui.CutSameUiIF;
+import com.cutsame.ui.template.play.PlayCacheServer;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
@@ -45,9 +54,12 @@ import java.util.List;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener, View.OnClickListener {
 
+    private static final String TAG = "ola-jackyang";
     NLEEditorContext nleEditorContext;
     private IPlayerActivityDelegate editorActivityDelegate;
     private SurfaceView mSurfaceView;
+    private TemplateNetPageModel templateNetPageModel;
+
 
     private ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
@@ -81,6 +93,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private List<MixerItemEntry> mixerList = new ArrayList<>();
     private ScaleSlideBar mScaleSlideBar;
     private RecyclerView mRcMenuMulti;
+    private HttpProxyCacheServer httpProxyCacheServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +109,17 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         editorActivityDelegate.onCreate(savedInstanceState);
         nleEditorContext = editorActivityDelegate.getNleEditorContext();
 
+        TemplateCategory templateCategory = new TemplateCategory(1, "情侣");
+        templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
+        templateNetPageModel.loadFeedList(true);
+        templateNetPageModel.getTemplateItems().observe(this, new Observer<List<TemplateItem>>() {
+            @Override
+            public void onChanged(List<TemplateItem> templateItems) {
+                TemplateItem templateItem = templateItems.get(0);
+                Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
+                httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
+            }
+        });
         initView(mSurfaceView);
         initPlayerView();
     }
@@ -135,6 +159,14 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 @Override
                 public void onEditVideoClick(View view) {
                     //点击视频编辑按钮
+                    List<TemplateItem> templateItems = templateNetPageModel.getTemplateItems().getValue();
+                    TemplateItem templateItem = templateItems.get(0);
+                    String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
+                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, videoCache);
+                    if (cutSameIntent != null) {
+                        cutSameIntent.setPackage(getPackageName());
+                        startActivity(cutSameIntent);
+                    }
                 }
             });
             itemList.add(videoItemView);
@@ -313,7 +345,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         if (v.getId() == R.id.tv_choose_album) {
             //打开相册
             Toast.makeText(this, "打开相册", Toast.LENGTH_SHORT).show();
-            Intent intent = new  Intent(this, PickerActivity.class);
+            Intent intent = new Intent(this, PickerActivity.class);
             long maxSize = 388743680L; //long long long LONG类型
             intent.putExtra(PickerConfig.MAX_SELECT_SIZE, maxSize); //default 180MB (Optional)
             intent.putExtra(PickerConfig.MAX_SELECT_COUNT, 7); //default 40 (Optional)

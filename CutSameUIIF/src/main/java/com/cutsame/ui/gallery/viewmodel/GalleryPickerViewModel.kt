@@ -3,23 +3,16 @@ package com.cutsame.ui.gallery.viewmodel
 import android.app.Application
 import android.net.Uri
 import android.util.Log
-import android.view.SurfaceView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import com.bytedance.ies.nle.editor_jni.NLEModel
 import com.cutsame.solution.source.SourceInfo
 import com.cutsame.ui.gallery.album.AlbumFragment
 import com.cutsame.ui.gallery.album.model.MediaData
 import com.cutsame.ui.gallery.camera.EffectHelper
-import com.cutsame.ui.gallery.camera.IRecordCamera
-import com.cutsame.ui.gallery.camera.RecordCameraAdapter
 import com.cutsame.ui.gallery.data.TabType
-import com.cutsame.ui.utils.runOnUiThread
 import com.ss.android.ugc.cut_log.LogUtil
 import com.ss.android.ugc.cut_ui.MediaItem
-import com.ss.android.vesdk.VERecorder
 import java.io.File
 
 /**
@@ -40,8 +33,7 @@ class GalleryPickerViewModel(application: Application) :
     val processPickItem = MutableLiveData<ArrayList<MediaItem>>()
     val processPickMediaData = ArrayList<MediaData>()
     val pickFull = MutableLiveData<Boolean>()
-    val fragmentMap = mutableMapOf<TabType, androidx.fragment.app.Fragment>()
-    val recordCamera by lazy { RecordCameraAdapter() }
+    val fragmentMap = mutableMapOf<TabType, Fragment>()
     val effectHelper: EffectHelper by lazy { EffectHelper() }
     var curMaterial: MediaItem? = null
     private var isOnCamera = false
@@ -49,7 +41,6 @@ class GalleryPickerViewModel(application: Application) :
     fun init(
         mediaItems: ArrayList<MediaItem>,
         preMediaItems: ArrayList<MediaItem>?,
-        cameraCallback: IRecordCamera.CameraCallback,
         videoCache: String
     ) {
 
@@ -62,11 +53,10 @@ class GalleryPickerViewModel(application: Application) :
         preProcessPickItem.value = preMediaItems
         setSelected(0)
         pickFull.value = false
-        recordCamera.setCameraCallBack(cameraCallback)
         effectHelper.init(getApplication(), videoCache)//初始化效果效果逻辑
     }
 
-    public fun setSelected(pos: Int) {
+    fun setSelected(pos: Int) {
         LogUtil.e(TAG, "setSelected  pos = ${pos}")
         if (pos == currentPickIndex.value) {
             return
@@ -77,18 +67,8 @@ class GalleryPickerViewModel(application: Application) :
                 val mediaItem = list[pos]
                 effectHelper.switchMaterial(mediaItem, list, isOnCamera)
                 curMaterial = mediaItem
-                updateCutSameConstraints()//更新当前素材的约束信息
             }
 
-        }
-    }
-
-    private fun updateCutSameConstraints(changeRenderSize: Boolean = false) {
-        runOnUiThread {
-            recordCamera.updateConstraints(
-                effectHelper.cutSameWidth, effectHelper.cutSameHeight,
-                effectHelper.cutSameDuration, changeRenderSize
-            )
         }
     }
 
@@ -239,37 +219,9 @@ class GalleryPickerViewModel(application: Application) :
         if (fragment != null) {
             return fragment
         }
-        return when (tabType) {
-            TabType.Camera -> {
-                recordCamera.getCameraInstance()
-            }
-            TabType.Album -> {
-                AlbumFragment()
-            }
-        }.apply {
+        return AlbumFragment().apply {
             fragmentMap[tabType] = this
         }
-    }
-
-    fun onBackPressed(): Boolean {
-        if (isOnCamera) {
-            return recordCamera.onBackPressed()
-        }
-        return false
-    }
-
-    fun onCameraInit(
-        recorder: VERecorder,
-        lifecycle: Lifecycle,
-        sfView: SurfaceView?
-    ) {
-        updateCutSameConstraints(true)//更新当前素材的约束信息
-        effectHelper.onCameraInit(recorder, lifecycle, sfView)
-    }
-
-
-    fun onRecorderNativeInit(ret: Int, msg: String) {
-        updateCutSameConstraints()//更新当前素材的约束信息
     }
 
     fun loadTemplateRes(sourceInfo: SourceInfo) {
@@ -277,25 +229,6 @@ class GalleryPickerViewModel(application: Application) :
         effectHelper.loadTemplateRes(sourceInfo) {
             loadingEvent.postValue(false)
         }
-    }
-
-    /**
-     * 拍摄的视频/图片，确认保存时回调
-     *
-     * @param isVideo 是否视频
-     */
-    fun onConfirmVideoAction(isVideo: Boolean) {
-        recordCamera.onConfirmPreview(isVideo)
-    }
-
-    fun fillMatch(path: String): NLEModel? {
-        return effectHelper.fillMatch(path)
-    }
-
-    /**
-     * 相机可见状态变化时回调
-     */
-    fun onCameraHiddenChanged(hidden: Boolean) {
     }
 
     fun onSelectChange(onCamera: Boolean) {
