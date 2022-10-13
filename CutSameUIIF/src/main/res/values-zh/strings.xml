@@ -18,7 +18,7 @@
 
     <!--preview-->
     <string name="cutsame_edit_title">视频编辑</string>
-    <string name="cutsame_export_title">导出</string>
+    <string name="cutsame_export_title">完成</string>
     <string name="cutsame_common_loading">加载中...</string>
 
     <!--template-->

@@ -119,7 +119,7 @@ public class OlaBannerView extends FrameLayout {
         mBannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
         mBannerViewPager.setPageTransformer(true, new ScalePageTransformer());
         if (mIsMargin) {
-            mBannerViewPager.setOffscreenPageLimit(1);
+            mBannerViewPager.setOffscreenPageLimit(2);
             mBannerViewPager.setPageMargin(mPageMargin / 2);
             mBannerViewPager.setClipChildren(false);
         }

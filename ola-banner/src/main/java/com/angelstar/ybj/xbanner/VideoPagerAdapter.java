@@ -1,9 +1,6 @@
 package com.angelstar.ybj.xbanner;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -45,13 +42,11 @@ public class VideoPagerAdapter extends PagerAdapter {
         return position % mBannerUrlList.size();
     }
 
-    @SuppressLint("LongLogTag")
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         if (getRealCount() == 0) {
             return null;
         }
-        Log.i("jackyang_instantiateItem", ":" + getRealPosition(position));
         VideoItemView videoItemView = mBannerUrlList.get(getRealPosition(position));
         videoItemView.setOnClickListener(new View.OnClickListener() {
             @Override

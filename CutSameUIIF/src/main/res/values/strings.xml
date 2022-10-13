@@ -22,7 +22,7 @@
 
     <!--preview-->
     <string name="cutsame_edit_title">Video editing</string>
-    <string name="cutsame_export_title">Export</string>
+    <string name="cutsame_export_title">Done</string>
     <string name="cutsame_common_loading">Loading...</string>
 
     <!--template-->

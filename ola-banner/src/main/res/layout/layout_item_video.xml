@@ -5,7 +5,7 @@
     android:layout_width="282dp"
     android:layout_height="500dp"
     app:cardBackgroundColor="@null"
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="5dp">
 
     <ImageView

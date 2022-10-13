@@ -18,13 +18,26 @@
 
         <ImageView
             android:id="@+id/playStatusBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginStart="10dp"
+            android:background="@drawable/bg_video_play_icon"
             android:scaleType="center"
-            android:src="@drawable/ic_start_play"
+            android:src="@drawable/icon_video_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/currentPlayTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="#99ffffff"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/playStatusBtn"
+            app:layout_constraintRight_toLeftOf="@id/playSliderView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.cutsame.ui.cut.preview.customview.PlaySliderView
@@ -32,41 +45,19 @@
             android:layout_width="0dp"
             android:layout_height="17dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/playStatusBtn"
-            app:layout_constraintRight_toLeftOf="@id/currentPlayTime"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lineColor="@color/theme_color"
-            app:lineHintColor="#33FFFFFF" />
-
-        <TextView
-            android:id="@+id/currentPlayTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/dividerPlayTime"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/dividerPlayTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="/"
-            android:textColor="@color/text_white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/currentPlayTime"
             app:layout_constraintRight_toLeftOf="@id/endPlayTime"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:lineColor="@color/app_green"
+            app:lineHintColor="#1fffffff" />
 
         <TextView
             android:id="@+id/endPlayTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:textColor="@color/text_white"
-            android:textSize="12sp"
+            android:layout_marginEnd="17dp"
+            android:textColor="#99ffffff"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -78,8 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/top"
-        />
+        app:layout_constraintTop_toBottomOf="@id/top" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/videoRecyclerView"
@@ -92,13 +82,11 @@
         app:layout_constraintTop_toBottomOf="@id/top" />
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/globalEditLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/base"
-        >
+        app:layout_constraintTop_toBottomOf="@id/base">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editMoreLayout"
@@ -169,8 +157,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
-        android:focusable="true"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/base">
 
@@ -178,13 +166,12 @@
             android:id="@+id/editLayoutBackIv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_edit_layout_back"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
-            />
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_edit_layout_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editVolumeLayout"
@@ -287,23 +274,22 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
+        android:background="@color/black"
         android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/top"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="@color/black"
-        android:visibility="gone"
-        >
+        app:layout_constraintTop_toBottomOf="@id/top">
 
         <com.cutsame.ui.cut.preview.customview.PlaySliderView
             android:id="@+id/volumeSliderView"
             android:layout_width="230dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:lineColor="@color/theme_color"
             app:lineHintColor="#33FFFFFF" />
 
@@ -311,32 +297,31 @@
             android:id="@+id/closeVolumeEditIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
             android:layout_marginStart="8dp"
+            android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/closeVolumeEditIv"
-            app:layout_constraintTop_toTopOf="@+id/closeVolumeEditIv"
             android:text="@string/cutsame_edit_volume"
             android:textColor="@color/text_white"
             android:textSize="14sp"
-            />
+            app:layout_constraintBottom_toBottomOf="@+id/closeVolumeEditIv"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/closeVolumeEditIv" />
 
         <ImageView
             android:id="@+id/sureVolumeEditIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_ok"
             android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_edit_ok"
             app:layout_constraintBottom_toBottomOf="@+id/closeVolumeEditIv"
-            app:layout_constraintTop_toTopOf="@+id/closeVolumeEditIv"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/closeVolumeEditIv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

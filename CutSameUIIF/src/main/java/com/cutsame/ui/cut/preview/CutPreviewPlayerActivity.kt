@@ -348,9 +348,9 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
             return@runOnUiThread
         }
         if (value) {
-            playStatusBtn.setImageResource(R.drawable.ic_pause_play)
+            playStatusBtn.setImageResource(R.drawable.icon_video_stop)
         } else {
-            playStatusBtn.setImageResource(R.drawable.ic_start_play)
+            playStatusBtn.setImageResource(R.drawable.icon_video_play)
         }
     }
 
