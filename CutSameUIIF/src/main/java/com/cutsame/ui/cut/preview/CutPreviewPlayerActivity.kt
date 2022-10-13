@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import com.bytedance.ies.cutsame.cut_android.TemplateError
@@ -17,9 +18,9 @@ import com.cutsame.solution.player.GetImageListener
 import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.GlobalDebounceOnClickListener
+import com.cutsame.ui.customview.OnFloatSliderChangeListener
 import com.cutsame.ui.customview.SpacesItemDecoration
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
-import com.cutsame.ui.cut.preview.customview.OnSliderChangeListener
 import com.cutsame.ui.cut.textedit.PlayerAnimateHelper
 import com.cutsame.ui.cut.textedit.PlayerTextBoxData
 import com.cutsame.ui.cut.textedit.PlayerTextEditItemData
@@ -123,35 +124,42 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         }
 
         val adapter = VideoListAdapter(mutableMediaItemList)
-        videoRecyclerView.layoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(this, HORIZONTAL, false) {
-            override fun smoothScrollToPosition(
-                recyclerView: androidx.recyclerview.widget.RecyclerView?,
-                state: androidx.recyclerview.widget.RecyclerView.State?,
-                position: Int
-            ) {
-                val linearSmoothScroller = object : androidx.recyclerview.widget.LinearSmoothScroller(recyclerView!!.context) {
-                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
-                        return super.calculateSpeedPerPixel(displayMetrics) * 2
-                    }
+        videoRecyclerView.layoutManager =
+            object : androidx.recyclerview.widget.LinearLayoutManager(this, HORIZONTAL, false) {
+                override fun smoothScrollToPosition(
+                    recyclerView: androidx.recyclerview.widget.RecyclerView?,
+                    state: androidx.recyclerview.widget.RecyclerView.State?,
+                    position: Int
+                ) {
+                    val linearSmoothScroller = object :
+                        androidx.recyclerview.widget.LinearSmoothScroller(recyclerView!!.context) {
+                        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+                            return super.calculateSpeedPerPixel(displayMetrics) * 2
+                        }
 
-                    override fun calculateDxToMakeVisible(view: View?, snapPreference: Int): Int {
-                        val layoutManager = this.layoutManager
-                        return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
-                            val params = view!!.layoutParams as androidx.recyclerview.widget.RecyclerView.LayoutParams
-                            val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
-                            val right = layoutManager.getDecoratedRight(view) + params.rightMargin
-                            val start = layoutManager.paddingLeft
-                            val end = layoutManager.width - layoutManager.paddingRight
-                            return start + (end - start) / 2 - (right - left) / 2 - left
-                        } else {
-                            0
+                        override fun calculateDxToMakeVisible(
+                            view: View?,
+                            snapPreference: Int
+                        ): Int {
+                            val layoutManager = this.layoutManager
+                            return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
+                                val params =
+                                    view!!.layoutParams as androidx.recyclerview.widget.RecyclerView.LayoutParams
+                                val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
+                                val right =
+                                    layoutManager.getDecoratedRight(view) + params.rightMargin
+                                val start = layoutManager.paddingLeft
+                                val end = layoutManager.width - layoutManager.paddingRight
+                                return start + (end - start) / 2 - (right - left) / 2 - left
+                            } else {
+                                0
+                            }
                         }
                     }
+                    linearSmoothScroller.targetPosition = position
+                    startSmoothScroll(linearSmoothScroller)
                 }
-                linearSmoothScroller.targetPosition = position
-                startSmoothScroll(linearSmoothScroller)
             }
-        }
         videoRecyclerView.setHasFixedSize(true)
         videoRecyclerView.addItemDecoration(
             SpacesItemDecoration(
@@ -162,8 +170,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         )
         videoRecyclerView.adapter = adapter
 
-        playSliderView.setDrawProgressText(false)
-        playSliderView.setOnSliderChangeListener(object : OnSliderChangeListener() {
+        playSliderView.setOnSliderChangeListener(object : OnFloatSliderChangeListener() {
             var isCurrentPlay = false // 记忆拖动前的播放状态，因为seek时总会先暂停播放
             override fun onChange(value: Int) {
                 cutSamePlayer?.seeking(value)
@@ -183,20 +190,6 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
                 if (isForeground) {
                     cutSamePlayer?.seekTo(value, isCurrentPlay)
                 }
-            }
-        })
-
-        volumeSliderView.setRange(0, 200)
-        volumeSliderView.setDrawProgressText(true)
-        volumeSliderView.setOnSliderChangeListener(object : OnSliderChangeListener() {
-            override fun onChange(value: Int) {
-            }
-
-            override fun onBegin(value: Int) {
-            }
-
-            override fun onFreeze(value: Int) {
-                changeCurrentMaterialVolume(value)
             }
         })
 
@@ -264,18 +257,18 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
             hideSlotEditLayout()
         }
 
-        editVolumeLayout.setGlobalDebounceOnClickListener {
-            //调整音量
-            LogUtil.d(
-                TAG,
-                "editVolumeLayout selectMediaItem=${selectMediaItem?.source}, type=${selectMediaItem?.type}"
-            )
-            selectMediaItem?.let {
-                if (it.type == TYPE_VIDEO) {
-                    showSlotVolumeLayout()
-                }
-            }
-        }
+//        editVolumeLayout.setGlobalDebounceOnClickListener {
+//            //调整音量
+//            LogUtil.d(
+//                TAG,
+//                "editVolumeLayout selectMediaItem=${selectMediaItem?.source}, type=${selectMediaItem?.type}"
+//            )
+//            selectMediaItem?.let {
+//                if (it.type == TYPE_VIDEO) {
+//                    showSlotVolumeLayout()
+//                }
+//            }
+//        }
 
         editClipLayout.setGlobalDebounceOnClickListener {
             //裁剪
@@ -315,18 +308,18 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
     private fun hideSlotEditLayout() {
         slotEditLayout.visibility = View.GONE
     }
-
-    private fun showSlotVolumeLayout() {
-        LogUtil.d(TAG, "showSlotVolumeLayout volumeLayout=${volumeLayout.visibility}")
-        if (volumeLayout.visibility == View.GONE) {
-            selectMediaItem?.let {
-                val volume = cutSamePlayer?.getVolume(it.materialId)?.times(100)?.toInt() ?: 0
-                volumeBefore = volume//记录之前的音量，放弃时需要恢复
-                volumeSliderView.currPosition = volume
-            }
-            volumeLayout.visibility = View.VISIBLE
-        }
-    }
+//
+//    private fun showSlotVolumeLayout() {
+//        LogUtil.d(TAG, "showSlotVolumeLayout volumeLayout=${volumeLayout.visibility}")
+//        if (volumeLayout.visibility == View.GONE) {
+//            selectMediaItem?.let {
+//                val volume = cutSamePlayer?.getVolume(it.materialId)?.times(100)?.toInt() ?: 0
+//                volumeBefore = volume//记录之前的音量，放弃时需要恢复
+//                volumeSliderView.currPosition = volume.toFloat()
+//            }
+//            volumeLayout.visibility = View.VISIBLE
+//        }
+//    }
 
     private fun hideSlotVolumeLayout() {
         volumeLayout.visibility = View.GONE
@@ -425,16 +418,19 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         runOnUiThread {
             currentPlayTime.text = formatTime(progress.toInt())
             if (!moveProgress) {
-                playSliderView.currPosition = progress.toInt()
+                Log.i(TAG, " | onPlayerProgress: " + progress + " - " + progress.toFloat())
+                //视频播放时动态更新全屏状态下的进度条
+//                val position: Float = 100F * progress / (cutSamePlayer?.getDuration()?.toFloat()!!)
+                playSliderView.currPosition = progress.toFloat()
             }
 
             videoRecyclerView.adapter?.apply {
                 this as VideoListAdapter
-                val indexSet = if(clickPosition >= 0 && clickProgress == progress){
+                val indexSet = if (clickPosition >= 0 && clickProgress == progress) {
                     val position = clickPosition
                     clickPosition = -1
                     updatePosition(position)
-                }else{
+                } else {
                     update(progress)
                 }
                 indexSet?.maxOrNull()?.let { max ->
@@ -454,7 +450,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         runOnUiThread {
             exportView?.isEnabled = false
         }
-        playSliderView.currPosition = 0
+        playSliderView.currPosition = 0F
         super.onPlayerDestroy()
     }
 
@@ -547,7 +543,8 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
                 val frameStartTime = data.getFrameTime()
                 if (frameStartTime >= 0) {
                     //seek 到文字那帧，并且暂停
-                    cutSamePlayer?.seekTo(frameStartTime.toInt(), false
+                    cutSamePlayer?.seekTo(
+                        frameStartTime.toInt(), false
                     ) {
                         seekDone?.invoke(it)
                     }

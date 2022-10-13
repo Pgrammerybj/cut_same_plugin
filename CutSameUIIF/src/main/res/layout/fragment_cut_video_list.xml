@@ -38,9 +38,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/playStatusBtn"
             app:layout_constraintRight_toLeftOf="@id/playSliderView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SmallSp" />
 
-        <com.cutsame.ui.cut.preview.customview.PlaySliderView
+        <!--        <com.cutsame.ui.cut.preview.customview.PlaySliderView-->
+        <!--            android:id="@+id/playSliderView"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="17dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintLeft_toRightOf="@id/currentPlayTime"-->
+        <!--            app:layout_constraintRight_toLeftOf="@id/endPlayTime"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:lineColor="@color/app_green"-->
+        <!--            app:lineHintColor="#1fffffff" />-->
+
+
+        <com.cutsame.ui.customview.FloatSliderView
             android:id="@+id/playSliderView"
             android:layout_width="0dp"
             android:layout_height="17dp"
@@ -48,7 +61,7 @@
             app:layout_constraintLeft_toRightOf="@id/currentPlayTime"
             app:layout_constraintRight_toLeftOf="@id/endPlayTime"
             app:layout_constraintTop_toTopOf="parent"
-            app:lineColor="@color/app_green"
+            app:lineDefColor="#1CC9AA"
             app:lineHintColor="#1fffffff" />
 
         <TextView
@@ -282,7 +295,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top">
 
-        <com.cutsame.ui.cut.preview.customview.PlaySliderView
+        <com.cutsame.ui.customview.FloatSliderView
             android:id="@+id/volumeSliderView"
             android:layout_width="230dp"
             android:layout_height="50dp"
@@ -290,7 +303,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:lineColor="@color/theme_color"
+            app:lineDefColor="@color/theme_color"
             app:lineHintColor="#33FFFFFF" />
 
         <ImageView
