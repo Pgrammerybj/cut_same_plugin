@@ -12,7 +12,7 @@ import com.cutsame.ui.cut.textedit.listener.KeyboardHeightProvider
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditListener
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditListenerAdapter
 import com.cutsame.ui.cut.textedit.listener.PlayerTextItemThumbBitmapListener
-import com.cutsame.ui.cut.textedit.view.PlayerTextEditView
+import com.cutsame.ui.cut.textedit.view.PlayerMaterialTextEditView
 import com.cutsame.ui.cut.textedit.view.TextEditQuitDialog
 import com.cutsame.ui.utils.postOnUiThread
 import com.ss.android.ugc.cut_ui.TextItem
@@ -20,7 +20,7 @@ import java.util.HashMap
 
 class PlayerTextEditController : PlayerTextEditListenerAdapter() {
 
-    private lateinit var playerTextEditView: PlayerTextEditView
+    private lateinit var playerTextEditView: PlayerMaterialTextEditView
     private lateinit var videoListView: View
     private lateinit var titleView: View
     private lateinit var fragmentActivity: FragmentActivity
@@ -44,7 +44,7 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
 
     var processPlayerTextBoxData: ((PlayerTextBoxData) -> Unit)? = null
 
-    fun init(activity: androidx.fragment.app.FragmentActivity, contentView: View, editListener: PlayerTextEditListener?) {
+    fun init(activity: FragmentActivity, contentView: View, editListener: PlayerTextEditListener?) {
         fragmentActivity = activity
         this.playerTextEditView = contentView.findViewById(R.id.player_edit_view)
         this.videoListView = contentView.findViewById(R.id.videoThumbListContainer)
@@ -88,6 +88,8 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
         if (dataList == null || dataList!!.isEmpty()) {
             dataList = PlayerTextEditHelper.covertItemTextData(textItems)
         }
+        // TODO: 2022/10/14 此处为临时添加，记得删除
+        dataList?.get(4)?.let { dataList?.add(it) }
         playerTextEditView.updateTextData(dataList)
     }
 
@@ -180,39 +182,7 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
         }
     }
 
-    /**
-     * 获取文字原始内容
-     */
-    fun getOriginTextList(): MutableList<String>? {
-        if (dataList?.isEmpty() == false) {
-            val textList = mutableListOf<String>()
-            dataList!!.forEach {
-                if (it.isValid) {
-                    textList.add(it.getOriginText()!!)
-                }
-            }
-            return textList
-        }
-        return null
-    }
-
-    /**
-     * 获取用户最后更改的文字内容
-     */
-    fun getLastTextList(): MutableList<String>? {
-        if (dataList?.isEmpty() == false) {
-            val lastTextList = mutableListOf<String>()
-            dataList!!.forEach {
-                if (it.getOriginText() != null) {
-                    lastTextList.add(it.getEditText()!!)
-                }
-            }
-            return lastTextList
-        }
-        return null
-    }
-
-    fun isTextChange(): Boolean {
+    private fun isTextChange(): Boolean {
         if (dataList?.isEmpty() == false) {
             dataList!!.forEach {
                 if (it.isChangeText()) {
@@ -223,8 +193,8 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
         return false
     }
 
-    fun onPlaying(isPlay: Boolean) {
-    }
+//    fun onPlaying() {
+//    }
 
     override fun clickCancel() {
         //文字发生变化了才谈对话框
@@ -309,8 +279,8 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
         }
     }
 
-    override fun finishClickEditText(data: PlayerTextEditItemData?) {
-        playerTextEditListener?.finishClickEditText(data)
+    override fun finishClickEditText(itemData: PlayerTextEditItemData?) {
+        playerTextEditListener?.finishClickEditText(itemData)
     }
 
     override fun inputTextChange(itemData: PlayerTextEditItemData?, text: String?) {
@@ -448,5 +418,4 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
             playerTextEditView.curSelectItemData?.getEditText()
         )
     }
-
 }

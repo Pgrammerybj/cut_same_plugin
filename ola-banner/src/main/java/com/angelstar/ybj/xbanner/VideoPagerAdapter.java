@@ -45,7 +45,7 @@ public class VideoPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         if (getRealCount() == 0) {
-            return null;
+            return container;
         }
         VideoItemView videoItemView = mBannerUrlList.get(getRealPosition(position));
         videoItemView.setOnClickListener(new View.OnClickListener() {

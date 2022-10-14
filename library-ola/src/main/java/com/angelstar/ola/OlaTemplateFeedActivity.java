@@ -109,7 +109,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         editorActivityDelegate.onCreate(savedInstanceState);
         nleEditorContext = editorActivityDelegate.getNleEditorContext();
 
-        TemplateCategory templateCategory = new TemplateCategory(1, "情侣");
+        TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
         templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
         templateNetPageModel.loadFeedList(true);
         templateNetPageModel.getTemplateItems().observe(this, new Observer<List<TemplateItem>>() {

@@ -12,6 +12,10 @@ enum class MediaType(val stringId: Int) {
     )
 }
 
+enum class MaterialEditType(val stringId: Int) {
+    TYPE_VIDEO(R.string.ola_material_edit_video),TYPE_TEXT(R.string.ola_material_edit_text),TYPE_LYRICS(R.string.ola_material_edit_lyrics)
+}
+
 enum class TitleMediaType(val stringId: Int) {
     TYPE_ALL(R.string.cutsame_common_title_all),TYPE_VIDEO(R.string.cutsame_common_title_video),TYPE_IMAGE(R.string.cutsame_common_title_image)
 }

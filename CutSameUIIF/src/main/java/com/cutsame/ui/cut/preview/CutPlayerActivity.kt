@@ -4,20 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import androidx.annotation.MainThread
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceView
 import android.widget.Toast
+import androidx.annotation.MainThread
+import androidx.appcompat.app.AppCompatActivity
 import com.bytedance.ies.cutsame.cut_android.TemplateError
 import com.bytedance.ies.cutsame.util.MediaUtil
-import com.bytedance.ies.nle.editor_jni.NLEModel
 import com.cutsame.solution.CutSameSolution
 import com.cutsame.solution.player.BasePlayer
 import com.cutsame.solution.player.CutSamePlayer
 import com.cutsame.solution.player.PlayerStateListener
 import com.cutsame.solution.source.CutSameSource
-import com.cutsame.solution.source.PrepareSourceListener
 import com.cutsame.solution.source.SourceInfo
 import com.cutsame.solution.template.model.TemplateExtraList
 import com.cutsame.solution.template.model.TemplateItem
@@ -33,7 +31,6 @@ import com.ss.android.ugc.cut_ui.MediaItem
 import com.ss.android.ugc.cut_ui.TextItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 
@@ -43,8 +40,6 @@ const val REQUEST_CODE_CLIP = 1002 //素材裁剪
 const val REQUEST_CODE_NEXT = 1003 //导出
 
 private const val TAG = "cut.CutPlayerActivity"
-const val ARG_CUT_MEDIA_ITEM_LIST = "media_item_list"
-const val ARG_CUT_TEXT_ITEM_LIST = "text_item_list"
 
 /**
  * 剪同款成品播放页
@@ -77,15 +72,11 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
 
         val templateItem =
             intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
-        if (templateItem == null || templateItem.templateUrl.isNullOrEmpty() || templateItem.md5.isNullOrEmpty()
-        ) {
+        if (templateItem == null || templateItem.templateUrl.isEmpty() || templateItem.md5.isEmpty()) {
             LogUtil.e(TAG, "onCreate templateItem == null，return")
             finish()
             return
         }
-
-//        direct parse extra field for fill mutableMediaItemList。
-
         val templateExtraList = Gson().fromJson(templateItem.extra, TemplateExtraList::class.java)
         LogUtil.d(TAG, "onCreate templateExtraList $templateExtraList")
         for (template in templateExtraList.list) {
@@ -117,48 +108,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 "onCreate restore hasLaunchPicker=$hasLaunchPicker, hasLaunchNext=$hasLaunchNext, hasLaunchClip=$hasLaunchClip"
             )
         }
-        // prepareSource()
         checkDataOkOrNot()
-    }
-
-    //进入相册之前，先准备模版，解析槽位信息
-    private fun prepareSource() {
-//        progressDialog.show()
-        cutSameSource?.prepareSource(object : PrepareSourceListener {
-            override fun onProgress(progress: Float) {
-                launch(FastMain) {
-                    val realProgress = progress * 100
-                    Log.d(TAG, "onProgress $realProgress")
-//                    progressDialog.setProgress(realProgress.toInt())
-                }
-            }
-
-            override fun onSuccess(
-                mediaItemList: ArrayList<MediaItem>?,
-                textItemList: ArrayList<TextItem>?,
-                model: NLEModel
-            ) {
-                Log.d(TAG, "onSuccess ${Thread.currentThread().name}")
-                launch(FastMain) {
-                    if (mediaItemList == null) {
-                        Toast.makeText(this@CutPlayerActivity, "没有需要替换的槽位", Toast.LENGTH_SHORT)
-                            .show()
-                        finish()
-                    }
-                    mediaItemList?.forEach {
-                        if (it.isMutable) {
-                            mutableMediaItemList.add(it)
-                        }
-                    }
-//                    progressDialog.dismiss()
-                    checkDataOkOrNot()
-                }
-            }
-
-            override fun onError(code: Int, message: String?) {
-                //  progressDialog.dismiss()
-            }
-        })
     }
 
     override fun onResume() {

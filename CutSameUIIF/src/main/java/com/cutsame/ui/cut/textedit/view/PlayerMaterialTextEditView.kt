@@ -2,13 +2,13 @@ package com.cutsame.ui.cut.textedit.view
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.bytedance.ies.cutsame.util.SizeUtil
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.SpacesItemDecoration
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
@@ -16,10 +16,9 @@ import com.cutsame.ui.cut.textedit.PlayerTextEditAdapter
 import com.cutsame.ui.cut.textedit.PlayerTextEditItemData
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditListener
-import com.cutsame.ui.utils.SizeUtil.dp2px
 import java.util.*
 
-class PlayerTextEditView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     private lateinit var contentRootView: View
     private lateinit var textRecyleView: RecyclerView
@@ -36,16 +35,44 @@ class PlayerTextEditView @JvmOverloads constructor(context: Context, attrs: Attr
     private fun initView(context: Context) {
         contentRootView = LayoutInflater.from(context).inflate(R.layout.layout_textedit_view, this, true)
         textRecyleView = contentRootView.findViewById(R.id.text_recyleview)
-        val layoutManager = GridLayoutManager(context, 4)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
-        textRecyleView.layoutManager = layoutManager
-        textRecyleView.addItemDecoration(
-            SpacesItemDecoration(
-                dp2px(15f),
-                dp2px(15f),
-                columnCountLimit = 4
-            )
-        )
+        textRecyleView.layoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(context, HORIZONTAL, false) {
+            override fun smoothScrollToPosition(
+                recyclerView: RecyclerView?,
+                state: RecyclerView.State?,
+                position: Int
+            ) {
+                val linearSmoothScroller = object :
+                    androidx.recyclerview.widget.LinearSmoothScroller(recyclerView!!.context) {
+                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+                        return super.calculateSpeedPerPixel(displayMetrics) * 2
+                    }
+
+                    override fun calculateDxToMakeVisible(
+                        view: View?,
+                        snapPreference: Int
+                    ): Int {
+                        val layoutManager = this.layoutManager
+                        return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
+                            val params =
+                                view!!.layoutParams as RecyclerView.LayoutParams
+                            val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
+                            val right =
+                                layoutManager.getDecoratedRight(view) + params.rightMargin
+                            val start = layoutManager.paddingLeft
+                            val end = layoutManager.width - layoutManager.paddingRight
+                            return start + (end - start) / 2 - (right - left) / 2 - left
+                        } else {
+                            0
+                        }
+                    }
+                }
+                linearSmoothScroller.targetPosition = position
+                startSmoothScroll(linearSmoothScroller)
+            }
+        }
+        textRecyleView.setHasFixedSize(true)
+        textRecyleView.addItemDecoration(SpacesItemDecoration(0, SizeUtil.dp2px(16f), rowCountLimit = 1))
+
         contentRootView.findViewById<View>(R.id.save_btn).setGlobalDebounceOnClickListener {
             editListener?.clickSave()
         }
@@ -55,7 +82,7 @@ class PlayerTextEditView @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun initData() {
-        textEditViewAdapter = PlayerTextEditAdapter(context, object : PlayerTextEditItemListener {
+        textEditViewAdapter = PlayerTextEditAdapter(object : PlayerTextEditItemListener {
             override fun selectItem(data: PlayerTextEditItemData?, pos: Int) {
                 updateCurEditItemStatus(pos)
                 editListener?.selectTextItem(data, pos)
@@ -66,10 +93,6 @@ class PlayerTextEditView @JvmOverloads constructor(context: Context, attrs: Attr
             }
         })
         textRecyleView.adapter = textEditViewAdapter
-    }
-
-    fun getCurSelectPos(): Int {
-        return textEditViewAdapter.curPos
     }
 
     fun updateTextData(dataList: List<PlayerTextEditItemData>?) {

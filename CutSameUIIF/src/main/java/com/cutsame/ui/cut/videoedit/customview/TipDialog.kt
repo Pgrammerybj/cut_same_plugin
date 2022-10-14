@@ -27,11 +27,6 @@ class TipDialog(context: Context, theme: Int) : Dialog(context, theme) {
             return this
         }
 
-        fun setCancelText(cancel: String): Builder {
-            this.cancel = cancel
-            return this
-        }
-
         fun setDialogOperationListener(dialogOperationListener: DialogOperationListener): Builder {
             this.dialogOperationListener = dialogOperationListener
             return this
@@ -78,7 +73,7 @@ class TipDialog(context: Context, theme: Int) : Dialog(context, theme) {
 
     interface DialogOperationListener {
         fun onClickSure()
-        fun onClickCancel()
+        fun onClickCancel(){}
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

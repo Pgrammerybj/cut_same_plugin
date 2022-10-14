@@ -1,9 +1,7 @@
 package com.cutsame.ui.cut.textedit
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Matrix
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +16,7 @@ import com.cutsame.ui.cut.CutSameDesignDrawableFactory
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
 import java.util.*
 
-class PlayerTextEditAdapter(context: Context, private val itemListener: PlayerTextEditItemListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var dataList: List<PlayerTextEditItemData> = ArrayList()
 
@@ -54,7 +52,7 @@ class PlayerTextEditAdapter(context: Context, private val itemListener: PlayerTe
         if (dataList == null || dataList.isEmpty()) {
             return
         }
-        this.dataList = dataList!!
+        this.dataList = dataList
         notifyDataSetChanged()
     }
 
@@ -88,18 +86,6 @@ class PlayerTextEditAdapter(context: Context, private val itemListener: PlayerTe
             notifyItemChanged(preSelectPos)
         }
     }
-    fun zoomBitmap(bitmap: Bitmap, w: Int, h: Int): Bitmap? {
-        val width = bitmap.width
-        val height = bitmap.height
-        val matrix = Matrix()
-        val scaleWidth = w.toFloat() / width
-        val scaleHeight = h.toFloat() / height
-        matrix.postScale(scaleWidth, scaleHeight)
-        return Bitmap.createBitmap(
-            bitmap, 0, 0, width, height,
-            matrix, true
-        )
-    }
 
     internal inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -132,7 +118,6 @@ class PlayerTextEditAdapter(context: Context, private val itemListener: PlayerTe
                     itemListener?.selectItem(itemData, adapterPosition)
                 }
             }
-
             numberTextView.text = "${pos+1}"
         }
 
@@ -154,7 +139,5 @@ class PlayerTextEditAdapter(context: Context, private val itemListener: PlayerTe
                 textContentView.text = itemData.getEditText()
             }
         }
-
     }
-
 }

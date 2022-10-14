@@ -16,6 +16,11 @@
     <!--    <string name="media_time">%.1f 秒</string>  --> <!-- 无用词条 -->
     <string name="cutsame_common_open_permission">请开启此应用相机、录音、存储权限</string>
 
+    <string name="ola_material_edit_video">视频</string>
+    <string name="ola_material_edit_text">文本</string>
+    <string name="ola_material_edit_lyrics">歌词样式</string>
+
+
     <!--preview-->
     <string name="cutsame_edit_title">视频编辑</string>
     <string name="cutsame_export_title">完成</string>

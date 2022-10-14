@@ -150,7 +150,11 @@ class VideoListAdapter(
 
         holder.itemView.setGlobalDebounceOnClickListener {
             if (segment.isMutable) {
-                itemClickListener?.onItemClick(segment, holder.adapterPosition)
+                itemClickListener?.onItemClick(
+                    segment,
+                    holder.adapterPosition,
+                    isSelect(holder.adapterPosition)
+                )
             }
         }
     }
@@ -208,11 +212,11 @@ class VideoListAdapter(
             )
         )
 
-    interface ItemClickListener {
-        fun onItemClick(item: MediaItem, position: Int)
+    fun interface ItemClickListener {
+        fun onItemClick(item: MediaItem, position: Int, isSelect: Boolean)
     }
 
-    interface CurrentIndexChangeListener {
+    fun interface CurrentIndexChangeListener {
         fun onCurrentIndexChange(item: MediaItem, index: Int)
     }
 }

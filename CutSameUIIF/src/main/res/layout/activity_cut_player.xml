@@ -8,7 +8,7 @@
     android:background="@color/transparent"
     tools:context=".cut.preview.CutPreviewPlayerActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -48,19 +48,33 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--预览区域-->
         <include
             android:id="@+id/videoPlayContainer"
             layout="@layout/fragment_cut_video_play"
             android:layout_width="260dp"
             android:layout_height="462dp"
-            android:layout_below="@+id/titleBar"
-            android:layout_centerHorizontal="true" />
+            android:layout_gravity="center_horizontal" />
+
+        <!--播放进度-->
+        <include
+            android:id="@+id/material_video_play_progress"
+            layout="@layout/layout_materail_video_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <!--底部素材编辑区-->
+        <include
+            android:id="@+id/materialEditContainer"
+            layout="@layout/layout_material_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <FrameLayout
             android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_height="wrap_content">
             <!-- 底部视频list -->
             <include
                 android:id="@+id/videoThumbListContainer"
@@ -69,15 +83,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom" />
             <!-- 文字编辑功能 -->
-            <com.cutsame.ui.cut.textedit.view.PlayerTextEditView
+            <com.cutsame.ui.cut.textedit.view.PlayerMaterialTextEditView
                 android:id="@+id/player_edit_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_panel"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
         </FrameLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <!-- 文字编辑功能(文本框输入)-->
     <com.cutsame.ui.cut.textedit.view.PlayerTextEditExtraView
