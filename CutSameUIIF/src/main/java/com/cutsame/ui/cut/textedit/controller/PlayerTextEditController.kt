@@ -18,10 +18,10 @@ import com.cutsame.ui.utils.postOnUiThread
 import com.ss.android.ugc.cut_ui.TextItem
 import java.util.HashMap
 
-class PlayerTextEditController : PlayerTextEditListenerAdapter() {
+class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditView) : PlayerTextEditListenerAdapter() {
 
-    private lateinit var playerTextEditView: PlayerMaterialTextEditView
-    private lateinit var videoListView: View
+//    private lateinit var playerTextEditView: PlayerMaterialTextEditView
+//    private lateinit var videoListView: View
     private lateinit var titleView: View
     private lateinit var fragmentActivity: FragmentActivity
 
@@ -46,11 +46,11 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
 
     fun init(activity: FragmentActivity, contentView: View, editListener: PlayerTextEditListener?) {
         fragmentActivity = activity
-        this.playerTextEditView = contentView.findViewById(R.id.player_edit_view)
-        this.videoListView = contentView.findViewById(R.id.videoThumbListContainer)
+//        this.playerTextEditView = contentView.findViewById(R.id.player_edit_view)
+//        this.videoListView = contentView.findViewById(R.id.videoThumbListContainer)
         this.titleView = contentView.findViewById(R.id.titleBar)
 
-        this.playerTextEditView.setGlobalDebounceOnClickListener { }
+        playerTextEditView.setGlobalDebounceOnClickListener { }
 
         playerTextExtraController.init(contentView.findViewById(R.id.play_edit_extra_view))
         playerTextExtraController.setPlayerTextEditListenerAdapter(this)
@@ -101,48 +101,48 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
         if (!playerTextEditView.hasData()) {
             return false
         }
-
-        PlayerAnimateHelper.scaleIn(
-            videoListView,
-            playerTextEditView,
-            object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
-                override fun scale(
-                    scaleW: Float,
-                    scaleH: Float,
-                    tranX: Int,
-                    tranY: Int,
-                    faction: Float,
-                    isScaleDown: Boolean
-                ) {
-                    scaleListener?.scale(scaleW, scaleH, tranX, tranY / 2, faction, isScaleDown)
-                }
-
-                override fun scaleEnd(
-                    targetScaleW: Float,
-                    targetScaleH: Float,
-                    targetTranx: Int,
-                    targetTranY: Int,
-                    isScaleDown: Boolean
-                ) {
-                    scaleListener?.scaleEnd(
-                        targetScaleW,
-                        targetScaleH,
-                        targetTranx,
-                        targetTranY,
-                        isScaleDown
-                    )
-
-                    scaleW = targetScaleW
-                    scaleH = targetScaleH
-                    surfaceTransY = targetTranY
-
-                    //每次进入，都是视频暂停，定格在第一段文字选中状态
-                    playerTextEditView.updateCurEditItemStatus(0)
-                    playerTextEditView.scrollToPos(0)
-                    selectTextItem(playerTextEditView.curSelectItemData, 0)
-                    playerTextExtraController.showOrHideView(true)
-                }
-            })
+//
+//        PlayerAnimateHelper.scaleIn(
+//            videoListView,
+//            playerTextEditView,
+//            object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
+//                override fun scale(
+//                    scaleW: Float,
+//                    scaleH: Float,
+//                    tranX: Int,
+//                    tranY: Int,
+//                    faction: Float,
+//                    isScaleDown: Boolean
+//                ) {
+//                    scaleListener?.scale(scaleW, scaleH, tranX, tranY / 2, faction, isScaleDown)
+//                }
+//
+//                override fun scaleEnd(
+//                    targetScaleW: Float,
+//                    targetScaleH: Float,
+//                    targetTranx: Int,
+//                    targetTranY: Int,
+//                    isScaleDown: Boolean
+//                ) {
+//                    scaleListener?.scaleEnd(
+//                        targetScaleW,
+//                        targetScaleH,
+//                        targetTranx,
+//                        targetTranY,
+//                        isScaleDown
+//                    )
+//
+//                    scaleW = targetScaleW
+//                    scaleH = targetScaleH
+//                    surfaceTransY = targetTranY
+//
+//                    //每次进入，都是视频暂停，定格在第一段文字选中状态
+//                    playerTextEditView.updateCurEditItemStatus(0)
+//                    playerTextEditView.scrollToPos(0)
+//                    selectTextItem(playerTextEditView.curSelectItemData, 0)
+//                    playerTextExtraController.showOrHideView(true)
+//                }
+//            })
         PlayerAnimateHelper.animateAlphaShowOrHide(titleView, false, false)
 
         //获取文字封面图
@@ -337,37 +337,37 @@ class PlayerTextEditController : PlayerTextEditListenerAdapter() {
     }
 
     private fun finishAnim() {
-        PlayerAnimateHelper.scaleOut(
-            videoListView,
-            playerTextEditView,
-            object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
-                override fun scale(
-                    scaleW: Float,
-                    scaleH: Float,
-                    tranX: Int,
-                    tranY: Int,
-                    faction: Float,
-                    isScaleDown: Boolean
-                ) {
-                    scaleListener?.scale(scaleW, scaleH, tranX, tranY / 2, faction, isScaleDown)
-                }
-
-                override fun scaleEnd(
-                    targetScaleW: Float,
-                    targetScaleH: Float,
-                    targetTranx: Int,
-                    targetTranY: Int,
-                    isScaleDown: Boolean
-                ) {
-                    scaleListener?.scaleEnd(
-                        targetScaleW,
-                        targetScaleH,
-                        targetTranx,
-                        targetTranY,
-                        isScaleDown
-                    )
-                }
-            })
+//        PlayerAnimateHelper.scaleOut(
+//            videoListView,
+//            playerTextEditView,
+//            object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
+//                override fun scale(
+//                    scaleW: Float,
+//                    scaleH: Float,
+//                    tranX: Int,
+//                    tranY: Int,
+//                    faction: Float,
+//                    isScaleDown: Boolean
+//                ) {
+//                    scaleListener?.scale(scaleW, scaleH, tranX, tranY / 2, faction, isScaleDown)
+//                }
+//
+//                override fun scaleEnd(
+//                    targetScaleW: Float,
+//                    targetScaleH: Float,
+//                    targetTranx: Int,
+//                    targetTranY: Int,
+//                    isScaleDown: Boolean
+//                ) {
+//                    scaleListener?.scaleEnd(
+//                        targetScaleW,
+//                        targetScaleH,
+//                        targetTranx,
+//                        targetTranY,
+//                        isScaleDown
+//                    )
+//                }
+//            })
         playerTextExtraController.showOrHideView(false)
         playerTextExtraController.showOrHideTextBoxView(false)
         PlayerAnimateHelper.animateAlphaShowOrHide(titleView, true, false)

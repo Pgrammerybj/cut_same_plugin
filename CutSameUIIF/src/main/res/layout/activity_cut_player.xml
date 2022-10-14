@@ -17,8 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/titleBar"
             android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:layout_alignParentTop="true">
+            android:layout_height="57dp">
 
             <ImageView
                 android:id="@+id/closeView"
@@ -83,13 +82,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom" />
             <!-- 文字编辑功能 -->
-            <com.cutsame.ui.cut.textedit.view.PlayerMaterialTextEditView
-                android:id="@+id/player_edit_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_panel"
-                android:visibility="gone"
-                tools:visibility="visible" />
+<!--            <com.cutsame.ui.cut.textedit.view.PlayerMaterialTextEditView-->
+<!--                android:id="@+id/player_edit_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@drawable/bg_panel"-->
+<!--                android:visibility="gone"-->
+<!--                tools:visibility="visible" />-->
         </FrameLayout>
 
     </LinearLayout>

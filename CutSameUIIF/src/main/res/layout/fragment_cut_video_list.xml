@@ -9,17 +9,6 @@
     android:paddingBottom="30dp"
     tools:context=".cut.preview.CutPreviewPlayerActivity">
 
-    <!--素材展示区-->
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/videoRecyclerView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="90dp"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        android:paddingLeft="8dp"-->
-    <!--        android:paddingRight="8dp"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/globalEditLayout"
         android:layout_width="wrap_content"

@@ -17,7 +17,7 @@
 
         <!--歌词展示区-->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/text_recyleview"
+            android:id="@+id/textRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             app:layout_constraintLeft_toLeftOf="parent"

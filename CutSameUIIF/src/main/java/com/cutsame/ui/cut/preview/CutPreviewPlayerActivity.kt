@@ -1,12 +1,15 @@
 package com.cutsame.ui.cut.preview
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.RectF
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.SurfaceView
 import android.view.View
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.bytedance.ies.cutsame.cut_android.TemplateError
 import com.cutsame.solution.player.BasePlayer
 import com.cutsame.solution.player.GetImageListener
@@ -53,7 +56,6 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
 
 
     private lateinit var materialPagerAdapter: MaterialPagerAdapter
-    private val playerTextEditController: PlayerTextEditController by lazy { PlayerTextEditController() }
     private val playerMaterialVideoView: PlayerMaterialVideoView by lazy {
         PlayerMaterialVideoView(
             this
@@ -70,6 +72,12 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         )
     }
 
+    private val playerTextEditController: PlayerTextEditController by lazy {
+        PlayerTextEditController(
+            playerMaterialTextEditView
+        )
+    }
+
 
     private val editTypeArray = MaterialEditType.values()
 
@@ -82,6 +90,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
     override fun onDestroy() {
         super.onDestroy()
         playerTextEditController.release()
+        materialEditViewPager.removeOnPageChangeListener(mPageListener)
     }
 
     override fun onPlayerDataOk() {
@@ -141,7 +150,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
      */
     private fun initPaper() {
         materialPagerAdapter = MaterialPagerAdapter(
-            getApplicationContext(),
+            applicationContext,
             editTypeArray,
             playerMaterialVideoView,
             playerMaterialTextEditView,
@@ -150,6 +159,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         materialEditViewPager.adapter = materialPagerAdapter
         materialEditViewPager.offscreenPageLimit = 3
         editTypeTab.setupWithViewPager(materialEditViewPager)
+        materialEditViewPager.addOnPageChangeListener(mPageListener)
     }
 
     private fun initListener() {
@@ -429,15 +439,43 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         }
         playerTextEditController.updateDataList(mutableTextSegments)
 
-        globalEditLayout.setGlobalDebounceOnClickListener {
-            if (templatePlayerErrorCode == TemplateError.SUCCESS) {
-                if (cutSamePlayer?.getTextItems()?.filter { it.mutable }.isNullOrEmpty()) {
-                    showTipToast(resources.getString(R.string.cutsame_edit_tip_text_no_editable))
-                } else {
-                    playerTextEditController.showTextEditView()
+//        globalEditLayout.setGlobalDebounceOnClickListener {
+//            if (templatePlayerErrorCode == TemplateError.SUCCESS) {
+//                if (cutSamePlayer?.getTextItems()?.filter { it.mutable }.isNullOrEmpty()) {
+//                    showTipToast(resources.getString(R.string.cutsame_edit_tip_text_no_editable))
+//                } else {
+//                    playerTextEditController.showTextEditView()
+//                }
+//            }
+//        }
+    }
+
+    /**
+     * ViewPager滑动监听
+     */
+    var mPageListener: OnPageChangeListener = object : OnPageChangeListener {
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+        }
+
+        @SuppressLint("LongLogTag")
+        override fun onPageSelected(currentPosition: Int) {
+            Log.i("jackyang_onPageSelected", "当前页面是=$currentPosition")
+            if (currentPosition == 1) {
+                if (templatePlayerErrorCode == TemplateError.SUCCESS) {
+                    if (cutSamePlayer?.getTextItems()?.filter { it.mutable }.isNullOrEmpty()) {
+                        showTipToast(resources.getString(R.string.cutsame_edit_tip_text_no_editable))
+                    } else {
+                        playerTextEditController.showTextEditView()
+                    }
                 }
             }
         }
+
+        override fun onPageScrollStateChanged(state: Int) {}
     }
 
     override fun onClipFinish(item: MediaItem?) {

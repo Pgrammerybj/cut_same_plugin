@@ -16,12 +16,12 @@ import com.cutsame.ui.cut.textedit.PlayerTextEditAdapter
 import com.cutsame.ui.cut.textedit.PlayerTextEditItemData
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditListener
+import kotlinx.android.synthetic.main.layout_textedit_view.view.*
 import java.util.*
 
 class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     private lateinit var contentRootView: View
-    private lateinit var textRecyleView: RecyclerView
     private lateinit var textEditViewAdapter: PlayerTextEditAdapter
     private var editListener: PlayerTextEditListener? = null
 
@@ -34,8 +34,7 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
 
     private fun initView(context: Context) {
         contentRootView = LayoutInflater.from(context).inflate(R.layout.layout_textedit_view, this, true)
-        textRecyleView = contentRootView.findViewById(R.id.text_recyleview)
-        textRecyleView.layoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(context, HORIZONTAL, false) {
+        textRecyclerView.layoutManager = object : androidx.recyclerview.widget.LinearLayoutManager(context, HORIZONTAL, false) {
             override fun smoothScrollToPosition(
                 recyclerView: RecyclerView?,
                 state: RecyclerView.State?,
@@ -70,8 +69,8 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
                 startSmoothScroll(linearSmoothScroller)
             }
         }
-        textRecyleView.setHasFixedSize(true)
-        textRecyleView.addItemDecoration(SpacesItemDecoration(0, SizeUtil.dp2px(16f), rowCountLimit = 1))
+        textRecyclerView.setHasFixedSize(true)
+        textRecyclerView.addItemDecoration(SpacesItemDecoration(0, SizeUtil.dp2px(16f), rowCountLimit = 1))
 
         contentRootView.findViewById<View>(R.id.save_btn).setGlobalDebounceOnClickListener {
             editListener?.clickSave()
@@ -92,7 +91,7 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
                 editListener?.clickEditTextItem(data, pos)
             }
         })
-        textRecyleView.adapter = textEditViewAdapter
+        textRecyclerView.adapter = textEditViewAdapter
     }
 
     fun updateTextData(dataList: List<PlayerTextEditItemData>?) {
@@ -111,7 +110,7 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
     }
 
     fun scrollToPos(pos: Int) {
-        textRecyleView.scrollToPosition(pos)
+        textRecyclerView.scrollToPosition(pos)
     }
 
     fun setEditListener(editListener: PlayerTextEditListener?) {
