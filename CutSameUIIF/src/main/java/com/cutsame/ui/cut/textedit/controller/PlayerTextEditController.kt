@@ -20,9 +20,6 @@ import java.util.HashMap
 
 class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditView) : PlayerTextEditListenerAdapter() {
 
-//    private lateinit var playerTextEditView: PlayerMaterialTextEditView
-//    private lateinit var videoListView: View
-    private lateinit var titleView: View
     private lateinit var fragmentActivity: FragmentActivity
 
     private var keyBoardListener: KeyboardHeightProvider? = null
@@ -46,9 +43,6 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
 
     fun init(activity: FragmentActivity, contentView: View, editListener: PlayerTextEditListener?) {
         fragmentActivity = activity
-//        this.playerTextEditView = contentView.findViewById(R.id.player_edit_view)
-//        this.videoListView = contentView.findViewById(R.id.videoThumbListContainer)
-        this.titleView = contentView.findViewById(R.id.titleBar)
 
         playerTextEditView.setGlobalDebounceOnClickListener { }
 
@@ -101,49 +95,6 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
         if (!playerTextEditView.hasData()) {
             return false
         }
-//
-//        PlayerAnimateHelper.scaleIn(
-//            videoListView,
-//            playerTextEditView,
-//            object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
-//                override fun scale(
-//                    scaleW: Float,
-//                    scaleH: Float,
-//                    tranX: Int,
-//                    tranY: Int,
-//                    faction: Float,
-//                    isScaleDown: Boolean
-//                ) {
-//                    scaleListener?.scale(scaleW, scaleH, tranX, tranY / 2, faction, isScaleDown)
-//                }
-//
-//                override fun scaleEnd(
-//                    targetScaleW: Float,
-//                    targetScaleH: Float,
-//                    targetTranx: Int,
-//                    targetTranY: Int,
-//                    isScaleDown: Boolean
-//                ) {
-//                    scaleListener?.scaleEnd(
-//                        targetScaleW,
-//                        targetScaleH,
-//                        targetTranx,
-//                        targetTranY,
-//                        isScaleDown
-//                    )
-//
-//                    scaleW = targetScaleW
-//                    scaleH = targetScaleH
-//                    surfaceTransY = targetTranY
-//
-//                    //每次进入，都是视频暂停，定格在第一段文字选中状态
-//                    playerTextEditView.updateCurEditItemStatus(0)
-//                    playerTextEditView.scrollToPos(0)
-//                    selectTextItem(playerTextEditView.curSelectItemData, 0)
-//                    playerTextExtraController.showOrHideView(true)
-//                }
-//            })
-        PlayerAnimateHelper.animateAlphaShowOrHide(titleView, false, false)
 
         //获取文字封面图
         var width = SizeUtil.dp2px(60f)
@@ -192,9 +143,6 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
         }
         return false
     }
-
-//    fun onPlaying() {
-//    }
 
     override fun clickCancel() {
         //文字发生变化了才谈对话框
@@ -337,40 +285,8 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
     }
 
     private fun finishAnim() {
-//        PlayerAnimateHelper.scaleOut(
-//            videoListView,
-//            playerTextEditView,
-//            object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
-//                override fun scale(
-//                    scaleW: Float,
-//                    scaleH: Float,
-//                    tranX: Int,
-//                    tranY: Int,
-//                    faction: Float,
-//                    isScaleDown: Boolean
-//                ) {
-//                    scaleListener?.scale(scaleW, scaleH, tranX, tranY / 2, faction, isScaleDown)
-//                }
-//
-//                override fun scaleEnd(
-//                    targetScaleW: Float,
-//                    targetScaleH: Float,
-//                    targetTranx: Int,
-//                    targetTranY: Int,
-//                    isScaleDown: Boolean
-//                ) {
-//                    scaleListener?.scaleEnd(
-//                        targetScaleW,
-//                        targetScaleH,
-//                        targetTranx,
-//                        targetTranY,
-//                        isScaleDown
-//                    )
-//                }
-//            })
         playerTextExtraController.showOrHideView(false)
         playerTextExtraController.showOrHideTextBoxView(false)
-        PlayerAnimateHelper.animateAlphaShowOrHide(titleView, true, false)
         releaseKeyboardListener()
         isShowView = false
     }

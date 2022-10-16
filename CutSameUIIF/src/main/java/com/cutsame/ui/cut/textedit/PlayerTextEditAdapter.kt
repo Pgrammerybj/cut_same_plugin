@@ -1,5 +1,6 @@
 package com.cutsame.ui.cut.textedit
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.text.TextUtils
@@ -9,14 +10,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bytedance.ies.cutsame.util.SizeUtil
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.cut.CutSameDesignDrawableFactory
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
+import com.cutsame.ui.utils.SizeUtil
 import java.util.*
 
-class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener?) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var dataList: List<PlayerTextEditItemData> = ArrayList()
 
@@ -36,7 +38,8 @@ class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(
             R.layout.layout_textedit_item,
-                viewGroup, false)
+            viewGroup, false
+        )
         return ItemViewHolder(view)
     }
 
@@ -94,6 +97,7 @@ class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener
         private val selectedView: TextView = itemView.findViewById(R.id.selectedView)
         private val numberTextView: TextView = itemView.findViewById(R.id.numberTextView)
 
+        @SuppressLint("SetTextI18n")
         fun bindView(itemData: PlayerTextEditItemData?, pos: Int) {
             if (itemData == null || TextUtils.isEmpty(itemData.saltId) || itemData.getEditText() == null) {
                 return
@@ -104,21 +108,22 @@ class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener
                 thumbImageView.setImageBitmap(bitmap)
             } else {
                 thumbImageView.background = CutSameDesignDrawableFactory.createRectNormalDrawable(
-                        Color.TRANSPARENT,
-                        0x26FFFFFF,
-                        0, SizeUtil.dp2px(2f))
+                    Color.TRANSPARENT,
+                    0x26FFFFFF,
+                    0, SizeUtil.dp2px(2f)
+                )
             }
 
             changeViewStatus(itemData, pos)
 
             itemView.setGlobalDebounceOnClickListener {
-                if (curSelectPos == adapterPosition) { //如果已经是选中态就点击编辑
-                    itemListener?.clickEditItem(itemData, adapterPosition)
+                if (curSelectPos == bindingAdapterPosition) { //如果已经是选中态就点击编辑
+                    itemListener?.clickEditItem(itemData, bindingAdapterPosition)
                 } else {
-                    itemListener?.selectItem(itemData, adapterPosition)
+                    itemListener?.selectItem(itemData, bindingAdapterPosition)
                 }
             }
-            numberTextView.text = "${pos+1}"
+            numberTextView.text = "${pos + 1}"
         }
 
         /**
@@ -134,7 +139,8 @@ class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener
             }
 
             if (!itemData.isValid) {
-                textContentView.text = textContentView.context.resources.getString(R.string.cutsame_edit_tip_no_content)
+                textContentView.text =
+                    textContentView.context.resources.getString(R.string.cutsame_edit_tip_no_content)
             } else {
                 textContentView.text = itemData.getEditText()
             }

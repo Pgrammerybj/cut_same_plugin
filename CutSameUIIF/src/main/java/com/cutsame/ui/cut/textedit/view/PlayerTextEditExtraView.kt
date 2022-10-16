@@ -12,13 +12,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
-import com.bytedance.ies.cutsame.util.SizeUtil
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.cut.CutSameDesignDrawableFactory
 import com.cutsame.ui.cut.textedit.PlayerTextBoxData
 import com.cutsame.ui.cut.textedit.listener.PlayerTextViewExtraListener
 import com.cutsame.ui.cut.textedit.listener.TextWatcherAdapter
+import com.cutsame.ui.utils.SizeUtil
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -37,6 +37,9 @@ class PlayerTextEditExtraView @JvmOverloads constructor(context: Context, attrs:
     private val textBoxTopBottomPadding: Int
     private var extraListener: PlayerTextViewExtraListener? = null
 
+
+
+
     init {
         initView(context)
         textBoxLeftRightPadding = context.resources.getDimensionPixelOffset(R.dimen.video_player_text_box_leftright)
@@ -50,23 +53,23 @@ class PlayerTextEditExtraView @JvmOverloads constructor(context: Context, attrs:
         editFinishView = contentRootView.findViewById(R.id.finish_edit_text)
         textBoxView = contentRootView.findViewById(R.id.text_box_view)
 
-        val textBoxDrawable = CutSameDesignDrawableFactory.createRectNormalDrawable(Color.WHITE, Color.TRANSPARENT,
-                SizeUtil.dp2px(1f), 0)
+        val textBoxDrawable = CutSameDesignDrawableFactory.createRectNormalDrawable(Color.parseColor("#4d000000"), Color.parseColor("#4d000000"),
+            SizeUtil.dp2px(1f), SizeUtil.dp2px(8f))
         textBoxView.background = textBoxDrawable
 
         editFinishView.setGlobalDebounceOnClickListener { extraListener?.clickFinishEditTextView(editTextView.text.toString()) }
 
         editTextView.addTextChangedListener(object : TextWatcherAdapter() {
 
-            override fun onTextChanged(charSequence: CharSequence, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (count - before >= 1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M )   {
-                    val input: CharSequence? = charSequence?.subSequence(
+                    val input: CharSequence = s.subSequence(
                         start + before,
                         start + count
                     )
                     if (isEmoji(input.toString())) {
                         Toast.makeText(context, R.string.cutsame_not_support_emoji, Toast.LENGTH_SHORT).show()
-                        (charSequence as SpannableStringBuilder).delete(
+                        (s as SpannableStringBuilder).delete(
                             start + before,
                             start + count
                         )

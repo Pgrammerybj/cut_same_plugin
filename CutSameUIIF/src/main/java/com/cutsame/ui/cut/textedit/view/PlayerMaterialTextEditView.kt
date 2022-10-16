@@ -8,14 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.bytedance.ies.cutsame.util.SizeUtil
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.SpacesItemDecoration
-import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.cut.textedit.PlayerTextEditAdapter
 import com.cutsame.ui.cut.textedit.PlayerTextEditItemData
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditListener
+import com.cutsame.ui.utils.SizeUtil
 import kotlinx.android.synthetic.main.layout_textedit_view.view.*
 import java.util.*
 
@@ -72,12 +71,12 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
         textRecyclerView.setHasFixedSize(true)
         textRecyclerView.addItemDecoration(SpacesItemDecoration(0, SizeUtil.dp2px(16f), rowCountLimit = 1))
 
-        contentRootView.findViewById<View>(R.id.save_btn).setGlobalDebounceOnClickListener {
-            editListener?.clickSave()
-        }
-        contentRootView.findViewById<View>(R.id.cancel_btn).setGlobalDebounceOnClickListener {
-            editListener?.clickCancel()
-        }
+//        contentRootView.findViewById<View>(R.id.save_btn).setGlobalDebounceOnClickListener {
+//            editListener?.clickSave()
+//        }
+//        contentRootView.findViewById<View>(R.id.cancel_btn).setGlobalDebounceOnClickListener {
+//            editListener?.clickCancel()
+//        }
     }
 
     fun initData() {
@@ -109,9 +108,9 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
         textEditViewAdapter.updateCurSelectStatusView(pos)
     }
 
-    fun scrollToPos(pos: Int) {
-        textRecyclerView.scrollToPosition(pos)
-    }
+//    fun scrollToPos(pos: Int) {
+//        textRecyclerView.scrollToPosition(pos)
+//    }
 
     fun setEditListener(editListener: PlayerTextEditListener?) {
         this.editListener = editListener

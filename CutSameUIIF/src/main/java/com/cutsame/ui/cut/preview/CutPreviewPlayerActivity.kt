@@ -432,11 +432,11 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         })
 
         val mutableTextSegments = cutSamePlayer?.getTextItems()?.filter { it.mutable }
-        if (mutableTextSegments.isNullOrEmpty()) {
-            editTextIconView.setImageResource(R.drawable.ic_edit_text_disable)
-        } else {
-            editTextIconView.setImageResource(R.drawable.ic_edit_text)
-        }
+//        if (mutableTextSegments.isNullOrEmpty()) {
+//            editTextIconView.setImageResource(R.drawable.ic_edit_text_disable)
+//        } else {
+//            editTextIconView.setImageResource(R.drawable.ic_edit_text)
+//        }
         playerTextEditController.updateDataList(mutableTextSegments)
 
 //        globalEditLayout.setGlobalDebounceOnClickListener {

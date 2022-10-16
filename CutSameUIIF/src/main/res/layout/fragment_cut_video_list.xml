@@ -9,35 +9,35 @@
     android:paddingBottom="30dp"
     tools:context=".cut.preview.CutPreviewPlayerActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/globalEditLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        tools:ignore="MissingConstraints">
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/globalEditLayout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        tools:ignore="MissingConstraints">-->
 
-        <ImageView
-            android:id="@+id/editTextIconView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/ic_edit_text"
-            app:layout_constraintBottom_toTopOf="@id/editTextView"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+<!--        <ImageView-->
+<!--            android:id="@+id/editTextIconView"-->
+<!--            android:layout_width="24dp"-->
+<!--            android:layout_height="24dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:src="@drawable/ic_edit_text"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/editTextView"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent" />-->
 
-        <TextView
-            android:id="@+id/editTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cutsame_edit_title_text_edit"
-            android:textColor="@color/text_white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/editTextView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/cutsame_edit_title_text_edit"-->
+<!--            android:textColor="@color/text_white"-->
+<!--            android:textSize="12sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent" />-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <!--素材点击编辑后的面板-->
     <LinearLayout
