@@ -23,6 +23,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-ola/android.library-ola.iml" filepath="$PROJECT_DIR$/.idea/modules/library-ola/android.library-ola.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-res/android.library-res.iml" filepath="$PROJECT_DIR$/.idea/modules/library-res/android.library-res.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ola-banner/android.ola-banner.iml" filepath="$PROJECT_DIR$/.idea/modules/ola-banner/android.ola-banner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ola-picker/android.ola-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/ola-picker/android.ola-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/record-tobres/android.record-tobres.iml" filepath="$PROJECT_DIR$/.idea/modules/record-tobres/android.record-tobres.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/small-window/android.small-window.iml" filepath="$PROJECT_DIR$/.idea/modules/small-window/android.small-window.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/vebase/android.vebase.iml" filepath="$PROJECT_DIR$/.idea/modules/vebase/android.vebase.iml" />

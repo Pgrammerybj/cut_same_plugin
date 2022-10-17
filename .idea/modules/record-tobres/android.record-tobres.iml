@@ -32,11 +32,11 @@
         </compilerSettings>
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../../../build/record-tobres/tmp/kotlin-classes/debug" />
-          <option name="classpath" value="$MODULE_DIR$/../../../../build/record-tobres/intermediates/compile_r_class_jar/debug/R.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/20acfa242806fcc872b8bae28d8e795d/jetified-kotlin-stdlib-1.5.30.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/b1d61aea86a76263a10f62d47ff7e230/jetified-annotations-13.0.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/008e0ff7da14be98761dff895613b737/jetified-kotlin-stdlib-common-1.5.30.jar:/Users/yangbaojiang/Library/Android/sdk/platforms/android-31/android.jar:/Users/yangbaojiang/Library/Android/sdk/build-tools/29.0.2/core-lambda-stubs.jar" />
+          <option name="classpath" value="$MODULE_DIR$/../../../../build/record-tobres/intermediates/compile_r_class_jar/debug/R.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/3f220808ea904c9b3ec40d1758e3f360/jetified-kotlin-stdlib-1.6.10.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/b1d61aea86a76263a10f62d47ff7e230/jetified-annotations-13.0.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/d8c411ee0b2ff8e3c8e4e1eb2492f997/jetified-kotlin-stdlib-common-1.6.10.jar:/Users/yangbaojiang/Library/Android/sdk/platforms/android-31/android.jar:/Users/yangbaojiang/Library/Android/sdk/build-tools/29.0.2/core-lambda-stubs.jar" />
           <option name="noStdlib" value="true" />
           <option name="moduleName" value="record-tobres_debug" />
           <option name="languageVersion" value="1.6" />
-          <option name="apiVersion" value="1.5" />
+          <option name="apiVersion" value="1.6" />
           <option name="pluginOptions">
             <array />
           </option>
@@ -98,8 +98,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.services:storage:1.4.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test:monitor:1.4.0@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.test.espresso:espresso-idling-resource:3.4.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.6.10" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10" level="project" />
   </component>
 </module>

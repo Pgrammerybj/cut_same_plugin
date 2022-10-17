@@ -23,8 +23,13 @@ import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.CutSameUiIF.ARG_TEMPLATE_ITEM
 import com.cutsame.ui.R
 import com.cutsame.ui.exten.FastMain
+import com.cutsame.ui.utils.CutSameMediaUtils
 import com.cutsame.ui.utils.ScreenUtil.isScreenOn
 import com.google.gson.Gson
+import com.ola.chat.picker.entry.Author
+import com.ola.chat.picker.entry.Cover
+import com.ola.chat.picker.entry.OriginVideoInfo
+import com.ola.chat.picker.utils.PickerConstant
 import com.ss.android.ugc.cut_log.LogUtil
 import com.ss.android.ugc.cut_ui.ItemCrop
 import com.ss.android.ugc.cut_ui.MediaItem
@@ -215,8 +220,14 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
      */
     private fun launchPicker(itemList: ArrayList<MediaItem>, videoCache: String): Boolean {
         LogUtil.d(TAG, "launchPicker")
+
+
         val pickerIntent =
-            CutSameUiIF.createGalleryUIIntent(this, itemList, templateItem)?.let {
+            PickerConstant.createGalleryUIIntent(
+                this,
+                CutSameMediaUtils.cutSameToOlaMediaItemList(itemList),
+                parseTemplateItem(templateItem)
+            )?.let {
                 it.putExtra(CutSameUiIF.ARG_CUT_TEMPLATE_VIDEO_PATH, videoCache)
                 it.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
@@ -230,12 +241,41 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         return false
     }
 
+    fun parseTemplateItem(templateItem: TemplateItem): com.ola.chat.picker.entry.TemplateItem {
+        val jackYang = Author("https://photo.tuchong.com/250829/f/31548923.jpg", "JackYang", 10086)
+        val cover = Cover(
+            "http://lf3-ck.bytetos.com/obj/template-bucket/7117128998756794382/baiyueguangzhushazhi_7002448424021524488/cover.png",
+            720,
+            1280
+        )
+        val originVideoInfo =
+            OriginVideoInfo("http://lf3-ck.bytetos.com/obj/template-bucket/7117128998756794382/baiyueguangzhushazhi_7002448424021524488/baiyueguangzhushazhi_7002448424021524488.mp4")
+        return com.ola.chat.picker.entry.TemplateItem(
+            jackYang,
+            templateItem.title,
+            templateItem.md5,
+            templateItem.template_type,
+            templateItem.provider_media_id,
+            originVideoInfo,
+            templateItem.extra,
+            templateItem.templateUrl,
+            "",
+            cover,
+            templateItem.fragmentCount,
+            templateItem.id,
+            originVideoInfo,
+            templateItem.shortTitle,
+            templateItem.templateTags
+        )
+    }
+
     fun launchMediaReplace(mediaItem: MediaItem) {
         val items = ArrayList<MediaItem>().apply {
             add(mediaItem)
         }
 
-        val galleryUIIntent = CutSameUiIF.createGalleryUIIntent(this, items, templateItem)?.putExtras(intent)
+        val galleryUIIntent =
+            CutSameUiIF.createGalleryUIIntent(this, items, templateItem)?.putExtras(intent)
         if (galleryUIIntent == null) {
             Toast.makeText(
                 this,

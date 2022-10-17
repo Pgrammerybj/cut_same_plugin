@@ -26,6 +26,6 @@ android {
 }
 
 dependencies {
-    api 'org.jetbrains.kotlin:kotlin-stdlib:1.5.30'
+    api "org.jetbrains.kotlin:kotlin-stdlib:${rootProject.ext.kotlin_version}"
     implementation project(':editor-uibase')
 }

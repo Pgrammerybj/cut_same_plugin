@@ -50,7 +50,7 @@ class PickingListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PickingItemHolder {
         val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.activity_default_picker_segment,
+            R.layout.activity_picker_segment,
             parent,
             false
         )

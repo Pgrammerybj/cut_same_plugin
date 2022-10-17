@@ -66,4 +66,5 @@ dependencies {
     api project(":small-window")
     implementation project(":verecorder")
     implementation project(':record-tobres')
+    api project(":ola-picker")
 }

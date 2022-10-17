@@ -42,12 +42,12 @@ import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.ola.chat.picker.entry.Author;
+import com.ola.chat.picker.entry.Cover;
+import com.ola.chat.picker.entry.OriginVideoInfo;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
 import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
-import com.ss.ugc.android.editor.picker.mediapicker.PickType;
-import com.ss.ugc.android.editor.picker.mediapicker.PickerActivity;
-import com.ss.ugc.android.editor.picker.mediapicker.PickerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,8 +161,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                     //点击视频编辑按钮
                     List<TemplateItem> templateItems = templateNetPageModel.getTemplateItems().getValue();
                     TemplateItem templateItem = templateItems.get(0);
+
+//                    com.ola.chat.picker.entry.TemplateItem parseTemplateItem = parseTemplateItem(templateItem);
+
                     String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
                     Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, videoCache);
+//                    Intent cutSameIntent = PickerConstant.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, parseTemplateItem, videoCache);
                     if (cutSameIntent != null) {
                         cutSameIntent.setPackage(getPackageName());
                         startActivity(cutSameIntent);

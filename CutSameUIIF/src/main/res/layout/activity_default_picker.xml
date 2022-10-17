@@ -41,7 +41,7 @@
             android:scrollbars="none"
             tools:itemCount="13"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/activity_default_picker_segment" />
+            tools:listitem="@layout/activity_picker_segment" />
 
         <View
             android:layout_width="match_parent"
