@@ -15,6 +15,7 @@ import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.cut.CutSameDesignDrawableFactory
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
 import com.cutsame.ui.utils.SizeUtil
+import com.vesdk.vebase.view.RoundCornerImageView
 import java.util.*
 
 class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener?) :
@@ -92,7 +93,7 @@ class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener
 
     internal inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val thumbImageView: ImageView = itemView.findViewById(R.id.thumbView)
+        private val thumbImageView: RoundCornerImageView = itemView.findViewById(R.id.thumbView)
         private val textContentView: TextView = itemView.findViewById(R.id.textContentView)
         private val selectedView: TextView = itemView.findViewById(R.id.selectedView)
         private val numberTextView: TextView = itemView.findViewById(R.id.numberTextView)

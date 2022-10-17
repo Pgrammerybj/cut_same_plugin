@@ -83,7 +83,7 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
             dataList = PlayerTextEditHelper.covertItemTextData(textItems)
         }
         // TODO: 2022/10/14 此处为临时添加，记得删除
-        dataList?.get(4)?.let { dataList?.add(it) }
+//        dataList?.get(4)?.let { dataList?.add(it) }
         playerTextEditView.updateTextData(dataList)
     }
 
@@ -97,8 +97,8 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
         }
 
         //获取文字封面图
-        var width = SizeUtil.dp2px(60f)
-        var height = SizeUtil.dp2px(60f)
+        var width = SizeUtil.dp2px(68f)
+        var height = SizeUtil.dp2px(68f)
         if (originCanvasWidth > originCanvasHeight) {
             height =
                 (width.toFloat() / (originCanvasWidth.toFloat() / originCanvasHeight.toFloat())).toInt()

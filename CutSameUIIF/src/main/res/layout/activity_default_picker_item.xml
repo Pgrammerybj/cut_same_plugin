@@ -32,10 +32,11 @@
         android:background="@drawable/bg_video_duration_time"
         android:gravity="center"
         android:textColor="@color/colorWhite"
-        android:textSize="13sp"
+        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:text="00:17" />
+        tools:text="00:17"
+        tools:ignore="SmallSp" />
 
 
     <TextView

@@ -37,9 +37,6 @@ class PlayerTextEditExtraView @JvmOverloads constructor(context: Context, attrs:
     private val textBoxTopBottomPadding: Int
     private var extraListener: PlayerTextViewExtraListener? = null
 
-
-
-
     init {
         initView(context)
         textBoxLeftRightPadding = context.resources.getDimensionPixelOffset(R.dimen.video_player_text_box_leftright)
