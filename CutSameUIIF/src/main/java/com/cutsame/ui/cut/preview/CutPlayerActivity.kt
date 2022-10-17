@@ -235,8 +235,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             add(mediaItem)
         }
 
-        val galleryUIIntent =
-            CutSameUiIF.createGalleryUIIntent(this, items, templateItem)?.putExtras(intent)
+        val galleryUIIntent = CutSameUiIF.createGalleryUIIntent(this, items, templateItem)?.putExtras(intent)
         if (galleryUIIntent == null) {
             Toast.makeText(
                 this,
