@@ -90,7 +90,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
     override fun onDestroy() {
         super.onDestroy()
         playerTextEditController.release()
-        materialEditViewPager.removeOnPageChangeListener(mPageListener)
+        materialEditViewPager?.removeOnPageChangeListener(mPageListener)
     }
 
     override fun onPlayerDataOk() {
