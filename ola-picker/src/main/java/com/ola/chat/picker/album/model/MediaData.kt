@@ -24,6 +24,11 @@ enum class TitleMediaType(val stringId: Int) {
     )
 }
 
+
+enum class SingleMediaType(val stringId: Int) {
+    TYPE_IMAGE(R.string.picker_common_title_image)
+}
+
 @Parcelize
 data class MediaData(
 

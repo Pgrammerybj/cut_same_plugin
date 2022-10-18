@@ -46,7 +46,7 @@ class AlbumFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_album, container, false)
+        return inflater.inflate(R.layout.fragment_album_layout, container, false)
     }
 
     override fun onAttach(context: Context) {

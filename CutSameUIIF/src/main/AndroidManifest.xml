@@ -26,7 +26,8 @@
         <activity
             android:theme="@style/Cut.Transparent"
             android:name=".template.TemplateFeedPreviewActivity"
-            android:screenOrientation="portrait" /> <!-- 剪同款视频裁剪页 -->
+            android:screenOrientation="portrait" />
+        <!-- 剪同款视频裁剪页 -->
         <activity
             android:theme="@style/Cut.Transparent"
             android:name=".cut.videoedit.CutClipActivity"
@@ -37,7 +38,8 @@
 
                 <action android:name="com.ss.android.ugc.cut_ui.CLIP" />
             </intent-filter>
-        </activity> <!-- 剪同款成品播放页 -->
+        </activity>
+        <!-- 剪同款成品播放页 -->
         <activity
             android:name=".cut.preview.CutPreviewPlayerActivity"
             android:screenOrientation="portrait"
@@ -48,14 +50,14 @@
 
                 <action android:name="com.ss.android.ugc.cut_ui.PLAY" />
             </intent-filter>
-        </activity> <!-- 剪同款视频/图片压缩页 -->
+        </activity>
+        <!-- 剪同款视频/图片压缩页 -->
         <activity
             android:name=".cut.process.CutCompressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Cut.Transparent">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <action android:name="com.ss.android.ugc.cut_ui.COMPRESS" />
             </intent-filter>
         </activity>

@@ -61,7 +61,7 @@ class GalleryPreviewView(
 
     private fun initView(context: Context) {
         rootPreViewView =
-            LayoutInflater.from(context).inflate(R.layout.view_gallery_preview, this, true)
+            LayoutInflater.from(context).inflate(R.layout.picker_gallery_preview, this, true)
         previewViewPager = rootPreViewView.findViewById(R.id.previewViewPager)
         previewViewPager.adapter = galleryPreviewAdapter
         previewViewPager.isSaveFromParentEnabled = false

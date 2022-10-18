@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.ola.chat.picker.album.AlbumFragment
 import com.ola.chat.picker.album.model.MediaData
+import com.ola.chat.picker.entry.ImagePickConfig
 import com.ola.chat.picker.entry.MediaItem
 import com.ola.chat.picker.utils.PickerConstant
 import java.io.File
@@ -31,17 +32,15 @@ class GalleryPickerViewModel(application: Application) :
     val processPickMediaData = ArrayList<MediaData>()
     val pickFull = MutableLiveData<Boolean>()
     val fragmentMap = mutableMapOf<PickerConstant.TabType, Fragment>()
-//    val effectHelper: EffectHelper by lazy { EffectHelper() }
     var curMaterial: MediaItem? = null
-//    private var isOnCamera = false
+
 
     fun init(
-        mediaItems: ArrayList<MediaItem>,
-        preMediaItems: ArrayList<MediaItem>?,
-        videoCache: String
+        mediaItems: ArrayList<MediaItem>?,
+        preMediaItems: ArrayList<MediaItem>?
     ) {
 
-        mediaItems.forEach {
+        mediaItems?.forEach {
             it.source = ""
             it.sourceStartTime = 0
             it.mediaSrcPath = ""
@@ -50,7 +49,6 @@ class GalleryPickerViewModel(application: Application) :
         preProcessPickItem.value = preMediaItems
         setSelected(0)
         pickFull.value = false
-//        effectHelper.init(getApplication(), videoCache)//初始化效果效果逻辑
     }
 
     fun setSelected(pos: Int) {
@@ -61,7 +59,6 @@ class GalleryPickerViewModel(application: Application) :
         processPickItem.value?.let { list ->
             if (pos < list.size) {
                 val mediaItem = list[pos]
-//                effectHelper.switchMaterial(mediaItem, list, isOnCamera)
                 curMaterial = mediaItem
             }
 
@@ -210,12 +207,16 @@ class GalleryPickerViewModel(application: Application) :
         return false
     }
 
-    fun getFragmentByType(tabType: PickerConstant.TabType): Fragment {
+    fun getFragmentByType(
+        tabType: PickerConstant.TabType,
+        isCutSameScene: Boolean,
+        imagePickConfig: ImagePickConfig?
+    ): Fragment {
         val fragment = fragmentMap[tabType]
         if (fragment != null) {
             return fragment
         }
-        return AlbumFragment().apply {
+        return AlbumFragment(isCutSameScene,imagePickConfig).apply {
             fragmentMap[tabType] = this
         }
     }

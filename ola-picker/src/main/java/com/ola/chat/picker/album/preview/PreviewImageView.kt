@@ -30,7 +30,7 @@ class PreviewImageView(
 
     fun initView() {
         val rootView =
-            LayoutInflater.from(context).inflate(R.layout.view_preview_image, this, true)
+            LayoutInflater.from(context).inflate(R.layout.picker_preview_image, this, true)
         imageView = rootView.findViewById(R.id.imageView)
         imageScaleGestureLayout = rootView.findViewById(R.id.imageScaleGestureLayout)
         imageScaleGestureLayout.setVideoSize(mediaData.width, mediaData.height)
@@ -55,9 +55,7 @@ class PreviewImageView(
 
     override fun onResume(){
         super.onResume()
-        Glide.with(context)
-            .load(mediaData.uri)
-            .into(imageView)
+        Glide.with(context).load(mediaData.uri).into(imageView)
     }
 
 }

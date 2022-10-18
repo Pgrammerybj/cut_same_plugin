@@ -31,8 +31,7 @@ class PreviewVideoView(
     }
 
     private fun initView() {
-        val rootView =
-            LayoutInflater.from(context).inflate(R.layout.view_preview_video, this, true)
+        val rootView = LayoutInflater.from(context).inflate(R.layout.picker_preview_video, this, true)
         surfaceView = rootView.findViewById(R.id.surfaceView)
         videoScaleGestureLayout = rootView.findViewById(R.id.videoScaleGestureLayout)
         videoScaleGestureLayout.setVideoSize(mediaData.width, mediaData.height)

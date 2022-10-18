@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlPickerRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@null"
-    android:paddingTop="40dp">
+    tools:paddingTop="40dp">
 
     <!--相册、相机承载-->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:layout_above="@id/pickingListLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_image_picker"
+        android:layout_above="@id/pickingListLayout"
         android:layout_marginBottom="-20dp"
+        android:background="@drawable/bg_image_picker"
         android:paddingBottom="12dp"
         tools:layout_height="match_parent" />
 
@@ -25,7 +26,8 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@drawable/bg_picker_selected"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pickingRecyclerView"

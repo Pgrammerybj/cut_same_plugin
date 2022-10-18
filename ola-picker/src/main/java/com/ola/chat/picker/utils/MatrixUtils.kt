@@ -32,19 +32,6 @@ object MatrixUtils {
             .toFloat()
     }
 
-    fun isEqual(left: Matrix, right: Matrix): Boolean {
-        val leftValues = FloatArray(9)
-        left.getValues(leftValues)
-        val rightValues = FloatArray(9)
-        right.getValues(rightValues)
-        for (i in leftValues.indices) {
-            if (!isEqual(leftValues[i], rightValues[i])) {
-                return false
-            }
-        }
-        return true
-    }
-
     private fun isEqual(firstValue: Float, secondValue: Float): Boolean {
         return abs(firstValue - secondValue) < 1.0f
     }

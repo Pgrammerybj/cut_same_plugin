@@ -26,5 +26,10 @@
     <string name="pick_tip_support_preview_video">当前分类仅支持预览视频</string>
     <string name="pick_tip_support_preview_image">当前分类仅支持图片</string>
 
+    <string name="picker_common_preview">预览</string>
+    <string name="edit_multi_video_time_select">已选取 %ss</string>
+    <string name="picker_edit_title_picture_cut">图片裁剪</string>
+    <string name="picker_edit_title_video_cut">视频裁剪</string>
 
+    <string name="picker_cut_common_sure">确定</string>
 </resources>

@@ -17,10 +17,12 @@ import com.ola.chat.picker.utils.SpacesItemDecoration
 abstract class BasePickerFragment(
     context: Context,
     private val lifecycleOwner: LifecycleOwner,
-    private val galleryPickerViewModel: GalleryPickerViewModel
+    private val galleryPickerViewModel: GalleryPickerViewModel,
+    private val isCutSameScene: Boolean
 ) : Fragment() {
     var mContext: Context = context
     var itemClickListener: GalleryMaterialListAdapter.ItemClickListener? = null
+    var itemClickOpenClipListener: GalleryMaterialListAdapter.ItemClickOpenClipListener? = null
     private lateinit var materialRecycleView: androidx.recyclerview.widget.RecyclerView
     private lateinit var materialListAdapter: GalleryMaterialListAdapter
 
@@ -39,9 +41,11 @@ abstract class BasePickerFragment(
         materialListAdapter = GalleryMaterialListAdapter(
             mContext,
             lifecycleOwner,
-            galleryPickerViewModel
+            galleryPickerViewModel,
+            isCutSameScene
         )
         materialListAdapter.setItemClickListener(itemClickListener)
+        materialListAdapter.setItemClickOpenClipListener(itemClickOpenClipListener)
         val layoutManager =
             androidx.recyclerview.widget.GridLayoutManager(context, 3)
         materialRecycleView.layoutManager = layoutManager

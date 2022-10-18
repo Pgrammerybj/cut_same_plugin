@@ -25,9 +25,11 @@ import com.cutsame.ui.R
 import com.cutsame.ui.exten.FastMain
 import com.cutsame.ui.utils.CutSameMediaUtils
 import com.cutsame.ui.utils.ScreenUtil.isScreenOn
+import com.cutsame.ui.utils.SizeUtil
 import com.google.gson.Gson
 import com.ola.chat.picker.entry.Author
 import com.ola.chat.picker.entry.Cover
+import com.ola.chat.picker.entry.ImagePickConfig
 import com.ola.chat.picker.entry.OriginVideoInfo
 import com.ola.chat.picker.utils.PickerConstant
 import com.ss.android.ugc.cut_log.LogUtil
@@ -43,6 +45,7 @@ const val REQUEST_CODE_PICKER = 1000  //选择素材
 const val REQUEST_CODE_REPLACE = 1001 // 素材替换
 const val REQUEST_CODE_CLIP = 1002 //素材裁剪
 const val REQUEST_CODE_NEXT = 1003 //导出
+const val REQUEST_CODE_SINGLE_CHOOSE = 1004 //其他业务单选
 
 private const val TAG = "cut.CutPlayerActivity"
 
@@ -156,7 +159,16 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         val videoCachePath = CutSameUiIF.getTemplateVideoCacheByIntent(intent)
 
         if (!needPickMediaItems.isNullOrEmpty()) {
-            launchPicker(ArrayList(needPickMediaItems), videoCachePath!!)
+
+            // TODO: 2022/10/18 模拟其他业务的单选逻辑
+            val isSingleChoose = true
+            if (isSingleChoose) {
+                launchPicker()
+            } else {
+                launchPicker(ArrayList(needPickMediaItems), videoCachePath!!)
+            }
+
+
         } else {
             initTemplateWhileDataReady(
                 templateItem.templateUrl,
@@ -221,7 +233,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     private fun launchPicker(itemList: ArrayList<MediaItem>, videoCache: String): Boolean {
         LogUtil.d(TAG, "launchPicker")
 
-
         val pickerIntent =
             PickerConstant.createGalleryUIIntent(
                 this,
@@ -237,6 +248,32 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             return true
         }
 
+        LogUtil.d(TAG, "can not launchPicker, pickerIntent==null")
+        return false
+    }
+
+    /**
+     * 单选的逻辑
+     */
+    private fun launchPicker(): Boolean {
+
+        val imagePickConfig = ImagePickConfig()
+        imagePickConfig.crop = true
+        imagePickConfig.cropStyle = ImagePickConfig.CIRCLE
+        imagePickConfig.defaultResourceType = ImagePickConfig.SELECT_IMAGE
+        imagePickConfig.maxCount = 1
+        imagePickConfig.focusHeight = SizeUtil.dp2px(300f)
+        imagePickConfig.focusWidth = SizeUtil.dp2px(300f)
+        imagePickConfig.sceneType = ImagePickConfig.PICKER_SINGLE
+
+        val pickerIntent = PickerConstant.createSingleGalleryUIIntent(this, imagePickConfig)?.let {
+            it.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+        if (pickerIntent != null) {
+            hasLaunchPicker = true
+            startActivityForResult(pickerIntent, REQUEST_CODE_SINGLE_CHOOSE)
+            return true
+        }
         LogUtil.d(TAG, "can not launchPicker, pickerIntent==null")
         return false
     }

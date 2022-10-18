@@ -14,8 +14,9 @@ class PickerVideoFragment(
     context: Context,
     private val lifecycleOwner: LifecycleOwner,
     galleryPickerViewModel: GalleryPickerViewModel,
-    private val galleryDataViewModel: GalleryDataViewModel
-) : BasePickerFragment(context, lifecycleOwner, galleryPickerViewModel) {
+    private val galleryDataViewModel: GalleryDataViewModel,
+    isCutSameScene: Boolean
+) : BasePickerFragment(context, lifecycleOwner, galleryPickerViewModel, isCutSameScene) {
 
     override fun getData(block: (List<MediaData>) -> Unit) {
         galleryDataViewModel.getGalleryMaterialData(TitleMediaType.TYPE_VIDEO, mContext)

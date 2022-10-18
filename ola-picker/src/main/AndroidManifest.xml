@@ -17,5 +17,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!--图片裁剪页面-->
+        <activity
+            android:name=".ImageCropActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="false"
+            android:theme="@style/ImagePickerTheme">
+            <intent-filter>
+                <action android:name="com.ola.chat.picker.process.ImageCropActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

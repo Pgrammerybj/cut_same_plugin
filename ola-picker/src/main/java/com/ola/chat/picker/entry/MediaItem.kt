@@ -44,23 +44,15 @@ data class MediaItem(
     }
 
     fun getUri(): Uri {
-        val uri: Uri
-        return if (URLUtil.isValidUrl(mediaSrcPath)) {
-            uri = Uri.parse(mediaSrcPath)
-            Intrinsics.checkNotNullExpressionValue(uri, "parse(mediaSrcPath)")
-            uri
+        if (URLUtil.isValidUrl(source)) {
+            return Uri.parse(source)
         } else {
-            val file = File(mediaSrcPath)
+            val file = File(source)
             if (file.exists() && file.isFile) {
-                uri = Uri.fromFile(file)
-                Intrinsics.checkNotNullExpressionValue(uri, "fromFile(file)")
-                uri
-            } else {
-                uri = Uri.EMPTY
-                Intrinsics.checkNotNullExpressionValue(uri, "EMPTY")
-                uri
+                return Uri.fromFile(file)
             }
         }
+        return Uri.EMPTY
     }
 }
 

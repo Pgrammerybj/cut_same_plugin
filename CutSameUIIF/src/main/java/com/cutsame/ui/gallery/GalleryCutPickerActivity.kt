@@ -18,9 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
-import com.cutsame.solution.source.SourceInfo
 import com.cutsame.solution.template.model.TemplateItem
 import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.R
@@ -94,7 +92,7 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
 
     override fun onPermissionGranted() {
         LogUtil.d(TAG, "onPermissionGranted")
-        setContentView(R.layout.activity_default_picker)
+        setContentView(R.layout.activity_picker_layout)
         val mediaItems = CutSameUiIF.getGalleryPickDataByIntent(intent)
         val videoCachePath = CutSameUiIF.getTemplateVideoCacheByIntent(intent)
         LogUtil.d(TAG, "onPermissionGranted mediaItems=${mediaItems?.size}")

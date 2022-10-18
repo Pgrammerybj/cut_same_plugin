@@ -21,7 +21,6 @@ import com.ola.chat.picker.album.model.MediaData
 import com.ola.chat.picker.customview.RoundCornerImageView
 import com.ola.chat.picker.customview.setGlobalDebounceOnClickListener
 import com.ola.chat.picker.entry.MediaItem
-import com.ola.chat.picker.utils.MediaUtil
 import com.ola.chat.picker.utils.SizeUtil
 import com.ola.chat.picker.utils.showErrorTipToast
 import com.ola.chat.picker.viewmodel.GalleryPickerViewModel
@@ -38,7 +37,8 @@ import kotlin.math.min
 class GalleryMaterialListAdapter(
     private val context: Context,
     lifecycleOwner: LifecycleOwner,
-    private val galleryPickerViewModel: GalleryPickerViewModel
+    private val galleryPickerViewModel: GalleryPickerViewModel,
+    private val isCutSameScene: Boolean
 ) : RecyclerView.Adapter<GalleryMaterialListAdapter.MaterialViewHolder>() {
 
     private val mediaDataList = mutableListOf<CheckBoxMediaData>()
@@ -46,6 +46,8 @@ class GalleryMaterialListAdapter(
     private var needFullMask = false
 
     private var itemClickListener: ItemClickListener? = null
+    private var itemClickOpenClipListener: ItemClickOpenClipListener? = null
+
 
     private var preProcessDataList: List<MediaItem>
 
@@ -114,6 +116,7 @@ class GalleryMaterialListAdapter(
     override fun getItemCount(): Int = mediaDataList.size
 
     override fun onBindViewHolder(holder: MaterialViewHolder, position: Int) {
+        handleCutSameSceneView(holder)
         val data = mediaDataList[position]
         if (data.isSelected) {
             holder.itemView.selectImageView.visibility = View.VISIBLE
@@ -162,47 +165,47 @@ class GalleryMaterialListAdapter(
 
     private fun bindListener(data: CheckBoxMediaData, position: Int, holder: MaterialViewHolder) {
         holder.itemView.setGlobalDebounceOnClickListener {
-//            val realVideoMetaDataInfo = MediaUtil.getRealVideoMetaDataInfo(context, data.mediaData.path)
-            val realVideoMetaDataInfo = MediaUtil.getRealVideoMetaDataInfo(data.mediaData.path)
-            val minLength = realVideoMetaDataInfo.width.coerceAtMost(realVideoMetaDataInfo.height)
-            //暂不支持1080p下的h265的视频
-            if (data.mediaData.isVideo() && minLength > 1100 && realVideoMetaDataInfo.codecInfo != "h264") {
-                showTipToast(context.resources.getString(R.string.pick_not_support_h265))
-                return@setGlobalDebounceOnClickListener
-            }
-            if (needFullMask) {
-                //最多选择n个素材
-                val tipMsg = String.format(
-                    context.resources.getString(R.string.pick_tip_most_count),
-                    galleryPickerViewModel.processPickItem.value?.size
-                )
-                showTipToast(tipMsg)
-                return@setGlobalDebounceOnClickListener
-            }
-
-            if (!galleryPickerViewModel.pickOne(data.mediaData)) {
-                //素材时长小于要去时长
-                val index = galleryPickerViewModel.currentPickIndex.value ?: 0
-                if (index >= galleryPickerViewModel.processPickItem.value?.size!!) {
-                    return@setGlobalDebounceOnClickListener
-                }
-                galleryPickerViewModel.processPickItem.value?.get(index)?.let {
-                    //视频不能小于xs
-                    val tipMsg = context.resources.getString(
-                        R.string.cutsame_pick_tip_duration_invalid,
-                        String.format(
-                            Locale.getDefault(),
-                            context.resources.getString(R.string.cutsame_common_media_duration_s),
-                            it.duration.toFloat() / 1000
-                        )
-                    )
-                    showTipToast(tipMsg)
-                }
+            if (isCutSameScene) {
+                chooseMixItem(data)
+            } else {
+                itemClickOpenClipListener?.openImageClip(data.mediaData)
             }
         }
 
         holder.itemView.previewImageView.setOnClickListener {
             itemClickListener?.onItemClick(position, dataLists)
+        }
+    }
+
+    private fun chooseMixItem(data: CheckBoxMediaData) {
+        if (needFullMask) {
+            //最多选择n个素材
+            val tipMsg = String.format(
+                context.resources.getString(R.string.pick_tip_most_count),
+                galleryPickerViewModel.processPickItem.value?.size
+            )
+            showTipToast(tipMsg)
+            return
+        }
+
+        if (!galleryPickerViewModel.pickOne(data.mediaData)) {
+            //素材时长小于要去时长
+            val index = galleryPickerViewModel.currentPickIndex.value ?: 0
+            if (index >= galleryPickerViewModel.processPickItem.value?.size!!) {
+                return
+            }
+            galleryPickerViewModel.processPickItem.value?.get(index)?.let {
+                //视频不能小于xs
+                val tipMsg = context.resources.getString(
+                    R.string.cutsame_pick_tip_duration_invalid,
+                    String.format(
+                        Locale.getDefault(),
+                        context.resources.getString(R.string.cutsame_common_media_duration_s),
+                        it.duration.toFloat() / 1000
+                    )
+                )
+                showTipToast(tipMsg)
+            }
         }
     }
 
@@ -267,12 +270,16 @@ class GalleryMaterialListAdapter(
         this.itemClickListener = listener
     }
 
+    fun setItemClickOpenClipListener(listener: ItemClickOpenClipListener?) {
+        this.itemClickOpenClipListener = listener
+    }
+
     inner class MaterialViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(getItem(parent))
 
     private fun getItem(parent: ViewGroup): View {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activity_ola_picker_item, parent, false)
-        // 动态设置图片大小 保证宽高相等
-        //条目中间分割的间距,一行3个所以2个间距
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.activity_ola_picker_item, parent, false)
+        //动态设置图片大小 保证宽高相等，条目中间分割的间距,一行3个所以2个间距
         val itemDecorationSize = SizeUtil.dp2px(8F) * 2
         val itemPaddingHorizontal = SizeUtil.dp2px(18F) * 2   //计算的部分放到外面，这样可以优化耗时
         val ivSize =
@@ -281,7 +288,18 @@ class GalleryMaterialListAdapter(
         return itemView
     }
 
+    private fun handleCutSameSceneView(holder: MaterialViewHolder) {
+        val shouldShow = if (isCutSameScene) View.VISIBLE else View.GONE
+        holder.itemView.selectedMask.visibility = shouldShow
+        holder.itemView.selectImageView.visibility = shouldShow
+        holder.itemView.previewImageView.visibility = shouldShow
+    }
+
     interface ItemClickListener {
         fun onItemClick(position: Int, datas: List<MediaData>)
+    }
+
+    interface ItemClickOpenClipListener {
+        fun openImageClip(mediaData: MediaData)
     }
 }

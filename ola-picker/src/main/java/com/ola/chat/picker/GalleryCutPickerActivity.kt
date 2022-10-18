@@ -29,31 +29,31 @@ import com.ola.chat.picker.album.model.TitleMediaType
 import com.ola.chat.picker.album.preview.GalleryPreviewView
 import com.ola.chat.picker.customview.LoadingDialog
 import com.ola.chat.picker.customview.setGlobalDebounceOnClickListener
+import com.ola.chat.picker.entry.ImagePickConfig
 import com.ola.chat.picker.entry.MediaItem
 import com.ola.chat.picker.entry.TemplateItem
 import com.ola.chat.picker.utils.PickerConstant
 import com.ola.chat.picker.utils.SizeUtil
 import com.ola.chat.picker.utils.SpaceItemDecoration
 import com.ola.chat.picker.utils.showErrorTipToast
-import com.ola.chat.picker.viewmodel.GalleryDataViewModel
 import com.ola.chat.picker.viewmodel.GalleryPickerViewModel
-import kotlinx.android.synthetic.main.activity_default_picker.*
+import kotlinx.android.synthetic.main.activity_picker_layout.*
 import java.util.*
 
 private const val TAG = "Ola.DefaultPicker"
 private const val REQUEST_COMPRESS = 1000
 const val REQUEST_CODE_CLIP = 1001 // 素材替换 exp: 裁剪/录制
-//const val REQUEST_CODE_TEMPLATE_PREVIEW = 1002 // 模板效果预览
 
 class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     private var preClipMediaItemMap: HashMap<Int, MediaItem> = HashMap()
     private lateinit var pickingListAdapter: PickingListAdapter
     private lateinit var galleryPickerViewModel: GalleryPickerViewModel
-    private lateinit var galleryDataViewModel: GalleryDataViewModel
     private lateinit var previewRootLayout: FrameLayout
     private var galleryPreviewView: GalleryPreviewView? = null
     private var showPreview = false
     private lateinit var templateItem: TemplateItem
+    private var imagePickConfig: ImagePickConfig? = null
+    private var isCutSameScene: Boolean = true
     private var loadingDialog: LoadingDialog? = null
     private val previewViewControlListener = object : GalleryPreviewView.ControlListener {
         override fun onBackClick() {
@@ -69,48 +69,67 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        val templateItem = intent.getParcelableExtra<TemplateItem>(PickerConstant.ARG_TEMPLATE_ITEM)?.also { templateItem = it }
-        val data = PickerConstant.getGalleryPickDataByIntent(intent)
-        if (data != null) {
-            checkPermission(
-                arrayOf(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.RECORD_AUDIO
-                )
-            )
-        } else {
-            Log.e(TAG, "no data. finish now")
-            finish()
+        intent.getParcelableExtra<TemplateItem>(PickerConstant.ARG_TEMPLATE_ITEM)
+            ?.also { templateItem = it }
+        intent.getParcelableExtra<ImagePickConfig>(PickerConstant.ARG_DATA_PICK_CONFIG)
+            ?.also { imagePickConfig = it }
+
+        //只有剪同款模式【ImagePickConfig.PICKER_CUT_SAME】才需要检验data
+        if (imagePickConfig != null) {
+            isCutSameScene = imagePickConfig?.sceneType == ImagePickConfig.PICKER_CUT_SAME
         }
+
+        if (isCutSameScene) {
+            val data = PickerConstant.getGalleryPickDataByIntent(intent)
+            if (data != null) {
+                checkOlaPickerPermission()
+            } else {
+                Log.e(TAG, "no data. finish now")
+                finish()
+            }
+        } else {
+            checkOlaPickerPermission()
+        }
+    }
+
+    private fun checkOlaPickerPermission() {
+        checkPermission(
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            )
+        )
     }
 
     override fun onPermissionGranted() {
         Log.d(TAG, "onPermissionGranted")
-        setContentView(R.layout.activity_default_picker)
+        setContentView(R.layout.activity_picker_layout)
+
+        //剪同款需要的参数
         val mediaItems = PickerConstant.getGalleryPickDataByIntent(intent)
-        val videoCachePath = PickerConstant.getTemplateVideoCacheByIntent(intent)
-        Log.d(TAG, "onPermissionGranted mediaItems=${mediaItems?.size}")
         val prePickItems =
             intent.getParcelableArrayListExtra<MediaItem>(PickerConstant.ARG_DATA_PRE_PICK_RESULT_MEDIA_ITEMS)
+        Log.d(TAG, "onPermissionGranted mediaItems=${mediaItems?.size}")
         Log.d(TAG, "onPermissionGranted prePickItems=${prePickItems?.size}")
-        galleryPickerViewModel = ViewModelProvider(this@GalleryCutPickerActivity, object : ViewModelProvider.Factory {
+
+        galleryPickerViewModel =
+            ViewModelProvider(this@GalleryCutPickerActivity, object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                     @Suppress("UNCHECKED_CAST")
                     return GalleryPickerViewModel(application) as T
                 }
-            }
-        ).get(GalleryPickerViewModel::class.java)
-        galleryPickerViewModel.init(mediaItems!!, prePickItems, videoCachePath!!)
+            }).get(GalleryPickerViewModel::class.java)
 
-        galleryDataViewModel = ViewModelProvider(
-            this@GalleryCutPickerActivity,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        ).get(GalleryDataViewModel::class.java)
+        galleryPickerViewModel.init(mediaItems, prePickItems)
 
         initView()
-        initComponent()
-        initListener()
+        if (isCutSameScene) {
+            //初始化剪同款特有的布局视图
+            initCutSameLayout()
+            initComponent()
+            initListener()
+        }
     }
 
 
@@ -125,7 +144,16 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     }
 
     private fun initView() {
+        handleCutSameScene()
         previewRootLayout = findViewById(R.id.previewRootLayout)
+        val tabList = listOf(PickerConstant.TabType.Album)
+        viewPager.adapter =
+            TabFragmentPagerAdapter(tabList, this, galleryPickerViewModel, isCutSameScene,imagePickConfig)
+        viewPager.isUserInputEnabled = false
+        viewPager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
+    }
+
+    private fun initCutSameLayout() {
         confirmTV.text = String.format(
             resources.getString(R.string.confirm_picker), 0,
             galleryPickerViewModel.processPickItem.value?.size ?: 0
@@ -165,13 +193,12 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         pickingRecyclerView.setHasFixedSize(true)
         pickingRecyclerView.addItemDecoration(SpaceItemDecoration(0, 0, 0, SizeUtil.dp2px(8F)))
         pickingRecyclerView.adapter = pickingListAdapter
-
-        val tabList = listOf(PickerConstant.TabType.Album)
-        viewPager.adapter = TabFragmentPagerAdapter(tabList, this, galleryPickerViewModel)
-        viewPager.isUserInputEnabled = false
-        viewPager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
     }
 
+    private fun handleCutSameScene() {
+        pickingListLayout.visibility = if (isCutSameScene) View.VISIBLE else View.GONE
+        rlPickerRoot.setPadding(0, SizeUtil.dp2px(if (isCutSameScene) 40F else 0F), 0, 0)
+    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun initComponent() {
@@ -241,6 +268,9 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
                         createClipUIIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                         startActivityForResult(createClipUIIntent, REQUEST_CODE_CLIP)
                     }
+                } else if (imagePickConfig?.sceneType == ImagePickConfig.PICKER_SINGLE) {
+                    //其他业务的单选+裁剪逻辑
+                    Log.i(TAG, "onItemClick: 单选图片模式，准备进入子尧裁剪")
                 } else {
                     //进入素材预览页面
                     val processPickMediaData = galleryPickerViewModel.processPickMediaData
@@ -273,6 +303,9 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         }
     }
 
+    /**
+     * 大图预览
+     */
     override fun showPreview(
         position: Int,
         datas: List<MediaData>,

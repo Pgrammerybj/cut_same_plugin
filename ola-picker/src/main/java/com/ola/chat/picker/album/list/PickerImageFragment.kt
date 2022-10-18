@@ -9,11 +9,13 @@ import com.ola.chat.picker.album.model.TitleMediaType
 import com.ola.chat.picker.viewmodel.GalleryPickerViewModel
 import com.ola.chat.picker.viewmodel.GalleryDataViewModel
 @SuppressLint("ValidFragment")
-class PickerImageFragment(context: Context,
-                          private val lifecycleOwner: LifecycleOwner,
-                          galleryPickerViewModel: GalleryPickerViewModel,
-                          private val galleryDataViewModel: GalleryDataViewModel
-) : BasePickerFragment(context, lifecycleOwner, galleryPickerViewModel) {
+class PickerImageFragment(
+    context: Context,
+    private val lifecycleOwner: LifecycleOwner,
+    galleryPickerViewModel: GalleryPickerViewModel,
+    private val galleryDataViewModel: GalleryDataViewModel,
+    isCutSameScene: Boolean
+) : BasePickerFragment(context, lifecycleOwner, galleryPickerViewModel, isCutSameScene) {
 
     override fun getData(block: (List<MediaData>) -> Unit) {
         galleryDataViewModel.getGalleryMaterialData(TitleMediaType.TYPE_IMAGE, mContext)
