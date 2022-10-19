@@ -2,6 +2,7 @@ package com.ola.chat.picker
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -11,8 +12,11 @@ import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
+import android.widget.RelativeLayout.LayoutParams.*
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -148,7 +152,13 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         previewRootLayout = findViewById(R.id.previewRootLayout)
         val tabList = listOf(PickerConstant.TabType.Album)
         viewPager.adapter =
-            TabFragmentPagerAdapter(tabList, this, galleryPickerViewModel, isCutSameScene,imagePickConfig)
+            TabFragmentPagerAdapter(
+                tabList,
+                this,
+                galleryPickerViewModel,
+                isCutSameScene,
+                imagePickConfig
+            )
         viewPager.isUserInputEnabled = false
         viewPager.offscreenPageLimit = OFFSCREEN_PAGE_LIMIT_DEFAULT
     }
@@ -198,6 +208,9 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     private fun handleCutSameScene() {
         pickingListLayout.visibility = if (isCutSameScene) View.VISIBLE else View.GONE
         rlPickerRoot.setPadding(0, SizeUtil.dp2px(if (isCutSameScene) 40F else 0F), 0, 0)
+        val layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        layoutParams.setMargins(0, 0, 0, SizeUtil.dp2px(if (isCutSameScene) -20F else 0F))
+        viewPager.layoutParams = layoutParams;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
