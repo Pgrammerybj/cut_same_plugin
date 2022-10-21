@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.angelstar.ola">
-
-    <application android:theme="@android:style/Theme.Light.NoTitleBar">
-        <activity android:name=".OlaTemplateFeedActivity" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-    </application>
-
-</manifest>

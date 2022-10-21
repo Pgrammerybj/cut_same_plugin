@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('vesdk-11.3.2.1-tob.aar'))

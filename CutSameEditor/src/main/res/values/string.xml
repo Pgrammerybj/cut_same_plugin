@@ -1,5 +1,0 @@
-<resources>
-    <string name="cutsame_tips_resource_copying_to_sdcard">Copying resources to SD card, please wait</string>
-    <string name="ck_tips_resource_copying">Copying resources ... </string>
-    <string name="ck_has_saved_local_and_draft">Saved to local and draft</string>
-</resources>

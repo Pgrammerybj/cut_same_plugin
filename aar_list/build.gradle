@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('list-1.0.1-alpha.24.aar'))

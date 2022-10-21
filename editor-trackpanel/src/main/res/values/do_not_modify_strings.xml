@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<resources>
-    <string name="add_audio">添加音频</string>
-    <string name="add_epilogue">添加片尾</string>
-    <string name="beautify">美颜</string>
-    <string name="epilogue">片尾</string>
-    <string name="music_collection">音乐合集</string>
-    <string name="original_picture">原图</string>
-</resources>
