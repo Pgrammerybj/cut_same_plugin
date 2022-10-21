@@ -25,7 +25,10 @@
 
 #Demo案例代码，代码都在里面后续还都需要调整
 #/example
-#/example/*
+/example/.dart_tool
+/example/.idea
+/example/build
+/example/test
 
 /pubspec.lock
 **/doc/api/
