@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextureView
+        android:id="@+id/previewTexture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/videoCoverIv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/videoPauseIv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_play_pause"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infoLayout"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/preview_info_bg"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/VideoTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="28dp"
+            android:textColor="@color/text_white"
+            android:textSize="20sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxEms="10"
+            app:layout_constraintBottom_toTopOf="@+id/jumpToCutSameTv"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_goneMarginLeft="0dp" />
+
+        <TextView
+            android:id="@+id/segmentNumTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_shadow_desc"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="5dp"
+            android:textColor="#C6CACD"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@id/VideoTitleTv"
+            app:layout_constraintLeft_toRightOf="@id/VideoTitleTv"
+            app:layout_constraintTop_toTopOf="@id/VideoTitleTv"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:id="@+id/jumpToCutSameTv"
+            android:text="@string/cutsame_feed_select_material"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/bg_ok_btn"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:textColor="@color/text_white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.cutsame.ui.customview.LoadingView
+        android:id="@+id/loadingView"
+        tools:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.cutsame.ui.customview.LoadingView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

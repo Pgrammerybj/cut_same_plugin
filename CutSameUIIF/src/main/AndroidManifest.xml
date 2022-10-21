@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.cutsame.ui">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+        <activity android:name=".gallery.camera.VideoPreviewActivity"/>
+        <!-- 剪同款模板选择页 网络数据 -->
+        <activity
+            android:name=".template.TemplateFeedNetActivity"
+            android:theme="@style/Cut.Transparent"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.ss.android.ugc.template_ui.feed.net" />
+            </intent-filter>
+        </activity> <!-- 剪同款模板预览页 -->
+        <activity
+            android:theme="@style/Cut.Transparent"
+            android:name=".template.TemplateFeedPreviewActivity"
+            android:screenOrientation="portrait" />
+        <!-- 剪同款视频裁剪页 -->
+        <activity
+            android:theme="@style/Cut.Transparent"
+            android:name=".cut.videoedit.CutClipActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="com.ss.android.ugc.cut_ui.CLIP" />
+            </intent-filter>
+        </activity>
+        <!-- 剪同款成品播放页 -->
+        <activity
+            android:name=".cut.preview.CutPreviewPlayerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cut.Transparent"
+            android:windowSoftInputMode="adjustNothing">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="com.ss.android.ugc.cut_ui.PLAY" />
+            </intent-filter>
+        </activity>
+        <!-- 剪同款视频/图片压缩页 -->
+        <activity
+            android:name=".cut.process.CutCompressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cut.Transparent">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.ss.android.ugc.cut_ui.COMPRESS" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".cut.export.ExportActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Cut.Transparent">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.ss.android.ugc.cut_ui.EXPORT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:theme="@style/Cut.Transparent"
+            android:name=".gallery.GalleryCutPickerActivity"
+            android:label="@string/cutsame_common_lable_albumn"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.ss.android.ugc.cut_ui.process.PICKER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="template_feed_margin">9dp</dimen>
+    <dimen name="video_player_bottom_videolist_height">245dp</dimen>
+    <dimen name="video_player_bottom_textedit_height">300dp</dimen>
+    <dimen name="video_player_top_title_height">52dp</dimen>
+    <dimen name="video_player_left_right_margin">56dp</dimen>
+    <dimen name="video_player_text_box_leftright">10dp</dimen>
+    <dimen name="video_player_text_box_topbottom">6dp</dimen>
+    <dimen name="album_import_bottom_height">165dp</dimen>
+</resources>

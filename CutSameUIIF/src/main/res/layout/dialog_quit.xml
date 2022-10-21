@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="275dp"
+    android:layout_height="158dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_dialog">
+
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cancelBtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:text="@string/cutsame_edit_abandon_edit"
+        android:textStyle="bold"
+        android:paddingHorizontal="10dp"
+        />
+
+    <TextView
+        android:id="@+id/cancelBtn"
+        android:layout_width="108dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/transparent_50p"
+        tools:text="取消"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/bg_ok_noselect"
+        android:paddingVertical="10dp"
+        />
+
+    <TextView
+        android:id="@+id/sureBtn"
+        android:layout_width="108dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="49dp"
+        android:textColor="@color/text_white"
+        tools:text="放弃"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:background="@drawable/bg_ok_btn"
+        android:paddingVertical="10dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ck_track_panel_main_track">主</string>
+    <string name="ck_track_panel_all_videos">全局</string>
+    <string name="ck_track_panel_pip_2">画</string>
+</resources>

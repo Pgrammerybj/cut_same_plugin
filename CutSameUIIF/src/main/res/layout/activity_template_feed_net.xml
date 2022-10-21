@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/feed_background"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/backIv"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_close" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/creation_title"
+        android:textStyle="bold"
+        android:textColor="@color/tools_std_const_text_inverse_2"
+        android:textSize="17sp" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabCategory"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_below="@+id/backIv"
+        android:visibility="visible"
+        app:tabIndicatorColor="@color/theme_color"
+        app:tabIndicatorHeight="2dp"
+        app:tabMinWidth="20dp"
+        app:tabMode="scrollable"
+        app:tabPaddingEnd="15dp"
+        app:tabPaddingStart="15dp"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextAppearance="@style/textappearance_design_tab"
+        app:tabTextColor="#80ffffff"
+        android:background="@color/black"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/categoryViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tabCategory"
+        android:layout_marginTop="33dp"
+        android:paddingStart="4.5dp"
+        android:paddingLeft="4.5dp"
+        android:paddingEnd="4.5dp"
+        android:paddingRight="4.5dp"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/retryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/netError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="300dp"
+            android:gravity="center"
+            android:text="@string/cutsame_feed_net_error"
+            android:textColor="@color/tools_std_const_text_inverse_2"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/netErrorDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/netError"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/cutsame_feed_net_error_desc"
+            android:textColor="@color/tools_std_const_text_inverse_4"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/retryBtn"
+            android:layout_width="270dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/netErrorDesc"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/bg_feed_retry"
+            android:text="@string/cutsame_feed_retry"
+            android:textColor="@color/tools_std_const_text_inverse"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/noCategoryTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="@string/cutsame_feed_no_category"
+        android:textColor="@color/tools_std_const_text_inverse"
+        android:textSize="17sp"
+        android:visibility="gone" />
+</RelativeLayout>

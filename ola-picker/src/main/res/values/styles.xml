@@ -1,0 +1,44 @@
+<resources>
+
+    <style name="TransparentDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+
+    <style name="CutDialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.2</item>
+    </style>
+
+    <style name="ImagePickerTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="Picker.Base" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="Picker.Transparent" parent="Picker.Base">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="font_size_30">
+        <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
+    <declare-styleable name="RoundCornerView">
+        <attr name="cutRadius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="CutCenterMaskView">
+        <attr name="civLineColor" format="color" />
+        <attr name="civLineWidth" format="dimension" />
+        <attr name="civMaskColor" format="color" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="34dp"
+    android:orientation="vertical">
+
+    <com.angelstar.ola.view.FloatSliderView
+        android:id="@+id/temp_video_player_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lineHintColor="#33FFFFFF" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/tv_current_play_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="00:00"
+            android:textColor="#99ffffff"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_total_video_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="00:00"
+            android:textColor="#99ffffff"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</LinearLayout>
