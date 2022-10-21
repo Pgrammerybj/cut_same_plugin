@@ -32,7 +32,10 @@ import kotlinx.android.synthetic.main.fragment_album_layout.*
 /**
  * 相册页面
  */
-class AlbumFragment(private val isCutSameScene: Boolean, private val imagePickConfig: ImagePickConfig?) : Fragment() {
+class AlbumFragment(
+    private val isCutSameScene: Boolean,
+    private val imagePickConfig: ImagePickConfig?
+) : Fragment() {
 
     private lateinit var galleryPagerAdapter: GalleryPagerAdapter
     private lateinit var pickerAllFragment: PickerAllFragment
@@ -85,11 +88,10 @@ class AlbumFragment(private val isCutSameScene: Boolean, private val imagePickCo
      * 先完成功能后续再考虑架构和涉及
      */
     private fun initFragment() {
+        findImageFragment()
         if (isCutSameScene) {
             findAllFragment()
             findVideoFragment()
-        } else {
-            findImageFragment()
         }
     }
 
@@ -120,12 +122,14 @@ class AlbumFragment(private val isCutSameScene: Boolean, private val imagePickCo
         pickerImageFragment.itemClickOpenClipListener =
             object : GalleryMaterialListAdapter.ItemClickOpenClipListener {
                 override fun openImageClip(mediaData: MediaData) {
-                    //展示裁剪页面
-                    Toast.makeText(context, "单选图片，准备裁剪", Toast.LENGTH_SHORT).show()
                     val pickerIntent =
-                        PickerConstant.createImageClipIntent(context!!,mediaData,imagePickConfig)?.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        PickerConstant.createImageClipIntent(context!!, mediaData, imagePickConfig)
+                            ?.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     if (pickerIntent != null) {
-                        startActivityForResult(pickerIntent, ImagePickConfig.REQUEST_CODE_IMAGE_CROP)
+                        activity?.startActivityForResult(
+                            pickerIntent,
+                            ImagePickConfig.REQUEST_CODE_IMAGE_CROP
+                        )
                     }
                 }
             }

@@ -1,10 +1,12 @@
 package com.ola.chat.picker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,6 +51,7 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
         ImagePickConfig imagePickConfig = getIntent().getParcelableExtra(ARG_CLIP_PICKER_CONFIG);
 
 
+
         //初始化View
         findViewById(R.id.btn_back).setOnClickListener(this);
         Button btn_ok = findViewById(R.id.btn_clip_ok);
@@ -64,6 +67,10 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
         mCropImageView.setFocusStyle(CropImageView.Style.CIRCLE);
         mCropImageView.setFocusWidth(imagePickConfig.getFocusWidth());
         mCropImageView.setFocusHeight(imagePickConfig.getFocusHeight());
+
+
+        mOutputX = imagePickConfig.getCropWidth();
+        mOutputY = imagePickConfig.getCropHeight();
 
         //缩放图片
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -104,18 +111,12 @@ public class ImageCropActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onBitmapSaveSuccess(File file) {
-        Toast.makeText(ImageCropActivity.this, "裁剪成功:" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
+        Log.i("Ola-picker-clip", "裁剪成功getPath:" + file.getPath());
         //裁剪后替换掉返回数据的内容，但是不要改变全局中的选中数据
-//        mImageItems.remove(0);
-//        ImageItem imageItem = new ImageItem();
-//        imageItem.path = file.getAbsolutePath();
-//        mImageItems.add(imageItem);
-//
-//        Intent intent = new Intent();
-//        intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, mImageItems);
-//        setResult(ImagePicker.RESULT_CODE_ITEMS, intent);   //单选不需要裁剪，返回数据
-//        finish();
+        Intent intent = new Intent();
+        intent.putExtra(ImagePickConfig.EXTRA_RESULT_IMAGE_FILE, file.getAbsolutePath());
+        setResult(ImagePickConfig.REQUEST_CODE_IMAGE_CROP, intent);   //单选不需要裁剪，返回数据
+        finish();
     }
 
     public File getCropCacheFolder(Context context) {

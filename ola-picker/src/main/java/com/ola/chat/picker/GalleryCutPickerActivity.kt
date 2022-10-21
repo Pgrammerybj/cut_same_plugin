@@ -2,7 +2,6 @@ package com.ola.chat.picker
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -12,10 +11,7 @@ import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import android.widget.RelativeLayout.LayoutParams.*
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -36,10 +32,7 @@ import com.ola.chat.picker.customview.setGlobalDebounceOnClickListener
 import com.ola.chat.picker.entry.ImagePickConfig
 import com.ola.chat.picker.entry.MediaItem
 import com.ola.chat.picker.entry.TemplateItem
-import com.ola.chat.picker.utils.PickerConstant
-import com.ola.chat.picker.utils.SizeUtil
-import com.ola.chat.picker.utils.SpaceItemDecoration
-import com.ola.chat.picker.utils.showErrorTipToast
+import com.ola.chat.picker.utils.*
 import com.ola.chat.picker.viewmodel.GalleryPickerViewModel
 import kotlinx.android.synthetic.main.activity_picker_layout.*
 import java.util.*
@@ -47,6 +40,7 @@ import java.util.*
 private const val TAG = "Ola.DefaultPicker"
 private const val REQUEST_COMPRESS = 1000
 const val REQUEST_CODE_CLIP = 1001 // 素材替换 exp: 裁剪/录制
+const val REQUEST_CODE_IMAGE_CROP = 1004 // 单选图片的裁剪
 
 class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     private var preClipMediaItemMap: HashMap<Int, MediaItem> = HashMap()
@@ -70,14 +64,12 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        MTUtils.makeStatusBarTransparent(this)
         intent.getParcelableExtra<TemplateItem>(PickerConstant.ARG_TEMPLATE_ITEM)
             ?.also { templateItem = it }
         intent.getParcelableExtra<ImagePickConfig>(PickerConstant.ARG_DATA_PICK_CONFIG)
             ?.also { imagePickConfig = it }
-
         //只有剪同款模式【ImagePickConfig.PICKER_CUT_SAME】才需要检验data
         if (imagePickConfig != null) {
             isCutSameScene = imagePickConfig?.sceneType == ImagePickConfig.PICKER_CUT_SAME
@@ -88,7 +80,6 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
             if (data != null) {
                 checkOlaPickerPermission()
             } else {
-                Log.e(TAG, "no data. finish now")
                 finish()
             }
         } else {
@@ -109,7 +100,6 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     override fun onPermissionGranted() {
         Log.d(TAG, "onPermissionGranted")
         setContentView(R.layout.activity_picker_layout)
-
         //剪同款需要的参数
         val mediaItems = PickerConstant.getGalleryPickDataByIntent(intent)
         val prePickItems =
@@ -206,11 +196,17 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     }
 
     private fun handleCutSameScene() {
+        viewPager.setBackgroundResource(if (isCutSameScene) R.drawable.bg_image_picker else R.color.white)
         pickingListLayout.visibility = if (isCutSameScene) View.VISIBLE else View.GONE
-        rlPickerRoot.setPadding(0, SizeUtil.dp2px(if (isCutSameScene) 40F else 0F), 0, 0)
-        val layoutParams = RelativeLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        layoutParams.setMargins(0, 0, 0, SizeUtil.dp2px(if (isCutSameScene) -20F else 0F))
-        viewPager.layoutParams = layoutParams;
+        val layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+        pickingListLayout.post {
+            viewPager.setPadding(0, 0, 0, SizeUtil.dp2px(16F))
+            layoutParams.setMargins(
+                0, SizeUtil.dp2px(if (isCutSameScene) 40F else 0F),
+                0, if (isCutSameScene) pickingListLayout.height - SizeUtil.dp2px(16F) else 0
+            )
+            viewPager.layoutParams = layoutParams
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -403,6 +399,14 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
                 } else {
                     Log.d(TAG, "REQUEST_CODE_CLIP resultCode!=RESULT_OK")
                 }
+            }
+            //单选图片裁剪的结果
+            REQUEST_CODE_IMAGE_CROP -> {
+                val imagePath = data?.getStringExtra(ImagePickConfig.EXTRA_RESULT_IMAGE_FILE)
+                val intent = Intent()
+                intent.putExtra(ImagePickConfig.EXTRA_RESULT_IMAGE_FILE, imagePath)
+                setResult(ImagePickConfig.REQUEST_CODE_IMAGE_CROP, intent) //单选不需要裁剪，返回数据
+                finish()
             }
         }
     }

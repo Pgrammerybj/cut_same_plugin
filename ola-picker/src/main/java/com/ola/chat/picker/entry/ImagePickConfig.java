@@ -20,6 +20,7 @@ public class ImagePickConfig implements Parcelable {
 
 
     public static final int REQUEST_CODE_IMAGE_CROP = 1004;
+    public static final String EXTRA_RESULT_IMAGE_FILE = "extra_result_image_path";
 
     //先定义 常量
     public static final int PICKER_SINGLE = 0; //单选模式
@@ -33,7 +34,7 @@ public class ImagePickConfig implements Parcelable {
     public static final String SELECT_IMAGE = "IMAGE";//展示图片
     public static final String SELECT_VIDEO = "VIDEO";//展示视频
 
-    public ImagePickConfig(){
+    public ImagePickConfig() {
 
     }
 
@@ -45,6 +46,8 @@ public class ImagePickConfig implements Parcelable {
         focusWidth = in.readInt();
         focusHeight = in.readInt();
         maxCount = in.readInt();
+        cropWidth = in.readInt();
+        cropHeight = in.readInt();
     }
 
     public static final Creator<ImagePickConfig> CREATOR = new Creator<ImagePickConfig>() {
@@ -73,7 +76,10 @@ public class ImagePickConfig implements Parcelable {
         dest.writeInt(focusWidth);
         dest.writeInt(focusHeight);
         dest.writeInt(maxCount);
+        dest.writeInt(cropWidth);
+        dest.writeInt(cropHeight);
     }
+
 
     //注解枚举
     @IntDef({PICKER_SINGLE, PICKER_MIX, PICKER_CUT_SAME})
@@ -107,14 +113,19 @@ public class ImagePickConfig implements Parcelable {
     private String defaultResourceType = SELECT_IMAGE;
 
     //矩形裁剪框宽度（圆形自动取宽高最小值）
-    private int focusWidth;
-    private int focusHeight;
+    private int focusWidth = 300;
+    private int focusHeight = cropStyle.equals(CIRCLE) ? 300 : 400;
 
     //最大可以选择多少张图片
-    private int maxCount;
+    private int maxCount = 1;
+
+    //图片裁剪完成后保存的的宽高
+    private int cropWidth = 800;
+    private int cropHeight = 800;
 
 
-    public @SceneType int getSceneType() {
+    public @SceneType
+    int getSceneType() {
         return sceneType;
     }
 
@@ -130,7 +141,8 @@ public class ImagePickConfig implements Parcelable {
         this.crop = crop;
     }
 
-    public @DefaultSelectType String getDefaultResourceType() {
+    public @DefaultSelectType
+    String getDefaultResourceType() {
         return defaultResourceType;
     }
 
@@ -170,6 +182,22 @@ public class ImagePickConfig implements Parcelable {
         this.cropStyle = cropStyle;
     }
 
+    public int getCropWidth() {
+        return cropWidth;
+    }
+
+    public void setCropWidth(int cropWidth) {
+        this.cropWidth = cropWidth;
+    }
+
+    public int getCropHeight() {
+        return cropHeight;
+    }
+
+    public void setCropHeight(int cropHeight) {
+        this.cropHeight = cropHeight;
+    }
+
     @Override
     public String toString() {
         return "ImagePickConfig{" +
@@ -180,6 +208,8 @@ public class ImagePickConfig implements Parcelable {
                 ", focusWidth=" + focusWidth +
                 ", focusHeight=" + focusHeight +
                 ", maxCount=" + maxCount +
+                ", cropWidth=" + cropWidth +
+                ", cropHeight=" + cropHeight +
                 '}';
     }
 }

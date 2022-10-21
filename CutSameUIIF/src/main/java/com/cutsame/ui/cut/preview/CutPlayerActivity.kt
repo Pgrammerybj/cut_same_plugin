@@ -161,7 +161,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         if (!needPickMediaItems.isNullOrEmpty()) {
 
             // TODO: 2022/10/18 模拟其他业务的单选逻辑
-            val isSingleChoose = true
+            val isSingleChoose = false
             if (isSingleChoose) {
                 launchPicker()
             } else {
@@ -261,9 +261,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         imagePickConfig.crop = true
         imagePickConfig.cropStyle = ImagePickConfig.CIRCLE
         imagePickConfig.defaultResourceType = ImagePickConfig.SELECT_IMAGE
-        imagePickConfig.maxCount = 1
-        imagePickConfig.focusHeight = SizeUtil.dp2px(300f)
-        imagePickConfig.focusWidth = SizeUtil.dp2px(300f)
         imagePickConfig.sceneType = ImagePickConfig.PICKER_SINGLE
 
         val pickerIntent = PickerConstant.createSingleGalleryUIIntent(this, imagePickConfig)?.let {
@@ -555,6 +552,13 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 } else {
                     LogUtil.e(TAG, "REQUEST_CODE_CLIP resultCode!=ok")
                 }
+            }
+
+            REQUEST_CODE_SINGLE_CHOOSE->{
+                //单选图片裁剪的结果
+                val imagePath = data?.getStringExtra(ImagePickConfig.EXTRA_RESULT_IMAGE_FILE)
+                Toast.makeText(this, "裁剪成功:$imagePath", Toast.LENGTH_LONG).show()
+                this.finish()
             }
 
             else -> super.onActivityResult(requestCode, resultCode, data)

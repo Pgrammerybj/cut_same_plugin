@@ -32,11 +32,11 @@
         </compilerSettings>
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../../../build/record-tobres/tmp/kotlin-classes/debug" />
-          <option name="classpath" value="$MODULE_DIR$/../../../../build/record-tobres/intermediates/compile_r_class_jar/debug/R.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/3f220808ea904c9b3ec40d1758e3f360/jetified-kotlin-stdlib-1.6.10.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/b1d61aea86a76263a10f62d47ff7e230/jetified-annotations-13.0.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/d8c411ee0b2ff8e3c8e4e1eb2492f997/jetified-kotlin-stdlib-common-1.6.10.jar:/Users/yangbaojiang/Library/Android/sdk/platforms/android-31/android.jar:/Users/yangbaojiang/Library/Android/sdk/build-tools/29.0.2/core-lambda-stubs.jar" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3f220808ea904c9b3ec40d1758e3f360/jetified-kotlin-stdlib-1.6.10.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/b1d61aea86a76263a10f62d47ff7e230/jetified-annotations-13.0.jar:/Users/yangbaojiang/.gradle/caches/transforms-2/files-2.1/d8c411ee0b2ff8e3c8e4e1eb2492f997/jetified-kotlin-stdlib-common-1.6.10.jar:/Users/yangbaojiang/Library/Android/sdk/platforms/android-31/android.jar:/Users/yangbaojiang/Library/Android/sdk/build-tools/29.0.2/core-lambda-stubs.jar" />
           <option name="noStdlib" value="true" />
           <option name="moduleName" value="record-tobres_debug" />
           <option name="languageVersion" value="1.6" />
-          <option name="apiVersion" value="1.6" />
+          <option name="apiVersion" value="1.5" />
           <option name="pluginOptions">
             <array />
           </option>
@@ -77,7 +77,6 @@
     <content url="file://$MODULE_DIR$/../../../../build/record-tobres/generated/source/buildConfig/androidTest/debug" />
     <content url="file://$MODULE_DIR$/../../../../build/record-tobres/generated/source/buildConfig/debug">
       <sourceFolder url="file://$MODULE_DIR$/../../../../build/record-tobres/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../../build/record-tobres/generated/source/buildConfig/debug" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 30 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

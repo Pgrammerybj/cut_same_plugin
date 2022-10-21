@@ -27,6 +27,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.ViewCompat;
 
 import com.ola.chat.picker.R;
+import com.ola.chat.picker.utils.SizeUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ import java.util.Locale;
 
 /**
  * ================================================
- * 作    者：廖子尧【美团MBC作者，现抖音中台TL】
+ * 作    者：廖子尧【美团MBC作者，现抖音中台TL, OkGo 开源作者】
  * 版    本：1.0
  * 创建日期：2016/1/7
  * 描    述：
@@ -184,10 +185,10 @@ public class CropImageView extends AppCompatImageView {
             mFocusWidth = focusSize;
             mFocusHeight = focusSize;
         }
-        mFocusRect.left = mFocusMidPoint.x - mFocusWidth / 2;
-        mFocusRect.right = mFocusMidPoint.x + mFocusWidth / 2;
-        mFocusRect.top = mFocusMidPoint.y - mFocusHeight / 2;
-        mFocusRect.bottom = mFocusMidPoint.y + mFocusHeight / 2;
+        mFocusRect.left = mFocusMidPoint.x - (mFocusWidth >> 1);
+        mFocusRect.right = mFocusMidPoint.x + (mFocusWidth >> 1);
+        mFocusRect.top = mFocusMidPoint.y - (mFocusHeight >> 1);
+        mFocusRect.bottom = mFocusMidPoint.y + (mFocusHeight >> 1);
 
         //适配焦点框的缩放比例（图片的最小边不小于焦点框的最小边）
         float fitFocusScale = getScale(mImageWidth, mImageHeight, mFocusWidth, mFocusHeight, true);
@@ -553,12 +554,12 @@ public class CropImageView extends AppCompatImageView {
         if (mSaving) return;
         mSaving = true;
         final Bitmap croppedImage = getCropBitmap(expectWidth, exceptHeight, isSaveRectangle);
-        Bitmap.CompressFormat outputFormat = Bitmap.CompressFormat.JPEG;
+        Bitmap.CompressFormat outputFormat = Bitmap.CompressFormat.WEBP;
         File saveFile = createFile(folder, "IMG_", ".jpg");
-        if (mStyle == Style.CIRCLE && !isSaveRectangle) {
-            outputFormat = Bitmap.CompressFormat.PNG;
-            saveFile = createFile(folder, "IMG_", ".png");
-        }
+//        if (mStyle == Style.CIRCLE && !isSaveRectangle) {
+//            outputFormat = Bitmap.CompressFormat.PNG;
+//            saveFile = createFile(folder, "IMG_", ".png");
+//        }
         final Bitmap.CompressFormat finalOutputFormat = outputFormat;
         final File finalSaveFile = saveFile;
         new Thread() {
@@ -655,7 +656,7 @@ public class CropImageView extends AppCompatImageView {
      * 设置焦点框的宽度
      */
     public void setFocusWidth(int width) {
-        mFocusWidth = width;
+        mFocusWidth = SizeUtil.INSTANCE.dp2px(width);
         initImage();
     }
 
@@ -670,7 +671,7 @@ public class CropImageView extends AppCompatImageView {
      * 设置焦点框的高度
      */
     public void setFocusHeight(int height) {
-        mFocusHeight = height;
+        mFocusHeight = SizeUtil.INSTANCE.dp2px(height);
         initImage();
     }
 

@@ -19,7 +19,7 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="Picker.Base" parent="Theme.AppCompat.Light.DarkActionBar" />
+    <style name="Picker.Base" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="Picker.Transparent" parent="Picker.Base">
         <item name="android:windowBackground">@android:color/transparent</item>
