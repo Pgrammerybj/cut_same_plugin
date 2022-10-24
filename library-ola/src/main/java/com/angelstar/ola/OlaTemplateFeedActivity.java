@@ -1,5 +1,6 @@
 package com.angelstar.ola;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.angelstar.ola.interfaces.ScaleSlideBarListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
+import com.angelstar.ola.utils.JsonHelper;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
 import com.angelstar.ola.viewmodel.TemplateNetPageModel;
@@ -42,6 +44,7 @@ import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.ola.chat.picker.entry.OlaTemplateResponse;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
 import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
@@ -87,7 +90,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
-    private List<MixerItemEntry> mixerList = new ArrayList<MixerItemEntry>();
+    private final List<MixerItemEntry> mixerList = new ArrayList<>();
     private ScaleSlideBar mScaleSlideBar;
     private RecyclerView mRcMenuMulti;
     private HttpProxyCacheServer httpProxyCacheServer;
@@ -109,39 +112,42 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
         templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
         templateNetPageModel.loadFeedList(true);
-        templateNetPageModel.getTemplateItems().observe(this, new Observer<List<TemplateItem>>() {
-            @Override
-            public void onChanged(List<TemplateItem> templateItems) {
-                TemplateItem templateItem = templateItems.get(0);
-                Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
-                httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
-            }
+        templateNetPageModel.getTemplateItems().observe(this, templateItems -> {
+            TemplateItem templateItem = templateItems.get(0);
+            Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
+            httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
         });
         initView(mSurfaceView);
         initPlayerView();
     }
 
     private void initView(SurfaceView mSurfaceView) {
+
         OlaBannerView mBannerView = findViewById(R.id.banner_view);
         mBannerView.setIndicator(new RectangleIndicator(this));
         mBannerView.setScrollPageListener(this);
-        List<String> bannerData = new ArrayList<>();
-        bannerData.add("https://img2.baidu.com/it/u=3871466532,4184504555&fm=253&fmt=auto&app=138&f=JPEG?w=420&h=672");
-        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fmobile%2F2018-11-02%2F5bdbfaa772b74.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666854321&t=328f07614130a0c57da081fe71971f35");
-        bannerData.add("https://pics0.baidu.com/feed/77c6a7efce1b9d16ea9a0f497a8ffa878c546416.jpeg?token=fa7b61af9c9600dacdd91d593c08f4e7");
-        bannerData.add("https://photo.tuchong.com/250829/f/31548923.jpg");
-        bannerData.add("https://photo.tuchong.com/392724/f/16858773.jpg");
-        bannerData.add("https://photo.tuchong.com/408963/f/18401047.jpg");
-        bannerData.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fmobile%2F2020-04-14%2F5e9563a01a89c.jpg&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666854399&t=69a35ee9f901a27fbad75e23e8911893");
 
-        mBannerView.setBannerData(createVideoItem(bannerData), mSurfaceView);
+        OlaTemplateResponse olaTemplateResponse = JsonHelper.fromJson(MockJson.TEMPLATE_ITEM_JSON, OlaTemplateResponse.class);
+        if (null == olaTemplateResponse || olaTemplateResponse.getList().size() == 0) {
+            return;
+        }
+        List<com.ola.chat.picker.entry.TemplateItem> templateItemList = olaTemplateResponse.getList();
+        mBannerView.setBannerData(createVideoItem(templateItemList), mSurfaceView);
     }
 
-    private ArrayList<VideoItemView> createVideoItem(List<String> bannerData) {
+    private ArrayList<VideoItemView> createVideoItem(List<com.ola.chat.picker.entry.TemplateItem> bannerData) {
+        if (bannerData == null || bannerData.size() == 0) {
+            //todo:如果是debug直接抛出错误，线上打log报警
+            return null;
+        }
         ArrayList<VideoItemView> itemList = new ArrayList<>();
         for (int i = 0; i < bannerData.size(); i++) {
+            com.ola.chat.picker.entry.TemplateItem templateItem = bannerData.get(i);
+            if (templateItem == null || templateItem.getCover() == null || templateItem.getExtra() == null) {
+                break;
+            }
             VideoItemView videoItemView = new VideoItemView(this);
-            videoItemView.bindData(bannerData.get(i));
+            videoItemView.bindData(templateItem.getCover().getUrl());
             videoItemView.setOnClickPlayListener(new VideoItemView.OnClickPlayStateListener() {
                 @Override
                 public void onVideoClick(View view) {
@@ -157,17 +163,18 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 public void onEditVideoClick(View view) {
                     //点击视频编辑按钮
                     List<TemplateItem> templateItems = templateNetPageModel.getTemplateItems().getValue();
-                    TemplateItem templateItem = templateItems.get(0);
-
+                    if (null != templateItems) {
+                        TemplateItem templateItem = templateItems.get(0);
 //                    com.ola.chat.picker.entry.TemplateItem parseTemplateItem = parseTemplateItem(templateItem);
-
-                    String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
-                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, videoCache);
+                        String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
+                        Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, videoCache);
 //                    Intent cutSameIntent = PickerConstant.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, parseTemplateItem, videoCache);
-                    if (cutSameIntent != null) {
-                        cutSameIntent.setPackage(getPackageName());
-                        startActivity(cutSameIntent);
+                        if (cutSameIntent != null) {
+                            cutSameIntent.setPackage(getPackageName());
+                            startActivity(cutSameIntent);
+                        }
                     }
+
                 }
             });
             itemList.add(videoItemView);
@@ -191,15 +198,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mixerList);
         mMixerRecyclerView.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
         mMixerRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnMixerItemClickListener() {
-            @Override
-            public void onItemClick(View view, MixerItemEntry data, int position) {
-                //弹出调音面板
-                if (position == 0) {
-                    showMixerMenu();
-                }
-                Toast.makeText(OlaTemplateFeedActivity.this, position == 0 ? "弹出调音面板" : data.getMixerTitle() + "+" + position, Toast.LENGTH_SHORT).show();
+        adapter.setOnItemClickListener((view, data, position) -> {
+            //弹出调音面板
+            if (position == 0) {
+                showMixerMenu();
             }
+            Toast.makeText(OlaTemplateFeedActivity.this, position == 0 ? "弹出调音面板" : data.getMixerTitle() + "+" + position, Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -214,12 +218,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         mScaleSlideBar.setPosition(2);
 
-        mScaleSlideBar.setOnGbSlideBarListener(new ScaleSlideBarListener() {
-            @Override
-            public void onPositionSelected(int position) {
-                Toast.makeText(OlaTemplateFeedActivity.this, "selected " + position, Toast.LENGTH_SHORT).show();
-                Log.d("edanelx", "selected " + position);
-            }
+        mScaleSlideBar.setOnGbSlideBarListener(position -> {
+            Toast.makeText(OlaTemplateFeedActivity.this, "selected " + position, Toast.LENGTH_SHORT).show();
+            Log.d("edanelx", "selected " + position);
         });
 
 
@@ -230,17 +231,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mixerList);
         mRcMenuMulti.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
         mRcMenuMulti.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnMixerItemClickListener() {
-            @Override
-            public void onItemClick(View view, MixerItemEntry data, int position) {
-                Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data.getMixerTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        adapter.setOnItemClickListener((view, data, position) -> Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data.getMixerTitle(), Toast.LENGTH_SHORT).show());
     }
 
     private void showMixerMenu() {
         BottomSheetDialog answerSheetDialog = new BottomSheetDialog(this, R.style.MixerBottomSheetDialogTheme);
-        View inflate = LayoutInflater.from(this).inflate(R.layout.layout_mixer_menu, null, false);
+        @SuppressLint("InflateParams") View inflate = LayoutInflater.from(this).inflate(R.layout.layout_mixer_menu, null, false);
         answerSheetDialog.setContentView(inflate);
         answerSheetDialog.setCanceledOnTouchOutside(true);
         answerSheetDialog.setCancelable(true);

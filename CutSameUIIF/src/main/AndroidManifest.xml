@@ -47,7 +47,6 @@
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <action android:name="com.ss.android.ugc.cut_ui.PLAY" />
             </intent-filter>
         </activity>

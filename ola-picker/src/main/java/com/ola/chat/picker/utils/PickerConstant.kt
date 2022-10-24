@@ -13,8 +13,6 @@ object PickerConstant {
         Album, Camera;
     }
 
-
-
     private const val ARG_TEMPLATE_FEED = "com.ss.android.ugc.template_ui.feed.net"
     fun createTemplateUIIntent(context: Context): Intent? {
         val intent = Intent(ARG_TEMPLATE_FEED)

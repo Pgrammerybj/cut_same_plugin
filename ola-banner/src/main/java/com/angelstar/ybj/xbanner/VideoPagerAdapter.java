@@ -3,9 +3,12 @@ package com.angelstar.ybj.xbanner;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
@@ -54,6 +57,11 @@ public class VideoPagerAdapter extends PagerAdapter {
                 Toast.makeText(mContext, "点击了：" + getRealPosition(position), Toast.LENGTH_SHORT).show();
             }
         });
+        //为了保证安全先移除
+        ViewGroup viewGroup = (ViewGroup) videoItemView.getParent();
+        if (null != viewGroup) {
+            viewGroup.removeView(videoItemView);
+        }
         container.addView(videoItemView);
         return videoItemView;
     }
@@ -64,6 +72,6 @@ public class VideoPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
+//        container.removeView((View) object);
     }
 }

@@ -214,6 +214,8 @@ public class OlaBannerView extends FrameLayout {
         mBannerUrlList.clear();
         mBannerUrlList.addAll(bannerData);
         mIndicator.setCellCount(bannerData.size());
+
+
         final int realPosition = (MAX_VALUE / 2) % getRealCount(bannerData);
         if (realPosition < bannerData.size()) {
             //首次进入mSurfaceView应添加到默认显示的条目

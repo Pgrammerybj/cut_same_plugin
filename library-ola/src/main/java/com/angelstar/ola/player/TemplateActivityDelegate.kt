@@ -28,7 +28,7 @@ import kotlin.system.measureTimeMillis
  * @E-Mail: pgrammer.ybj@outlook.com
  * @Description: android
  */
-class TemplateActivityDelegate (
+class TemplateActivityDelegate(
     private val activity: FragmentActivity,
     private val surfaceView: SurfaceView?
 ) : IPlayerActivityDelegate {
@@ -55,7 +55,8 @@ class TemplateActivityDelegate (
     private val mHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        nleEditorContext = EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
+        nleEditorContext =
+            EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
         nleEditorContext!!.nleEditor.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
 
         type = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_FROM_TYPE, 0)
@@ -184,8 +185,8 @@ class TemplateActivityDelegate (
      * 5️⃣ NLE数据驱动触发VEEditor
      */
     private fun handleVEEditor() {
-        if (nleEditorContext != null) {
-            nleEditorContext!!.videoPlayer.player!!.dataSource = nleEditorContext!!.nleModel
+        if ((nleEditorContext != null) && (null != nleEditorContext?.videoPlayer) && (null!=nleEditorContext?.videoPlayer?.player)) {
+            nleEditorContext?.videoPlayer?.player?.dataSource = nleEditorContext!!.nleModel
             if ((type == DRAFT_RESTORE || type == EditorHelper.EXTRA_FROM_TEMPLATE || type == FILE_DRAFT) && !hasLoaded) {
                 val mainTrack = nleModel!!.mainTrack
                 nleEditorContext!!.nleMainTrack = mainTrack!!
