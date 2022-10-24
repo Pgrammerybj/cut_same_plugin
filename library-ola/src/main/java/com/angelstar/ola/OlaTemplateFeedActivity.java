@@ -42,9 +42,6 @@ import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.ola.chat.picker.entry.Author;
-import com.ola.chat.picker.entry.Cover;
-import com.ola.chat.picker.entry.OriginVideoInfo;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
 import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
@@ -90,7 +87,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
-    private List<MixerItemEntry> mixerList = new ArrayList<>();
+    private List<MixerItemEntry> mixerList = new ArrayList<MixerItemEntry>();
     private ScaleSlideBar mScaleSlideBar;
     private RecyclerView mRcMenuMulti;
     private HttpProxyCacheServer httpProxyCacheServer;
