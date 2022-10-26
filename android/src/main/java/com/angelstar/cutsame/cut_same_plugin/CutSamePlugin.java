@@ -39,14 +39,7 @@ public class CutSamePlugin implements FlutterPlugin, MethodCallHandler, Activity
         } else if (call.method.equals("startCutSamePage")) {
             //跳转到目标页面
             if (null != activity) {
-
-                ArrayList<String> videoList = new ArrayList<>();
-                videoList.add("/storage/emulated/0/DCIM/baiyueguangzhushazhi_7002448424021524488.mp4");
-
                 Intent intent = new Intent(activity, OlaTemplateFeedActivity.class);
-                intent.putExtra("extra_key_from_type", 1);
-                intent.putStringArrayListExtra("extra_video_paths", videoList);
-                intent.putExtra("extra_media_type", 3);//1：图片、3视频
                 intent.setPackage(activity.getPackageName());
                 activity.startActivity(intent);
             }
