@@ -34,6 +34,8 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
     private TextView mTvEditVideo;
     //surfaceView的插入视图
     private FrameLayout mFlSurfaceViewContainer;
+    //下载到本地的文件路径
+    public String videoFilePath;
 
     public VideoItemView(@NonNull Context context) {
         this(context, null);
@@ -61,8 +63,9 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
         mFlSurfaceViewContainer = cardView.findViewById(R.id.fl_surfaceView_container);
     }
 
-    public VideoItemView bindData(String url) {
+    public VideoItemView bindData(String url, String videoFilePath) {
         Glide.with(this.context).load(url).into(mIvVideoCover);
+        this.videoFilePath = videoFilePath;
         mTvVideoTime.setText("00:30");
         mIvVideState.setOnClickListener(this);
         mTvEditVideo.setOnClickListener(this);

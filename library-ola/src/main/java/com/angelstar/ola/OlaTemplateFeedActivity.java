@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,8 +24,6 @@ import com.angelstar.ola.adapter.MixerRecyclerViewAdapter;
 import com.angelstar.ola.adapter.SlideAdapter;
 import com.angelstar.ola.entity.MixerItemEntry;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
-import com.angelstar.ola.interfaces.OnMixerItemClickListener;
-import com.angelstar.ola.interfaces.ScaleSlideBarListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
@@ -45,12 +42,18 @@ import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ola.chat.picker.entry.OlaTemplateResponse;
+import com.ola.download.RxNetDownload;
+import com.ola.download.callback.DownloadCallback;
+import com.ola.download.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
 import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
@@ -100,14 +103,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_ola_template_homepage);
-
-
+        //视频缓存框架
+        httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
         mSurfaceView = new SurfaceView(this);
-
-        editorActivityDelegate = new TemplateActivityDelegate(this, mSurfaceView);
-        editorActivityDelegate.setViewStateListener(videoStateListener);
-        editorActivityDelegate.onCreate(savedInstanceState);
-        nleEditorContext = editorActivityDelegate.getNleEditorContext();
 
         TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
         templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
@@ -115,13 +113,21 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         templateNetPageModel.getTemplateItems().observe(this, templateItems -> {
             TemplateItem templateItem = templateItems.get(0);
             Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
-            httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
         });
-        initView(mSurfaceView);
+        initActivityDelegate();
+        initView();
         initPlayerView();
     }
 
-    private void initView(SurfaceView mSurfaceView) {
+    private void initActivityDelegate() {
+        Log.i(TAG, "initActivityDelegate: 开始创建TemplateActivityDelegate");
+        editorActivityDelegate = new TemplateActivityDelegate(this, mSurfaceView);
+        editorActivityDelegate.setViewStateListener(videoStateListener);
+        editorActivityDelegate.onCreate();
+        nleEditorContext = editorActivityDelegate.getNleEditorContext();
+    }
+
+    private void initView() {
 
         OlaBannerView mBannerView = findViewById(R.id.banner_view);
         mBannerView.setIndicator(new RectangleIndicator(this));
@@ -141,13 +147,18 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             return null;
         }
         ArrayList<VideoItemView> itemList = new ArrayList<>();
+
         for (int i = 0; i < bannerData.size(); i++) {
             com.ola.chat.picker.entry.TemplateItem templateItem = bannerData.get(i);
             if (templateItem == null || templateItem.getCover() == null || templateItem.getExtra() == null) {
                 break;
             }
+
+            //后台视频下载，下载策略和时机后续再优化
+            String videoFilePath = downloadVideo(templateItem);
+
             VideoItemView videoItemView = new VideoItemView(this);
-            videoItemView.bindData(templateItem.getCover().getUrl());
+            videoItemView.bindData(templateItem.getCover().getUrl(), videoFilePath);
             videoItemView.setOnClickPlayListener(new VideoItemView.OnClickPlayStateListener() {
                 @Override
                 public void onVideoClick(View view) {
@@ -165,10 +176,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                     List<TemplateItem> templateItems = templateNetPageModel.getTemplateItems().getValue();
                     if (null != templateItems) {
                         TemplateItem templateItem = templateItems.get(0);
-//                    com.ola.chat.picker.entry.TemplateItem parseTemplateItem = parseTemplateItem(templateItem);
                         String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
                         Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, videoCache);
-//                    Intent cutSameIntent = PickerConstant.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, parseTemplateItem, videoCache);
                         if (cutSameIntent != null) {
                             cutSameIntent.setPackage(getPackageName());
                             startActivity(cutSameIntent);
@@ -180,6 +189,34 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             itemList.add(videoItemView);
         }
         return itemList;
+    }
+
+    private String downloadVideo(com.ola.chat.picker.entry.TemplateItem bannerData) {
+        String videoUrl = bannerData.getVideo_info().getUrl();
+        String cacheVideoDir = CommonUtils.getCacheVideoDir(this);
+        String videoName = videoUrl.substring(videoUrl.lastIndexOf("/"));
+        RxNetDownload.execute(videoUrl, cacheVideoDir, videoName, new DownloadCallback() {
+            @Override
+            public void onStart(Disposable d) {
+                Log.i(TAG, "开始下载: " + videoName);
+            }
+
+            @Override
+            public void onProgress(long totalByte, long currentByte, int progress) {
+//                Log.i(TAG, "onProgress: " + progress);
+            }
+
+            @Override
+            public void onFinish(File file) {
+                Log.i(TAG, "下载完成: " + file.getAbsolutePath());
+            }
+
+            @Override
+            public void onError(String msg) {
+                Log.i(TAG, "onError: " + msg);
+            }
+        });
+        return cacheVideoDir.concat(videoName);
     }
 
     private void initPlayerView() {
@@ -321,7 +358,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         if (null != nleEditorContext) {
             nleEditorContext.getVideoPlayer().play();
             if (null != videStateView) {
-                Log.i("JackYang-Ola", "onPageSelected");
                 videStateView.setImageResource(R.mipmap.icon_video_stop);
             }
         }
@@ -331,7 +367,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     public void onPageSelected(int position, VideoItemView videoItemView) {
         this.mVideoItemView = videoItemView;
         //切换ViewPager前先恢复播放器参数
-        nleEditorContext.getVideoPlayer().resume();
-        startPlay(videoItemView.getVideStateView());
+        if (null != nleEditorContext && null != editorActivityDelegate) {
+            List<String> filePathList = new ArrayList<>();
+            filePathList.add(mVideoItemView.videoFilePath);
+            editorActivityDelegate.importVideoMedia(filePathList);
+            nleEditorContext.getVideoPlayer().resume();
+            startPlay(videoItemView.getVideStateView());
+        }
     }
 }

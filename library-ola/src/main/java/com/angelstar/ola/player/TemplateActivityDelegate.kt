@@ -1,6 +1,5 @@
 package com.angelstar.ola.player
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.SurfaceView
@@ -42,9 +41,9 @@ class TemplateActivityDelegate(
     }
 
 
-    private var type: Int = 0 // 0:默认 1:从拍摄进来 2:草稿
-    private var mediaType: Int = 0 //代表从拍摄进来的资源类型 图片1 视频3
-    private var videoPaths: List<String> = arrayListOf()
+//    private var type: Int = 0 // 0:默认 1:从拍摄进来 2:草稿
+//    private var mediaType: Int = 0 //代表从拍摄进来的资源类型 图片1 视频3
+
     private var hasLoaded = false
     private var nleModel: NLEModel? = null
 
@@ -54,58 +53,44 @@ class TemplateActivityDelegate(
 
     private val mHandler = Handler(Looper.getMainLooper())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate() {
+//        type = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_FROM_TYPE, 0)
+//        mediaType = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_MEDIA_TYPE, 0)
         nleEditorContext =
             EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
         nleEditorContext!!.nleEditor.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
 
-        type = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_FROM_TYPE, 0)
-        mediaType = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_MEDIA_TYPE, 0)
-        videoPaths = activity.intent.getStringArrayListExtra(EditorHelper.EXTRA_KEY_VIDEO_PATHS)
-            ?: arrayListOf()
         val costMill = measureTimeMillis {
-            initImport()//1️⃣
+            initNLEPlayer()//1️⃣
         }
         DLog.d(TAG, "EditorActivityDelegate initImport costTime:$costMill")
         registerEvent()
     }
 
-    //2️⃣
-    private fun initImport() { // 判断是否从拍摄进来
-        DLog.d(TAG, "是否从拍摄进来 jump type $type")
-        if (type == SELECT_VIDEO_AUDIO) { //从拍摄进来
-            nleEditorContext?.templateInfo = TemplateInfo()
-            val select: MutableList<EditMedia> = ArrayList()
-            videoPaths.forEach {
-                select.add(EditMedia(it, mediaType == 3))
-            }
-
-            initEditor(select)
+    /**
+     * 2️⃣初始化播放器
+     *
+     */
+    private fun initNLEPlayer() {
+        nleEditorContext?.templateInfo = TemplateInfo()
+        val rootPath = activity.filesDir.absolutePath
+        if (surfaceView != null) {
+            nleEditorContext!!.init(rootPath, surfaceView)
         }
     }
 
+
     //3️⃣
-    private fun initEditor(select: MutableList<EditMedia>) {
-        val rootPath = activity.filesDir.absolutePath
-        if (surfaceView == null) {
-            //日志上报
-            return
-        }
-        nleEditorContext!!.init(rootPath, surfaceView)
+    override fun importVideoMedia(filePathList: List<String>) {
+        val select: MutableList<EditMedia> = ArrayList()
+        filePathList.forEach { select.add(EditMedia(it, true)) }
+        //先清空主轨道
+        nleEditorContext!!.nleMainTrack.clearSlot()
         nleEditorContext!!.videoEditor.importMedia(
             select,
             EditorSDK.instance.config.pictureTime,
             EditorSDK.instance.config.isFixedRatio
         )
-        nleEditorContext!!.videoPlayer.seek(0)
-        if (type == EditorHelper.EXTRA_FROM_MULTI_SELECT || type == CHOSE_VIDEO ||
-            type == SELECT_VIDEO_AUDIO
-        ) {
-            // 如果是模板生产工具 默认静音所有视频
-            val isAllMute = EditorSDK.instance.config.enableTemplateFunction
-            nleEditorContext!!.oriAudioMuteEvent.postValue(isAllMute)
-        }
-
         activity.lifecycle.addObserver(nleEditorContext!!)
     }
 
@@ -185,13 +170,9 @@ class TemplateActivityDelegate(
      * 5️⃣ NLE数据驱动触发VEEditor
      */
     private fun handleVEEditor() {
-        if ((nleEditorContext != null) && (null != nleEditorContext?.videoPlayer) && (null!=nleEditorContext?.videoPlayer?.player)) {
+        if ((nleEditorContext != null) && (null != nleEditorContext?.videoPlayer) && (null != nleEditorContext?.videoPlayer?.player)) {
+            //此处很重要！~
             nleEditorContext?.videoPlayer?.player?.dataSource = nleEditorContext!!.nleModel
-            if ((type == DRAFT_RESTORE || type == EditorHelper.EXTRA_FROM_TEMPLATE || type == FILE_DRAFT) && !hasLoaded) {
-                val mainTrack = nleModel!!.mainTrack
-                nleEditorContext!!.nleMainTrack = mainTrack!!
-            }
-            hasLoaded = true
         }
     }
 

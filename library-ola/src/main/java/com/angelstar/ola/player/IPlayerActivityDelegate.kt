@@ -1,6 +1,5 @@
 package com.angelstar.ola.player
 
-import android.os.Bundle
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener
 import com.ss.ugc.android.editor.core.NLEEditorContext
 
@@ -10,7 +9,7 @@ interface IPlayerActivityDelegate {
 
     var viewStateListener: ITemplateVideoStateListener?
 
-    fun onCreate(savedInstanceState: Bundle?)
+    fun onCreate()
 
     fun onResume()
 
@@ -21,4 +20,9 @@ interface IPlayerActivityDelegate {
     fun pause()
 
     fun onDestroy()
+
+    /**
+     * 插入-替换本地视频素材
+     */
+    fun importVideoMedia(filePathList: List<String>) {}
 }

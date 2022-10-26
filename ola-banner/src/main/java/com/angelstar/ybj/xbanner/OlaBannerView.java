@@ -112,12 +112,12 @@ public class OlaBannerView extends FrameLayout {
             bannerParams.setMargins(mPageMargin, dp2px(16), mPageMargin, dp2px(16));
         }
         addView(mBannerViewPager, bannerParams);
-        mBannerViewPager.addOnPageChangeListener(mPageListener);
         mBannerUrlList = new ArrayList<>();
         mAdapter = new VideoPagerAdapter(context, mBannerUrlList);
         mBannerViewPager.setAdapter(mAdapter);
         mBannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
         mBannerViewPager.setPageTransformer(true, new ScalePageTransformer());
+        mBannerViewPager.addOnPageChangeListener(mPageListener);
         if (mIsMargin) {
             mBannerViewPager.setOffscreenPageLimit(2);
             mBannerViewPager.setPageMargin(mPageMargin / 2);
@@ -177,7 +177,7 @@ public class OlaBannerView extends FrameLayout {
     };
 
     private void changeSurfaceView(final int smallPos) {
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+        ThreadUtils.uiHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 for (int i = 0; i < mBannerUrlList.size() && (mBannerUrlList.get(i) != null); i++) {
@@ -216,18 +216,13 @@ public class OlaBannerView extends FrameLayout {
         mIndicator.setCellCount(bannerData.size());
 
 
-        final int realPosition = (MAX_VALUE / 2) % getRealCount(bannerData);
-        if (realPosition < bannerData.size()) {
-            //首次进入mSurfaceView应添加到默认显示的条目
-            bannerData.get(realPosition).onSelected(true, mSurfaceView);
-            //临时写法，模拟网络耗时
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScrollPageListener.onPageSelected(realPosition, bannerData.get(realPosition));
-                }
-            }, 100);
+        if (bannerData.size() != 0) {
+            //首次进入mSurfaceView应添加到默认显示的条目0
+            final VideoItemView videoItemView = bannerData.get(0);
+            mScrollPageListener.onPageSelected(0, videoItemView);
+            videoItemView.onSelected(true, mSurfaceView);
         }
+
         mAdapter.notifyDataSetChanged();
     }
 
