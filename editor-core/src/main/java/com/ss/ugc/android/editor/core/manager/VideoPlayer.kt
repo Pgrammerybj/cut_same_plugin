@@ -204,27 +204,6 @@ class VideoPlayer(val editorContext: IEditorContext) : IVideoPlayer {
     }
 
     override fun seekToPosition(position: Int, model: SeekMode, ifMoveTrack: Boolean) {
-//        val selectedTrackEndTime = editorContext.selectedNleTrack?.maxEnd?.div(1000)?.toInt()
-//        player?.also {
-//            if (selectedTrackEndTime != null) { //在选中轨道的情况下
-//                if (position > selectedTrackEndTime) {
-//                    it.seek(selectedTrackEndTime, model)
-//                } else {
-//                    it.seek(position, model)
-//                }
-//            } else {  //在没选中轨道的情况下
-//                var longestTrackEndTime = 0 //寻找拥有最长末尾时间的track。
-//                editorContext.nleModel.tracks.forEach {
-//                    if ((it.maxEnd / 1000).toInt() > longestTrackEndTime) longestTrackEndTime =
-//                        (it.maxEnd / 1000).toInt()
-//                }
-//                if (position > longestTrackEndTime) { //在删除了最长的track中最后的slot时，是有可能走这段逻辑的
-//                    it.seek(longestTrackEndTime, model)
-//                } else {
-//                    it.seek(position, model)
-//                }
-//            }
-//        }
         player?.seek(position,model)
         if (ifMoveTrack) {
             LiveDataBus.getInstance().with(Constants.KEY_MAIN, Int::class.java)
