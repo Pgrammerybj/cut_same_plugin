@@ -17,9 +17,7 @@ import com.ss.ugc.android.editor.core.api.video.EditMedia
 import com.ss.ugc.android.editor.core.utils.DLog
 import com.ss.ugc.android.editor.core.utils.LiveDataBus
 import com.ss.ugc.android.editor.core.vm.EditViewModelFactory
-import com.ss.ugc.android.editor.main.EditorHelper
 import java.util.*
-import kotlin.system.measureTimeMillis
 
 /**
  * @Author：yangbaojiang
@@ -32,19 +30,6 @@ class TemplateActivityDelegate(
     private val surfaceView: SurfaceView?
 ) : IPlayerActivityDelegate {
 
-    companion object {
-        const val TAG = "JackYang-EditorPageDelegate"
-        const val CHOSE_VIDEO = 0
-        const val SELECT_VIDEO_AUDIO = 1
-        const val DRAFT_RESTORE = 2
-        const val FILE_DRAFT = 100
-    }
-
-
-//    private var type: Int = 0 // 0:默认 1:从拍摄进来 2:草稿
-//    private var mediaType: Int = 0 //代表从拍摄进来的资源类型 图片1 视频3
-
-    private var hasLoaded = false
     private var nleModel: NLEModel? = null
 
     override var nleEditorContext: NLEEditorContext? = null
@@ -54,16 +39,9 @@ class TemplateActivityDelegate(
     private val mHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate() {
-//        type = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_FROM_TYPE, 0)
-//        mediaType = activity.intent.getIntExtra(EditorHelper.EXTRA_KEY_MEDIA_TYPE, 0)
-        nleEditorContext =
-            EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
+        nleEditorContext = EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
         nleEditorContext!!.nleEditor.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
-
-        val costMill = measureTimeMillis {
-            initNLEPlayer()//1️⃣
-        }
-        DLog.d(TAG, "EditorActivityDelegate initImport costTime:$costMill")
+        initNLEPlayer()//1️⃣
         registerEvent()
     }
 
@@ -171,7 +149,7 @@ class TemplateActivityDelegate(
      */
     private fun handleVEEditor() {
         if ((nleEditorContext != null) && (null != nleEditorContext?.videoPlayer) && (null != nleEditorContext?.videoPlayer?.player)) {
-            //此处很重要！~
+            //此处很重要！
             nleEditorContext?.videoPlayer?.player?.dataSource = nleEditorContext!!.nleModel
         }
     }

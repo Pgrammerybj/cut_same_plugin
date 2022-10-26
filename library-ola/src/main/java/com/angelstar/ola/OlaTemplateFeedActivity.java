@@ -64,7 +64,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private TemplateNetPageModel templateNetPageModel;
 
 
-    private ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
+    private final ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
         @Override
         public void onPlayViewActivate(Boolean activate) {
@@ -203,7 +203,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
             @Override
             public void onProgress(long totalByte, long currentByte, int progress) {
-//                Log.i(TAG, "onProgress: " + progress);
             }
 
             @Override
