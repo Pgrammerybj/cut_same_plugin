@@ -31,12 +31,14 @@
     <string name="picker_edit_title_picture_cut">Image cropping</string>
     <string name="picker_cut_common_sure">Sure</string>
 
-    <string name="cutsame_edit_abandon_edit">放弃编辑?</string>
-    <string name="cutsame_common_abandon">放弃</string>
-    <string name="cutsame_common_cancel">取消</string>
-    <string name="cutsame_common_finish">完成</string>
+    <string name="cutsame_edit_abandon_edit">Abandon edit?</string>
+    <string name="cutsame_common_abandon">abandon</string>
+    <string name="cutsame_common_cancel">Cancel</string>
+    <string name="cutsame_common_finish">Done</string>
 
-    <string name="picker_edit_title_video_cut">视频裁剪</string>
-    <string name="ip_photo_crop">裁剪</string>
+    <string name="picker_edit_title_video_cut">Video cut</string>
+    <string name="ip_photo_crop">Crop</string>
 
+    <!--compress-->
+    <string name="cutsame_compose_video_compose_loading">Loading </string>
 </resources>

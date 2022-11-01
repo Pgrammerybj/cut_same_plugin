@@ -317,13 +317,13 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
      */
     override fun showPreview(
         position: Int,
-        datas: List<MediaData>,
+        data: List<MediaData>,
         mediaType: String,
         viewType: String
     ) {
         showPreview = true
         galleryPreviewView = GalleryPreviewView(this, galleryPickerViewModel, this)
-        galleryPreviewView?.setData(datas, mediaType, viewType)
+        galleryPreviewView?.setData(data, mediaType, viewType)
         galleryPreviewView?.setCurrentItem(position)
         previewRootLayout.addView(galleryPreviewView)
         galleryPreviewView?.setControlListener(previewViewControlListener)
@@ -345,12 +345,14 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
             return
         }
 
-        val compressUIIntent =
-            PickerConstant.createCompressUIIntent(this, ArrayList(items), templateItem.template_url)
+        //ArrayList(items)
+        val catSameMediaItemList = CutSameMediaUtils.olaMediaItemListToCutSame(ArrayList(items))
+
+        val compressUIIntent = PickerConstant.createCompressUIIntent(this, catSameMediaItemList, templateItem.template_url)
         if (compressUIIntent == null) {
             Log.d(TAG, "compressUIIntent==null, finish")
             val intent = Intent().apply {
-                PickerConstant.setGalleryPickResultData(this, ArrayList(items))
+                PickerConstant.setGalleryPickResultData(this, catSameMediaItemList)
             }
             setResult(Activity.RESULT_OK, intent)
             finish()

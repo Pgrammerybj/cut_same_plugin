@@ -32,4 +32,8 @@
     <string name="picker_edit_title_video_cut">视频裁剪</string>
 
     <string name="picker_cut_common_sure">确定</string>
+
+
+    <!--compress-->
+    <string name="cutsame_compose_video_compose_loading">视频合成中</string>
 </resources>

@@ -10,10 +10,11 @@ import com.ola.chat.picker.entry.TemplateItem
 object PickerConstant {
 
     enum class TabType {
-        Album, Camera;
+        Album
     }
 
     private const val ARG_TEMPLATE_FEED = "com.ss.android.ugc.template_ui.feed.net"
+
     fun createTemplateUIIntent(context: Context): Intent? {
         val intent = Intent(ARG_TEMPLATE_FEED)
         return if (checkIntent(context, intent)) intent else null
@@ -104,23 +105,23 @@ object PickerConstant {
         return intent.getParcelableArrayListExtra(ARG_DATA_PICK_MEDIA_ITEMS)
     }
 
-    fun getGalleryPickResultData(intent: Intent): ArrayList<MediaItem>? {
-        return intent.getParcelableArrayListExtra<MediaItem>(ARG_DATA_PICK_RESULT_MEDIA_ITEMS)
+    fun getGalleryPickResultData(intent: Intent): ArrayList<com.ss.android.ugc.cut_ui.MediaItem>? {
+        return intent.getParcelableArrayListExtra(ARG_DATA_PICK_RESULT_MEDIA_ITEMS)
     }
 
-    fun setGalleryPickResultData(intent: Intent, mediaItems: ArrayList<MediaItem>) {
+    fun setGalleryPickResultData(intent: Intent, mediaItems: ArrayList<com.ss.android.ugc.cut_ui.MediaItem>) {
         intent.putParcelableArrayListExtra(ARG_DATA_PICK_RESULT_MEDIA_ITEMS, mediaItems)
     }
 
     /**
      * request compressing media
      */
-    private const val INTERFACE_COMPRESS = "com.ola.chat.picker.cut_ui.COMPRESS"
+    private const val INTERFACE_COMPRESS = "com.ola.chat.picker.COMPRESS"
     private const val ARG_DATA_COMPRESS_MEDIA_ITEMS = "arg_data_compress_media_items"
     private const val ARG_DATA_COMPRESS_RESULT_MEDIA_ITEMS = "arg_data_compress_result_media_items"
     fun createCompressUIIntent(
         context: Context,
-        mediaItems: ArrayList<MediaItem>,
+        mediaItems: ArrayList<com.ss.android.ugc.cut_ui.MediaItem>,
         templateUrl: String
     ): Intent? {
         val intent = Intent(INTERFACE_COMPRESS)
@@ -134,7 +135,12 @@ object PickerConstant {
         }
     }
 
-    fun getCompressResultData(intent: Intent): ArrayList<MediaItem>? {
+
+    fun setCompressResultData(intent: Intent, mediaItems: ArrayList<com.ss.android.ugc.cut_ui.MediaItem>) {
+        intent.putParcelableArrayListExtra(ARG_DATA_COMPRESS_RESULT_MEDIA_ITEMS, mediaItems)
+    }
+
+    fun getCompressResultData(intent: Intent): ArrayList<com.ss.android.ugc.cut_ui.MediaItem>? {
         return intent.getParcelableArrayListExtra(ARG_DATA_COMPRESS_RESULT_MEDIA_ITEMS)
     }
 
@@ -173,6 +179,10 @@ object PickerConstant {
             }
         }
         return size > 0
+    }
+
+    fun getCompressDataByIntent(intent: Intent): ArrayList<com.ss.android.ugc.cut_ui.MediaItem>? {
+        return intent.getParcelableArrayListExtra(ARG_DATA_COMPRESS_MEDIA_ITEMS)
     }
 
 }

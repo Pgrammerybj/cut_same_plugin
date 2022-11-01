@@ -1,4 +1,4 @@
-package com.cutsame.ui.utils;
+package com.ola.chat.picker.utils;
 
 import com.ola.chat.picker.entry.ItemCrop;
 import com.ola.chat.picker.entry.MediaItem;

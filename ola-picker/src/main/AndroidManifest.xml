@@ -28,5 +28,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- 剪同款视频/图片压缩页 -->
+        <activity
+            android:name=".process.OlaCutCompressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Picker.Transparent">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.ola.chat.picker.COMPRESS" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

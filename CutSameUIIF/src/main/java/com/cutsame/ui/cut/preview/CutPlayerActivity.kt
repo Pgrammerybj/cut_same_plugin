@@ -23,7 +23,7 @@ import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.CutSameUiIF.ARG_TEMPLATE_ITEM
 import com.cutsame.ui.R
 import com.cutsame.ui.exten.FastMain
-import com.cutsame.ui.utils.CutSameMediaUtils
+import com.ola.chat.picker.utils.CutSameMediaUtils
 import com.cutsame.ui.utils.CutSameTemplateUtils
 import com.cutsame.ui.utils.ScreenUtil.isScreenOn
 import com.google.gson.Gson
@@ -325,7 +325,8 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         textItemList: ArrayList<TextItem>?,
         videoSurfaceView: SurfaceView
     ) {
-        val templateUrl = "http://xs-image.starifymusic.com/upload/volcengine/templates/7002460115950059556/laozhaopianxiufu_7002460115950059556/template.zip"
+        val templateUrl =
+            "http://xs-image.starifymusic.com/upload/volcengine/templates/7002460115950059556/laozhaopianxiufu_7002460115950059556/template.zip"
         cutSamePlayer = CutSameSolution.createCutSamePlayer(videoSurfaceView, templateUrl)
         cutSamePlayer?.preparePlay(mediaItemList, textItemList, object : PlayerStateListener {
             override fun onFirstFrameRendered() {
@@ -371,7 +372,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             }
 
             override fun onPlayError(what: Int, extra: String) {
-                Log.e(TAG, "onPlayError: "+extra)
+                Log.e(TAG, "onPlayError: " + extra)
             }
 
             override fun onPlayProgress(process: Long) {
@@ -428,7 +429,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                     val mediaItemListFromPrepare = mutableMediaItemList
 
                     if (items != null) {
-                        mergeMediaItemList(mediaItemListFromPrepare, CutSameMediaUtils.olaMediaItemListToCutSame(items))
+                        mergeMediaItemList(mediaItemListFromPrepare, items)
                         if (originMediaItemList.isNullOrEmpty()) {
                             originMediaItemList = ArrayList(mediaItemListFromPrepare)
                         }
