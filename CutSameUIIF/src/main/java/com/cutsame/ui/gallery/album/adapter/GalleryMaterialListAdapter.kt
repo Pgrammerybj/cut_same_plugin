@@ -269,8 +269,7 @@ class GalleryMaterialListAdapter(
     inner class MaterialViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(getItem(parent))
 
     private fun getItem(parent: ViewGroup): View {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.activity_ola_picker_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activity_ola_picker_item, parent, false)
         // 动态设置图片大小 保证宽高相等
         //条目中间分割的间距,一行3个所以2个间距
         val itemDecorationSize = ScreenUtil.dp2px(8F) * 2

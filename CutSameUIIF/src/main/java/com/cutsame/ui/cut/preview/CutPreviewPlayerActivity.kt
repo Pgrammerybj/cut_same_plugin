@@ -259,7 +259,6 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
             if (!moveProgress) {
                 floatSliderView.currPosition = progress.toFloat()
             }
-
             // TODO: 2022/10/14 移动到视频组件内部
             playerMaterialVideoView.onPlayerProgress(progress)
         }
@@ -432,22 +431,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         })
 
         val mutableTextSegments = cutSamePlayer?.getTextItems()?.filter { it.mutable }
-//        if (mutableTextSegments.isNullOrEmpty()) {
-//            editTextIconView.setImageResource(R.drawable.ic_edit_text_disable)
-//        } else {
-//            editTextIconView.setImageResource(R.drawable.ic_edit_text)
-//        }
         playerTextEditController.updateDataList(mutableTextSegments)
-
-//        globalEditLayout.setGlobalDebounceOnClickListener {
-//            if (templatePlayerErrorCode == TemplateError.SUCCESS) {
-//                if (cutSamePlayer?.getTextItems()?.filter { it.mutable }.isNullOrEmpty()) {
-//                    showTipToast(resources.getString(R.string.cutsame_edit_tip_text_no_editable))
-//                } else {
-//                    playerTextEditController.showTextEditView()
-//                }
-//            }
-//        }
     }
 
     /**

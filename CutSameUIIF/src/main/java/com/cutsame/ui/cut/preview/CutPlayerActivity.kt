@@ -164,8 +164,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             } else {
                 launchPicker(ArrayList(needPickMediaItems), videoCachePath!!)
             }
-
-
         } else {
             initTemplateWhileDataReady(
                 templateItem.templateUrl,
@@ -325,8 +323,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         textItemList: ArrayList<TextItem>?,
         videoSurfaceView: SurfaceView
     ) {
-        val templateUrl =
-            "http://xs-image.starifymusic.com/upload/volcengine/templates/7002460115950059556/laozhaopianxiufu_7002460115950059556/template.zip"
         cutSamePlayer = CutSameSolution.createCutSamePlayer(videoSurfaceView, templateUrl)
         cutSamePlayer?.preparePlay(mediaItemList, textItemList, object : PlayerStateListener {
             override fun onFirstFrameRendered() {
@@ -433,7 +429,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                         if (originMediaItemList.isNullOrEmpty()) {
                             originMediaItemList = ArrayList(mediaItemListFromPrepare)
                         }
-
                         checkDataOkOrNot()
                     } else {
                         LogUtil.d(TAG, "REQUEST_CODE_PICKER items == null, finish")
