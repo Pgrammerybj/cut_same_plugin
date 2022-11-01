@@ -34,7 +34,8 @@ public class BaseModuleInit implements IModuleInit {
     }
 
     private static final String LICENSE_PATH = "resource/LicenseBag.bundle";
-    private static final String LICENSE_NAME = "labcv_test_20220608_20221231_com.bytedance.solution.ck_4.0.2.5.licbag";
+//    private static final String LICENSE_NAME = "labcv_test_20220608_20221231_com.bytedance.solution.ck_4.0.2.5.licbag";
+    private static final String LICENSE_NAME = "whrw_20221019_20231031_com.starify.ola.android_4.2.6.5.licbag";
 
     private void initVESDK(Application application) {
         VESDK.setAssetManagerEnable(true);

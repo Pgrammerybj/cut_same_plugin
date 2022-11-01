@@ -21,11 +21,11 @@ import com.ss.ugc.android.editor.resource.BuildInResourceProvider
 import java.io.File
 
 object EditorManager {
-    private val TAG = "EditorManager"
+    private val TAG = "Ola-EditorManager"
     private var isCopying: Boolean = false
 
     fun initEditorRes(
-        context: Context, action:()->Unit
+        context: Context, action: () -> Unit
     ) {
 
         // 判断是不是有copy 资源
@@ -33,10 +33,9 @@ object EditorManager {
             Toaster.show(context.getString(R.string.cutsame_tips_resource_copying_to_sdcard))
             return
         }
-        val resReady = context.getSharedPreferences(
-            EditorSDK.EDITOR_SP,
-            AppCompatActivity.MODE_PRIVATE
-        ).getBoolean("copy", false)
+        val resReady =
+            context.getSharedPreferences(EditorSDK.EDITOR_SP, AppCompatActivity.MODE_PRIVATE)
+                .getBoolean("copy", false)
         val isShowDialog = true
         if (!resReady) {
             val dialog = WaitingDialog(context)
@@ -55,6 +54,7 @@ object EditorManager {
                         dialog.show()
                         dialog.setProgress(context.getString(R.string.cutsame_tips_resource_copying_to_sdcard))
                     }
+                    Log.w(TAG, "onStartTask: 正在复制资源到 SD 卡，请稍后，复制完成后会自动跳转到编辑页面")
 
                     startTime = System.currentTimeMillis()
 
@@ -66,6 +66,8 @@ object EditorManager {
                     if (isShowDialog) {
                         dialog.dismiss()
                     }
+                    Log.w(TAG, "onStartTask: 复制资源到 SD 卡，结束，准备回调")
+
                     val endTime = System.currentTimeMillis()
                     DLog.d("copy cost ", "cost = ${endTime - startTime}")
 
@@ -73,8 +75,7 @@ object EditorManager {
                         context.getSharedPreferences(
                             EditorSDK.EDITOR_SP,
                             AppCompatActivity.MODE_PRIVATE
-                        )
-                            .edit().putBoolean("copy", true).apply()
+                        ).edit().putBoolean("copy", true).apply()
                         action.invoke()
                     }
                 }
@@ -86,43 +87,49 @@ object EditorManager {
 
 
     fun initEditor(context: Context) {
-        val compilerAction: EditorConfig.IVideoCompilerConfig = object : EditorConfig.IVideoCompilerConfig {
-            override fun onVideoCompileIntercept(duration: Long, size: Long, activity: Activity): Boolean {
-                Log.d(TAG, "video compile before \$size")
-                return false
-            }
-
-            override fun onVideoCompileDone(path: String, activity: Activity) {
-                val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-                intent.data = Uri.fromFile(File(path))
-                context.sendBroadcast(intent)
-                //调用系统播放器播放视频
-                previewExportVideo(path, context)
-                // 点击完成后保存到本地，同时存入草稿箱，提示toast文案“已保存到本地和草稿箱”
-                Log.d(TAG, "video compile done , just finish \$path")
-                if (activity is EditorActivity) {
-//                    activity.saveDraft()
-                    ToastUtils.show(context.getString(R.string.ck_has_saved_local_and_draft))
+        val compilerAction: EditorConfig.IVideoCompilerConfig =
+            object : EditorConfig.IVideoCompilerConfig {
+                override fun onVideoCompileIntercept(
+                    duration: Long,
+                    size: Long,
+                    activity: Activity
+                ): Boolean {
+                    Log.d(TAG, "video compile before \$size")
+                    return false
                 }
-                activity.finish()
+
+                override fun onVideoCompileDone(path: String, activity: Activity) {
+                    val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                    intent.data = Uri.fromFile(File(path))
+                    context.sendBroadcast(intent)
+                    //调用系统播放器播放视频
+                    previewExportVideo(path, context)
+                    // 点击完成后保存到本地，同时存入草稿箱，提示toast文案“已保存到本地和草稿箱”
+                    Log.d(TAG, "video compile done , just finish \$path")
+                    if (activity is EditorActivity) {
+//                    activity.saveDraft()
+                        ToastUtils.show(context.getString(R.string.ck_has_saved_local_and_draft))
+                    }
+                    activity.finish()
+                }
+
+                override fun onCloseEdit(activity: Activity): Boolean {
+                    Log.d(TAG, "now exit edit page")
+                    return false
+                }
+
+                override fun onCustomCloseMethodIntercept(activity: Activity): Boolean {
+                    Log.d(TAG, "custom close method")
+                    // 业务方的代码逻辑
+                    //
+                    return false
+                }
+
+                override fun onEditResume(activity: Activity) {}
             }
 
-            override fun onCloseEdit(activity: Activity): Boolean {
-                Log.d(TAG, "now exit edit page")
-                return false
-            }
-
-            override fun onCustomCloseMethodIntercept(activity: Activity): Boolean {
-                Log.d(TAG, "custom close method")
-                // 业务方的代码逻辑
-                //
-                return false
-            }
-
-            override fun onEditResume(activity: Activity) {}
-        }
-
-        val waterPath = context.getExternalFilesDir("editor")!!.absolutePath.toString() + File.separator + "EditorResource" + File.separator + "watermark" + File.separator + "ve-watermark.png"
+        val waterPath =
+            context.getExternalFilesDir("editor")!!.absolutePath.toString() + File.separator + "EditorResource" + File.separator + "watermark" + File.separator + "ve-watermark.png"
         val builder: EditorConfig = EditorConfig.Builder()
             .setLocalStickerEnable(true)
             .enableTemplateFunction(false)
@@ -142,12 +149,11 @@ object EditorManager {
 
     fun previewExportVideo(exportFilePath: String?, context: Context) {
         val file = File(exportFilePath)
-        var uri: Uri? = null
-        uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val uri_preview = String.format(EditorActivity.URI_PREVIEW, context.packageName)
+        val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val uriPreview = String.format(EditorActivity.URI_PREVIEW, context.packageName)
             FileProvider.getUriForFile(
                 context,
-                uri_preview,
+                uriPreview,
                 file
             )
         } else {

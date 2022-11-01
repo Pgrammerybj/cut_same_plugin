@@ -1,6 +1,7 @@
-package com.ola.chat.picker.entry
+package com.angelstar.ola.entity
 
 import android.os.Parcelable
+import com.cutsame.solution.template.model.TemplateItem
 import kotlinx.android.parcel.Parcelize
 
 /**

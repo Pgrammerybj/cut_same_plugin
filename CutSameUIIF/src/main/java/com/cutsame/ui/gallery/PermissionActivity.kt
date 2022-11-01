@@ -37,7 +37,7 @@ abstract class PermissionActivity : AppCompatActivity() {
     }
 
     fun checkPermission(permissions: Array<String>) {
-        LogUtil.e(TAG, "checkPermission")
+        LogUtil.w(TAG, "checkPermission")
         permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }.apply {

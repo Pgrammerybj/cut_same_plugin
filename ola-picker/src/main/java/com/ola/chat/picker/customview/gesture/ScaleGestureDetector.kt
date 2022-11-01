@@ -492,7 +492,6 @@ class ScaleGestureDetector(private val mListener: OnScaleGestureListener) {
     }
 
     companion object {
-        private val TAG = "ScaleGestureDetector"
 
         /**
          * This value is the threshold ratio between our previous combined pressure

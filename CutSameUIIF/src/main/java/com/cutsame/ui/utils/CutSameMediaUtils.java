@@ -39,6 +39,35 @@ public class CutSameMediaUtils {
         );
     }
 
+    private static com.ss.android.ugc.cut_ui.MediaItem olaMediaItemToCutSame(MediaItem mediaItem) {
+
+        return new com.ss.android.ugc.cut_ui.MediaItem(
+                mediaItem.getMaterialId(),
+                mediaItem.getTargetStartTime(),
+                mediaItem.isMutable(),
+                mediaItem.getAlignMode(),
+                mediaItem.isSubVideo(),
+                mediaItem.isReverse(),
+                mediaItem.getCartoonType(),
+                mediaItem.getGamePlayAlgorithm(),
+                mediaItem.getWidth(),
+                mediaItem.getHeight(),
+                mediaItem.getDuration(),
+                mediaItem.getOriDuration(),
+                mediaItem.getSource(),
+                mediaItem.getSourceStartTime(),
+                mediaItem.getCropScale(),
+                new com.ss.android.ugc.cut_ui.ItemCrop(mediaItem.getCrop().getLowerRightX(),
+                        mediaItem.getCrop().getLowerRightY(),
+                        mediaItem.getCrop().getUpperLeftX(),
+                        mediaItem.getCrop().getUpperLeftY()),
+                mediaItem.getType(),
+                mediaItem.getMediaSrcPath(),
+                mediaItem.getTargetEndTime(),
+                mediaItem.getVolume()
+        );
+    }
+
     public static ArrayList<MediaItem> cutSameToOlaMediaItemList(ArrayList<com.ss.android.ugc.cut_ui.MediaItem> mediaItemList) {
 
         ArrayList<MediaItem> olaMediaItemList = new ArrayList<>();
@@ -46,5 +75,13 @@ public class CutSameMediaUtils {
             olaMediaItemList.add(cutSameToOlaMediaItem(mediaItem));
         }
         return olaMediaItemList;
+    }
+
+    public static ArrayList<com.ss.android.ugc.cut_ui.MediaItem> olaMediaItemListToCutSame(ArrayList<MediaItem> mediaItemList) {
+        ArrayList<com.ss.android.ugc.cut_ui.MediaItem> cutSameMediaItemList = new ArrayList<>();
+        for (MediaItem mediaItem : mediaItemList) {
+            cutSameMediaItemList.add(olaMediaItemToCutSame(mediaItem));
+        }
+        return cutSameMediaItemList;
     }
 }

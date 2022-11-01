@@ -104,6 +104,10 @@ object PickerConstant {
         return intent.getParcelableArrayListExtra(ARG_DATA_PICK_MEDIA_ITEMS)
     }
 
+    fun getGalleryPickResultData(intent: Intent): ArrayList<MediaItem>? {
+        return intent.getParcelableArrayListExtra<MediaItem>(ARG_DATA_PICK_RESULT_MEDIA_ITEMS)
+    }
+
     fun setGalleryPickResultData(intent: Intent, mediaItems: ArrayList<MediaItem>) {
         intent.putParcelableArrayListExtra(ARG_DATA_PICK_RESULT_MEDIA_ITEMS, mediaItems)
     }

@@ -2,6 +2,7 @@ package com.angelstar.ola.player
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.SurfaceView
 import androidx.fragment.app.FragmentActivity
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener
@@ -39,7 +40,8 @@ class TemplateActivityDelegate(
     private val mHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate() {
-        nleEditorContext = EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
+        nleEditorContext =
+            EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
         nleEditorContext!!.nleEditor.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
         initNLEPlayer()//1️⃣
         registerEvent()
