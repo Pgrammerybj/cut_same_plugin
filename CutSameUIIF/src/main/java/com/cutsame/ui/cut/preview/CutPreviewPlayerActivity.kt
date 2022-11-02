@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.layout_material_edit.*
 import java.nio.ByteBuffer
 import java.util.*
 
-private const val TAG = "cut.PreviewPlayActivity"
+private const val TAG = "OlaCut.PreviewPlayActivity"
 
 @ExperimentalStdlibApi
 class CutPreviewPlayerActivity : CutPlayerActivity() {

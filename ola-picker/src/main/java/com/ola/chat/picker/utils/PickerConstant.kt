@@ -24,7 +24,7 @@ object PickerConstant {
 
     // 模板的预览视频
     const val ARG_CUT_TEMPLATE_VIDEO_PATH = "arg_cut_template_video_path"
-    const val ARG_TEMPLATE_ITEM = "arg_template_item"
+    const val ARG_TEMPLATE_ITEM = "arg_ola_template_item"
     //图片选择器配置参数
     const val ARG_DATA_PICK_CONFIG = "arg_data_pick_config" //新增
 

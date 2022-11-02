@@ -66,10 +66,8 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MTUtils.makeStatusBarTransparent(this)
-        intent.getParcelableExtra<TemplateItem>(PickerConstant.ARG_TEMPLATE_ITEM)
-            ?.also { templateItem = it }
-        intent.getParcelableExtra<ImagePickConfig>(PickerConstant.ARG_DATA_PICK_CONFIG)
-            ?.also { imagePickConfig = it }
+        intent.getParcelableExtra<TemplateItem>(PickerConstant.ARG_TEMPLATE_ITEM)?.also { templateItem = it }
+        intent.getParcelableExtra<ImagePickConfig>(PickerConstant.ARG_DATA_PICK_CONFIG)?.also { imagePickConfig = it }
         //只有剪同款模式【ImagePickConfig.PICKER_CUT_SAME】才需要检验data
         if (imagePickConfig != null) {
             isCutSameScene = imagePickConfig?.sceneType == ImagePickConfig.PICKER_CUT_SAME

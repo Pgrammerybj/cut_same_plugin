@@ -276,7 +276,11 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         }
 
         val galleryUIIntent =
-            CutSameUiIF.createGalleryUIIntent(this, items, templateItem)?.putExtras(intent)
+            PickerConstant.createGalleryUIIntent(
+                this,
+                CutSameMediaUtils.cutSameToOlaMediaItemList(items),
+                CutSameTemplateUtils.parseTemplateItem(templateItem)
+            )?.putExtras(intent)
         if (galleryUIIntent == null) {
             Toast.makeText(
                 this,
@@ -443,7 +447,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             }
 
             REQUEST_CODE_CLIP -> {
-                //替换素材返回到该页面
+                //裁剪素材返回到该页面
                 hasLaunchClip = false
                 var processItem: MediaItem? = null
                 LogUtil.d(TAG, "REQUEST_CODE_CLIP resultCode $resultCode")
@@ -482,7 +486,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 onClipFinish(processItem)
             }
 
-            REQUEST_CODE_REPLACE -> {
+            REQUEST_CODE_REPLACE -> {//替换素材返回到该页面
                 LogUtil.d(TAG, "REQUEST_CODE_REPLACE resultCode $resultCode")
                 if (resultCode == RESULT_OK && data != null) {
                     val items = CutSameUiIF.getGalleryPickResultData(data)
@@ -527,7 +531,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 Toast.makeText(this, "裁剪成功:$imagePath", Toast.LENGTH_LONG).show()
                 this.finish()
             }
-
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }

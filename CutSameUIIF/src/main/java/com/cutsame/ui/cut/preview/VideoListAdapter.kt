@@ -14,7 +14,7 @@ import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.ss.android.ugc.cut_ui.MediaItem
 import kotlinx.android.synthetic.main.fragment_cut_video_list_item.view.*
 
-private const val TAG = "cutui.VideoList"
+private const val TAG = "OlaCut.VideoList"
 
 class VideoListAdapter(
     items: List<MediaItem>
