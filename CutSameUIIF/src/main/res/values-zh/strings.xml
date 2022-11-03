@@ -11,7 +11,7 @@
     <string name="cutsame_common_title_image">图片</string>
     <string name="cutsame_albumn_all_photo">所有照片</string>
     <string name="cutsame_common_title_all">所有内容</string>
-    <string name="cutsame_common_sure">确定</string>
+    <string name="cutsame_common_sure">完成</string>
     <string name="cutsame_common_media_duration_s">%.1fs</string>
     <!--    <string name="media_time">%.1f 秒</string>  --> <!-- 无用词条 -->
     <string name="cutsame_common_open_permission">请开启此应用相机、录音、存储权限</string>

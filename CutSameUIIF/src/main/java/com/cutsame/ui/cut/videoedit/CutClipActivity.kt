@@ -89,7 +89,7 @@ class CutClipActivity : AppCompatActivity(), CoroutineScope {
         initData(mediaItem)
         curMediaItem?.let {
             playIv.visibility = View.GONE
-            initPlayer(it, videoInfo?.duration?.toLong() ?: 0, canvasSize)
+            initPlayer(it, canvasSize)
             initBtnClickListener()
             initViews(mediaItem)
             clipTimeTv.text = resources.getString(
@@ -139,7 +139,7 @@ class CutClipActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun initPlayer(mediaItem: MediaItem, videoDuration: Long, canvasSize: Point) {
+    private fun initPlayer(mediaItem: MediaItem, canvasSize: Point) {
         isViewPrepared = false
         mediaPlayer = CutSameSolution.createMediaPlayer(this@CutClipActivity, clipSurface)
         mediaPlayer?.preparePlayBySingleMedia(mediaItem, canvasSize, object : PlayerStateListener {
@@ -337,7 +337,7 @@ class CutClipActivity : AppCompatActivity(), CoroutineScope {
         )
     }
 
-    private fun seekAndPlay(position: Int, isAutoPlay: Boolean = true) {
+    private fun seekAndPlay(position: Int, isAutoPlay: Boolean = false) {
         mediaPlayer?.seekTo(position, isAutoPlay)
         if (isAutoPlay) playIv.visibility = View.GONE
     }

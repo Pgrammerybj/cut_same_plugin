@@ -27,14 +27,14 @@ class CenterMaskView : View {
     }
 
     companion object {
-        private const val DEFAULT_LINE_COLOR = 0xFF00FFFF.toInt()
+        private const val DEFAULT_LINE_COLOR = 0x8000FFFF.toInt()
         private const val DEFAULT_LINE_WIDTH = 1f // dp 
-        private const val DEFAULT_MASK_COLOR = 0x45000000 // dp 
+        private const val DEFAULT_MASK_COLOR = 0x4500ff00 // dp 
 
-        private const val DEFAULT_ANGLE_WIDTH = 15f
+        private const val DEFAULT_ANGLE_WIDTH = 10f
         private const val DEFAULT_ANGLE_LENGTH = 130f
 
-        private const val DEFAULT_SUPPLEMENTARY_WIDTH = 2f //默认辅助线宽度
+        private const val DEFAULT_SUPPLEMENTARY_WIDTH = 1f //默认辅助线宽度
     }
 
     private var maskPathAll = Path()
