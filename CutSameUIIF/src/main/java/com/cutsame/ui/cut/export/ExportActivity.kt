@@ -3,8 +3,9 @@ package com.cutsame.ui.cut.export
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.bytedance.ies.cutsame.veadapter.CompileListener
 import com.cutsame.solution.CutSameSolution
 import com.cutsame.solution.compile.CompileParam
@@ -28,7 +29,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class ExportActivity : AppCompatActivity(), CoroutineScope {
-    private val TAG = "UI_ExportActivity"
+    private val TAG = "OLA_ExportActivity"
     override val coroutineContext: CoroutineContext = FastMain + Job()
     private var cutSameSource: CutSameSource? = null
     private var cutSamePlayer: CutSamePlayer? = null
@@ -37,8 +38,7 @@ class ExportActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        val templateUrl =
-            intent.getStringExtra(CutSameUiIF.ARG_CUT_TEMPLATE_URL)
+        val templateUrl = intent.getStringExtra(CutSameUiIF.ARG_CUT_TEMPLATE_URL)
         LogUtil.d(TAG, "onCreate, templateUrl=$templateUrl")
         if (templateUrl.isNullOrEmpty()) {
             LogUtil.e(TAG, "templateUrl isEmpty, finish")
@@ -71,29 +71,14 @@ class ExportActivity : AppCompatActivity(), CoroutineScope {
         if (videoWidth >= videoHeight) {
             previewWidth = SizeUtil.dp2px(250f)
             previewHeight = videoHeight * previewWidth / videoWidth
-            exportPreview.y = SizeUtil.dp2px(70f) + (previewWidth - previewHeight) / 2f
         } else {
-            previewHeight = SizeUtil.dp2px(250f)
-            previewWidth = videoWidth * previewHeight / videoHeight
-            exportPreview.y = SizeUtil.dp2px(70f).toFloat()
+            previewWidth = SizeUtil.dp2px(260f)
+            previewHeight = previewWidth * 16 / 9
         }
         val imageViewLayoutParams = exportPreview.layoutParams as ConstraintLayout.LayoutParams
         imageViewLayoutParams.width = previewWidth
         imageViewLayoutParams.height = previewHeight
         exportPreview.layoutParams = imageViewLayoutParams
-
-        exportProgressBar.x = exportPreview.x
-        exportProgressBar.y = exportPreview.y - SizeUtil.dp2px(8f)
-        val progressBarLayoutParams =
-            exportProgressBar.layoutParams as ConstraintLayout.LayoutParams
-        progressBarLayoutParams.width = SizeUtil.dp2px(1f)
-        progressBarLayoutParams.height = previewHeight + SizeUtil.dp2px(16f)
-        exportProgressBar.layoutParams = progressBarLayoutParams
-        exportProgressBar.show()
-
-        exportMask.x = exportPreview.x
-        exportMask.y = exportPreview.y
-        exportMask.show()
 
         cutSamePlayer?.getSpecificImage(
             100,
@@ -102,21 +87,15 @@ class ExportActivity : AppCompatActivity(), CoroutineScope {
         ) { bitmap ->
             runOnUiThread {
                 exportPreview.setImageBitmap(bitmap)
+                exportPreview.showProgress(true)
+                exportPreview.isRoundedCorners = true
+                exportPreview.width = 8
                 export()
             }
         }
     }
 
     private fun initListener() {
-        backView.setGlobalDebounceOnClickListener {
-            finish()
-        }
-
-        closeView.setGlobalDebounceOnClickListener {
-            cutSamePlayer?.cancelCompile()
-            finish()
-        }
-
         exportFinishView.setGlobalDebounceOnClickListener {
             setResult(Activity.RESULT_OK)
             finish()
@@ -144,93 +123,72 @@ class ExportActivity : AppCompatActivity(), CoroutineScope {
                 outputVideoPath =
                     FileUtil.getExternalTmpSaveName(getSaveFileName(), this@ExportActivity)
             } while (File(outputVideoPath).exists().also { available = !it } && tryCount > 0)
-            LogUtil.d(TAG, "outputVideoPath ${outputVideoPath}")
+            LogUtil.d(TAG, "outputVideoPath $outputVideoPath")
             if (available) {
                 withContext(Dispatchers.IO) {
                     val param = createCompileParam()
-                    cutSamePlayer
-                        ?.compile(outputVideoPath, param, object : CompileListener {
-                            override fun onCompileDone() {
-                                LogUtil.d(TAG, "onCompileDone")
-                                val srcFile = File(outputVideoPath)
-                                var tarFilePath = ""
-                                var isMoveSuccess =
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                        LogUtil.d(TAG, "is android 11")
-                                        tarFilePath =
-                                            "${MediaUtil.getSDPath()}/${MediaUtil.getMediaDirForAndroid11(this@ExportActivity)}/${srcFile.name}"
-                                        var isRenameSuccess = false
-                                        try {
-                                            isRenameSuccess = srcFile.renameTo(File(tarFilePath))
-                                        } catch (t: Throwable) {
-                                            LogUtil.e(TAG, "doExport file rename fail! source path: ${srcFile.absolutePath} target path: $tarFilePath")
-                                        }
-                                        val ret = if (!isRenameSuccess) {
-                                            srcFile.copyToMediaDir(
-                                                this@ExportActivity,
-                                                false,
-                                                MediaUtil.getMediaDirForAndroid11(this@ExportActivity)
-                                            )
-                                        } else true
-                                        if (ret) {
-                                            srcFile.delete()
-                                        }
-                                        ret
-                                    } else {
-                                        val tarFilePath =
-                                            MediaUtil.getNewSavePath(
-                                                srcFile.name,
-                                                this@ExportActivity
-                                            )
-                                        srcFile.moveTo(File(tarFilePath), false)
+                    cutSamePlayer?.compile(outputVideoPath, param, object : CompileListener {
+                        override fun onCompileDone() {
+                            //进度更新
+                            exportPreview.progress = 100.0
+                            LogUtil.d(TAG, "onCompileDone")
+                            val srcFile = File(outputVideoPath)
+                            var tarFilePath = ""
+                            val isMoveSuccess =
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                    LogUtil.d(TAG, "is android 11")
+                                    tarFilePath = "${MediaUtil.getSDPath()}/${
+                                        MediaUtil.getMediaDirForAndroid11(this@ExportActivity)
+                                    }/${srcFile.name}"
+                                    var isRenameSuccess = false
+                                    try {
+                                        isRenameSuccess = srcFile.renameTo(File(tarFilePath))
+                                    } catch (t: Throwable) {
+                                        LogUtil.e(
+                                            TAG,
+                                            "doExport file rename fail! source path: ${srcFile.absolutePath} target path: $tarFilePath"
+                                        )
                                     }
-
-                                LogUtil.d(
-                                    TAG,
-                                    "onCompileDone MoveSuccess?${tarFilePath} $isMoveSuccess"
-                                )
-                                MediaUtil.notifyAlbum(this@ExportActivity, tarFilePath)
-                                showFinishToast()
-                                onExportFinish()
-                            }
-
-                            override fun onCompileProgress(progress: Float) {
-                                runOnUiThread {
-                                    exportProgressBar.post {
-                                        exportProgressBar.x =
-                                            exportPreview.x + exportPreview.width * progress
-                                        exportProgressBar.y = exportPreview.y - SizeUtil.dp2px(8f)
-                                        val progressBarLayoutParams =
-                                            exportProgressBar.layoutParams as ConstraintLayout.LayoutParams
-                                        progressBarLayoutParams.width = SizeUtil.dp2px(1f)
-                                        progressBarLayoutParams.height =
-                                            exportPreview.height + SizeUtil.dp2px(16f)
-                                        exportProgressBar.layoutParams = progressBarLayoutParams
-                                        exportProgressBar.show()
-
-                                        exportMask.x =
-                                            exportPreview.x + exportPreview.width * progress
-                                        exportMask.y = exportPreview.y
-                                        exportMask.layoutParams =
-                                            (exportMask.layoutParams as ConstraintLayout.LayoutParams).apply {
-                                                width =
-                                                    (exportPreview.width * (1 - progress)).toInt() + 1
-                                                height = exportPreview.height
-                                            }
-                                        exportMask.show()
+                                    val ret = if (!isRenameSuccess) {
+                                        srcFile.copyToMediaDir(
+                                            this@ExportActivity,
+                                            false,
+                                            MediaUtil.getMediaDirForAndroid11(this@ExportActivity)
+                                        )
+                                    } else true
+                                    if (ret) {
+                                        srcFile.delete()
                                     }
+                                    ret
+                                } else {
+                                    val tarFilePath =
+                                        MediaUtil.getNewSavePath(
+                                            srcFile.name,
+                                            this@ExportActivity
+                                        )
+                                    srcFile.moveTo(File(tarFilePath), false)
                                 }
-                            }
 
-                            override fun onCompileError(
-                                error: Int,
-                                ext: Int,
-                                f: Float,
-                                msg: String?
-                            ) {
-                                LogUtil.d(TAG, "onCompileError msg=$msg")
+                            LogUtil.d(
+                                TAG,
+                                "onCompileDone MoveSuccess?${tarFilePath} $isMoveSuccess"
+                            )
+                            MediaUtil.notifyAlbum(this@ExportActivity, tarFilePath)
+                            showFinishToast()
+                            onExportFinish()
+                        }
+
+                        override fun onCompileProgress(progress: Float) {
+                            Log.i(TAG, "onCompileProgress: $progress")
+                            runOnUiThread {
+                                exportPreview.progress = (progress * 100).toDouble()
                             }
-                        })
+                        }
+
+                        override fun onCompileError(error: Int, ext: Int, f: Float, msg: String?) {
+                            LogUtil.d(TAG, "onCompileError msg=$msg")
+                        }
+                    })
 
                 }
             } else {
@@ -240,19 +198,11 @@ class ExportActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun getSaveFileName() = "${
-        SimpleDateFormat(
-            "yyyyMMddHHmmss",
-            Locale.getDefault()
-        ).format(Date())
+        SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(Date())
     }.mp4"
 
     fun onExportFinish() {
         runOnUiThread {
-            exportPreview.clearColorFilter()
-            exportMask.hide()
-            exportProgressBar.hide()
-            closeView.hide()
-            backView.show()
             exportTipView.hide()
             exportFinishView.show()
             exportFinish = true
