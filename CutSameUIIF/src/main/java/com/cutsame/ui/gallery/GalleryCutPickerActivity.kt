@@ -95,15 +95,11 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         setContentView(R.layout.activity_picker_layout)
         val mediaItems = CutSameUiIF.getGalleryPickDataByIntent(intent)
         val videoCachePath = CutSameUiIF.getTemplateVideoCacheByIntent(intent)
-        LogUtil.d(TAG, "onPermissionGranted mediaItems=${mediaItems?.size}")
-        val prePickItems =
-            intent.getParcelableArrayListExtra<MediaItem>(CutSameUiIF.ARG_DATA_PRE_PICK_RESULT_MEDIA_ITEMS)
-        LogUtil.d(TAG, "onPermissionGranted prePickItems=${prePickItems?.size}")
+        val prePickItems = intent.getParcelableArrayListExtra<MediaItem>(CutSameUiIF.ARG_DATA_PRE_PICK_RESULT_MEDIA_ITEMS)
         galleryPickerViewModel = ViewModelProvider(
             this@GalleryCutPickerActivity,
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    @Suppress("UNCHECKED_CAST")
                     return GalleryPickerViewModel(application) as T
                 }
             }
@@ -123,7 +119,6 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
 
     override fun onPermissionDenied() {
         super.onPermissionDenied()
-        LogUtil.e(TAG, "onPermissionDenied, finish")
         Toast.makeText(
             this,
             R.string.cutsame_common_open_permission, Toast.LENGTH_LONG

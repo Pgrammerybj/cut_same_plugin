@@ -54,7 +54,7 @@ class PickingListAdapter(
             parent,
             false
         )
-        return PickingItemHolder(parent, view)
+        return PickingItemHolder(view)
     }
 
     override fun getItemCount(): Int = list.size
@@ -77,11 +77,9 @@ class PickingListAdapter(
         }
 
         holder.itemView.durationTv.text =
-            String.format(
-                Locale.getDefault(), holder.itemView.context.resources.getString(
+            String.format(Locale.getDefault(), holder.itemView.context.resources.getString(
                     R.string.cutsame_common_media_duration_s
-                ), data.duration.toFloat() / 1000
-            )
+                ), data.duration.toFloat() / 1000)
 
         holder.itemView.setGlobalDebounceOnClickListener {
             itemClickListener?.onItemClick(position, data.getUri() == Uri.EMPTY)
@@ -168,8 +166,7 @@ class PickingListAdapter(
         return list
     }
 
-    inner class PickingItemHolder(parent: ViewGroup, itemView: View) :
-        RecyclerView.ViewHolder(itemView)
+    inner class PickingItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
 
 interface DeleteClickListener {

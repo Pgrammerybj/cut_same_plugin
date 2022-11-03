@@ -56,26 +56,20 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
 
 
     private lateinit var materialPagerAdapter: MaterialPagerAdapter
+
     private val playerMaterialVideoView: PlayerMaterialVideoView by lazy {
-        PlayerMaterialVideoView(
-            this
-        )
+        PlayerMaterialVideoView(this)
     }
     private val playerMaterialTextEditView: PlayerMaterialTextEditView by lazy {
-        PlayerMaterialTextEditView(
-            this
-        )
+        PlayerMaterialTextEditView(this)
     }
+
     private val playerMaterialLyricsView: PlayerMaterialLyricsView by lazy {
-        PlayerMaterialLyricsView(
-            this
-        )
+        PlayerMaterialLyricsView(this)
     }
 
     private val playerTextEditController: PlayerTextEditController by lazy {
-        PlayerTextEditController(
-            playerMaterialTextEditView
-        )
+        PlayerTextEditController(playerMaterialTextEditView)
     }
 
 

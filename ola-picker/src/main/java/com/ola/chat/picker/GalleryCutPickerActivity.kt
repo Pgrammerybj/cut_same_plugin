@@ -246,7 +246,6 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         })
     }
 
-
     private fun initListener() {
         pickingListAdapter.setItemClickListener(object : ItemClickListener {
             override fun onItemClick(position: Int, empty: Boolean) {

@@ -61,7 +61,6 @@ class GalleryPickerViewModel(application: Application) :
                 val mediaItem = list[pos]
                 curMaterial = mediaItem
             }
-
         }
     }
 
