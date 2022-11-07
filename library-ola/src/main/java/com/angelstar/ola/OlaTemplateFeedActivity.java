@@ -34,6 +34,7 @@ import com.angelstar.ola.view.ScaleSlideBar;
 import com.angelstar.ola.viewmodel.TemplateNetPageModel;
 import com.angelstar.ola.viewmodel.TemplateNetPageViewModelFactory;
 import com.angelstar.ybj.xbanner.OlaBannerView;
+import com.angelstar.ybj.xbanner.ThreadUtils;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.cutsame.editor.EditorManager;
@@ -44,6 +45,7 @@ import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.angelstar.ola.entity.OlaTemplateResponse;
+import com.ola.chat.picker.utils.PickerConstant;
 import com.ola.download.RxNetDownload;
 import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
@@ -155,7 +157,16 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         }
         ArrayList<VideoItemView> itemList = new ArrayList<>();
 
-//        String videoFilePath = downloadVideo(bannerData.get(4));
+//        for (int i = 0; i < 5; i++) {
+//            Log.i(TAG, "downloadVideo: 开始下载：" + i);
+//            String videoFilePath = downloadVideo(bannerData.get(i));
+//            try {
+//                Thread.sleep(30 * 1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            Log.i(TAG, "downloadVideo: 下载完成：" + videoFilePath);
+//        }
 
         for (int i = 0; i < bannerData.size(); i++) {
             TemplateItem templateItem = bannerData.get(i);

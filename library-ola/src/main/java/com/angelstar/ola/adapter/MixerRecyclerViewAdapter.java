@@ -51,7 +51,7 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MixerItemEntry itemEntry = mixerList.get(position);
         if (position == 0) {
-            holder.itemImage.setImageResource(R.mipmap.mixer_item_test);
+            holder.itemImage.setImageResource(R.mipmap.song_edit_tuner_bg);
             holder.itemTitle.setText("调音");
         } else {
             RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(SizeUtil.INSTANCE.dp2px(8)));

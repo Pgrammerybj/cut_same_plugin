@@ -8,7 +8,7 @@
         android:layout_width="66dp"
         android:scaleType="fitXY"
         android:layout_height="66dp"
-        android:src="@mipmap/mixer_item_test" />
+        android:src="@mipmap/song_edit_tuner_bg" />
 
 
     <ImageView
