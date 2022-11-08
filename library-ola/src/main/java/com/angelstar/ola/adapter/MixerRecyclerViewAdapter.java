@@ -11,11 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.angelstar.ola.R;
-import com.angelstar.ola.entity.MixerItemEntry;
+import com.angelstar.ola.entity.AudioMixingEntry;
 import com.angelstar.ola.interfaces.OnMixerItemClickListener;
 import com.angelstar.ola.utils.SizeUtil;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -23,14 +22,13 @@ import java.util.List;
 
 public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecyclerViewAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<MixerItemEntry> mixerList;
+    private final Context mContext;
+    private List<AudioMixingEntry.BoardEffects> mixerList;
     public static final int DEFAULT_ITEM = 0;
     public static final int MIXER_ITEM = 1;
 
-    String url_test = "https://img2.baidu.com/it/u=552452605,2067380431&fm=253&fmt=auto&app=138&f=JPEG?w=160&h=100";
-
-    public MixerRecyclerViewAdapter(Context context, List<MixerItemEntry> mixerList) {
+    public MixerRecyclerViewAdapter(Context context, List<AudioMixingEntry.BoardEffects> mixerList) {
+        mixerList.add(0,new AudioMixingEntry.BoardEffects());
         this.mixerList = mixerList;
         this.mContext = context;
     }
@@ -49,17 +47,17 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MixerItemEntry itemEntry = mixerList.get(position);
+        AudioMixingEntry.BoardEffects itemEntry = mixerList.get(position);
         if (position == 0) {
             holder.itemImage.setImageResource(R.mipmap.song_edit_tuner_bg);
             holder.itemTitle.setText("调音");
         } else {
             RequestOptions options = RequestOptions.bitmapTransform(new RoundedCorners(SizeUtil.INSTANCE.dp2px(8)));
             //用来加载网络
-            Glide.with(this.mContext).load(url_test).apply(options).into(holder.itemImage);
-            holder.itemTitle.setText(itemEntry.getMixerTitle());
+            Glide.with(this.mContext).load(itemEntry.getIcon()).apply(options).into(holder.itemImage);
+            holder.itemTitle.setText(itemEntry.getName());
         }
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(holder.itemView, itemEntry, position));
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(holder.itemView, itemEntry.getIndex(), position));
     }
 
     @Override

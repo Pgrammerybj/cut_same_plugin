@@ -6,6 +6,7 @@
     android:background="@drawable/shape_sheet_dialog_bg"
     android:orientation="vertical">
 
+    <!-- 标题-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -96,10 +97,28 @@
         android:textSize="15sp" />
     <!--混响-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_mixer_menu_multi"
+        android:id="@+id/recyclerview_mixer_reverb"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="12dp"
+        android:background="@null"
+        android:paddingHorizontal="20dp"
+        android:scrollbars="none" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="24dp"
+        android:text="均衡器"
+        android:textColor="#99ffffff"
+        android:textSize="15sp" />
+    <!--混响-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_mixer_equalizer"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_marginTop="12dp"
         android:background="@null"
         android:paddingHorizontal="20dp"
         android:scrollbars="none" />

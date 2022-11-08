@@ -1,4 +1,4 @@
-package com.angelstar.ybj.xbanner;
+package com.angelstar.ybj.xbanner.utils;
 
 import android.os.Handler;
 import android.os.Looper;

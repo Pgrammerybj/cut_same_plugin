@@ -13,8 +13,8 @@ import com.angelstar.ola.entity.MixerItemEntry;
 public interface OnMixerItemClickListener {
     /**
      * @param view     当前条目View
-     * @param data     条目所对应的数据
+     * @param index     条目所对应的index，传递给SDK
      * @param position 条目index
      */
-    void onItemClick(View view, MixerItemEntry data, int position);
+    void onItemClick(View view,int index, int position);
 }

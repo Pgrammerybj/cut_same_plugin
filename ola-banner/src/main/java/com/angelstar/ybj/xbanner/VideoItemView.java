@@ -2,17 +2,14 @@ package com.angelstar.ybj.xbanner;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 
@@ -53,9 +50,6 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
     private void init(Context context) {
         this.context = context;
         FrameLayout cardView = (FrameLayout) inflate(context, R.layout.layout_item_video, this);
-        if (null == cardView) {
-            return;
-        }
         mIvVideoCover = cardView.findViewById(R.id.iv_video_cover);
         mIvVideState = cardView.findViewById(R.id.iv_video_player_state);
         mTvVideoTime = cardView.findViewById(R.id.tv_video_time);

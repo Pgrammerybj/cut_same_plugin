@@ -3,11 +3,8 @@ package com.angelstar.ybj.xbanner;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,6 +14,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.angelstar.ybj.xbanner.indicator.BaseIndicator;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.angelstar.ybj.xbanner.transformers.ScalePageTransformer;
+import com.angelstar.ybj.xbanner.utils.SizeUtils;
+import com.angelstar.ybj.xbanner.utils.ThreadUtils;
 
 import java.util.ArrayList;
 
@@ -61,6 +60,7 @@ public class OlaBannerView extends FrameLayout {
      */
     private boolean mIsMargin;
     private SurfaceView mSurfaceView;
+    private Context mContext;
 
     public OlaBannerView(Context context) {
         this(context, null);
@@ -80,6 +80,7 @@ public class OlaBannerView extends FrameLayout {
         if (mIsMargin) {
             setClipChildren(false);
         }
+        mContext = context;
         initBannerViewPager(context, attrs);
         initIndicatorView(context);
     }
@@ -88,10 +89,6 @@ public class OlaBannerView extends FrameLayout {
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.BannerView, defStyle, 0);
         try {
             mPageMargin = ta.getDimensionPixelSize(R.styleable.BannerView_banner_page_margin, 0);
-            /**
-             * Banner圆角
-             */
-            float mBannerRadius = ta.getDimensionPixelSize(R.styleable.BannerView_banner_radius, 0);
             if (mPageMargin > 0) {
                 mIsMargin = true;
             }
@@ -106,11 +103,12 @@ public class OlaBannerView extends FrameLayout {
      * 初始化ViewPager
      */
     private void initBannerViewPager(Context context, AttributeSet attrs) {
-        mBannerViewPager = new ViewPager(context, attrs);
-        LayoutParams bannerParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mBannerViewPager = new ViewPager(context, attrs);//卡片大小定位260dp*460dp
+        LayoutParams bannerParams = new LayoutParams(SizeUtils.dp2px(260, context), SizeUtils.dp2px(460, context));
         if (mIsMargin) {
-            bannerParams.setMargins(mPageMargin, dp2px(16), mPageMargin, dp2px(16));
+            bannerParams.setMargins(mPageMargin, 0, mPageMargin, 0);
         }
+        bannerParams.gravity = CENTER_HORIZONTAL;
         addView(mBannerViewPager, bannerParams);
         mBannerUrlList = new ArrayList<>();
         mAdapter = new VideoPagerAdapter(context, mBannerUrlList);
@@ -130,7 +128,7 @@ public class OlaBannerView extends FrameLayout {
      */
     private void initIndicatorView(Context context) {
         mIndicator = new RectangleIndicator(context);
-        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp2px(6));
+        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(6, context));
         indicatorParams.gravity = BOTTOM | CENTER_HORIZONTAL;
         addView(mIndicator, indicatorParams);
     }
@@ -141,7 +139,7 @@ public class OlaBannerView extends FrameLayout {
     public void setIndicator(BaseIndicator indicator) {
         removeView(mIndicator);
         mIndicator = indicator;
-        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp2px(6));
+        LayoutParams indicatorParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(6, mContext));
         indicatorParams.gravity = BOTTOM | CENTER_HORIZONTAL;
         addView(mIndicator, indicatorParams);
         invalidate();
@@ -190,19 +188,19 @@ public class OlaBannerView extends FrameLayout {
         }, 200);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height;
-        int hMode = MeasureSpec.getMode(heightMeasureSpec);
-        int hSize = MeasureSpec.getSize(heightMeasureSpec);
-        if (hMode == MeasureSpec.UNSPECIFIED || hMode == MeasureSpec.AT_MOST) {
-            height = dp2px(200);
-        } else {
-            height = hSize;
-        }
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        int height;
+//        int hMode = MeasureSpec.getMode(heightMeasureSpec);
+//        int hSize = MeasureSpec.getSize(heightMeasureSpec);
+//        if (hMode == MeasureSpec.UNSPECIFIED || hMode == MeasureSpec.AT_MOST) {
+//            height = SizeUtils.dp2px(460,mContext);
+//        } else {
+//            height = hSize;
+//        }
+//        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//    }
 
     /**
      * 设置Banner图片地址数据
@@ -238,24 +236,6 @@ public class OlaBannerView extends FrameLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mBannerViewPager.removeOnPageChangeListener(mPageListener);
-    }
-
-    /**
-     * 设置是否显示指示器
-     */
-    public void setHasIndicator(boolean flag) {
-        mIndicator.setVisibility(flag ? VISIBLE : GONE);
-    }
-
-    /**
-     * dp转px
-     *
-     * @param dpVal dp value
-     * @return px value
-     */
-    public int dp2px(float dpVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal,
-                getContext().getResources().getDisplayMetrics());
     }
 
     /**

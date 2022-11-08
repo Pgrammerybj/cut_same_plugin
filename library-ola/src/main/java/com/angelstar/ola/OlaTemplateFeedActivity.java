@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -21,47 +20,45 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.angelstar.ola.adapter.MixerEqualizerAdapter;
 import com.angelstar.ola.adapter.MixerRecyclerViewAdapter;
+import com.angelstar.ola.adapter.MixerReverbAdapter;
 import com.angelstar.ola.adapter.SlideAdapter;
+import com.angelstar.ola.entity.AudioMixingEntry;
 import com.angelstar.ola.entity.MixerItemEntry;
+import com.angelstar.ola.entity.OlaTemplateResponse;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ola.utils.JsonHelper;
+import com.angelstar.ola.utils.SizeUtil;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
 import com.angelstar.ola.viewmodel.TemplateNetPageModel;
 import com.angelstar.ola.viewmodel.TemplateNetPageViewModelFactory;
 import com.angelstar.ybj.xbanner.OlaBannerView;
-import com.angelstar.ybj.xbanner.ThreadUtils;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
-import com.cutsame.editor.EditorManager;
 import com.cutsame.solution.template.model.TemplateCategory;
 import com.cutsame.solution.template.model.TemplateItem;
 import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.angelstar.ola.entity.OlaTemplateResponse;
-import com.ola.chat.picker.utils.PickerConstant;
+import com.ola.chat.picker.utils.MTUtils;
 import com.ola.download.RxNetDownload;
 import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.utils.DLog;
 import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
-import com.vesdk.RecordInitHelper;
-import com.vesdk.vebase.task.UnzipTask;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
@@ -102,15 +99,16 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private RecyclerView mMixerRecyclerView;
     private final List<MixerItemEntry> mixerList = new ArrayList<>();
     private ScaleSlideBar mScaleSlideBar;
-    private RecyclerView mRcMenuMulti;
+    private RecyclerView mRcMenuReverb, mRcMenuEqualizer;
     private HttpProxyCacheServer httpProxyCacheServer;
     //当前真实的选中的条目位置
     private int currentRealPosition = 0;
+    private AudioMixingEntry mAudioMixingEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        MTUtils.makeStatusBarTransparent(this);
         setContentView(R.layout.activity_ola_template_homepage);
         //视频缓存框架
         httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
@@ -142,7 +140,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mBannerView.setIndicator(new RectangleIndicator(this));
         mBannerView.setScrollPageListener(this);
 
+        // TODO: 2022/11/7 mock 模版网络数据 
         OlaTemplateResponse olaTemplateResponse = JsonHelper.fromJson(MockJson.TEMPLATE_ITEM_JSON, OlaTemplateResponse.class);
+
+        mAudioMixingEntry = JsonHelper.fromJson(MockJson.getJson(this, "AudioMixingJson.json"), AudioMixingEntry.class);
+
+
         if (null == olaTemplateResponse || olaTemplateResponse.getList().size() == 0) {
             return;
         }
@@ -156,17 +159,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             return null;
         }
         ArrayList<VideoItemView> itemList = new ArrayList<>();
-
-//        for (int i = 0; i < 5; i++) {
-//            Log.i(TAG, "downloadVideo: 开始下载：" + i);
-//            String videoFilePath = downloadVideo(bannerData.get(i));
-//            try {
-//                Thread.sleep(30 * 1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            Log.i(TAG, "downloadVideo: 下载完成：" + videoFilePath);
-//        }
 
         for (int i = 0; i < bannerData.size(); i++) {
             TemplateItem templateItem = bannerData.get(i);
@@ -192,9 +184,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 @Override
                 public void onEditVideoClick(View view) {
                     //点击视频编辑按钮
-//                    List<TemplateItem> templateItems = templateNetPageModel.getTemplateItems().getValue();
-//                    List<TemplateItem> templateItems = templateNetPageModel.getTemplateItems().getValue();
-
                     TemplateItem templateItem = bannerData.get(currentRealPosition);
                     if (null == templateItem
                             || templateItem.getFragmentCount() == 0
@@ -262,7 +251,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mMixerRecyclerView.setLayoutManager(linearLayoutManager);
-        MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mixerList);
+        MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mAudioMixingEntry.getBoardEffects());
         mMixerRecyclerView.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
         mMixerRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((view, data, position) -> {
@@ -270,12 +259,10 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             if (position == 0) {
                 showMixerMenu();
             }
-            Toast.makeText(OlaTemplateFeedActivity.this, position == 0 ? "弹出调音面板" : data.getMixerTitle() + "+" + position, Toast.LENGTH_SHORT).show();
         });
     }
 
     private void initMixerMenuView() {
-
         //初始化带刻度的AISlideBar
         Resources resources = getResources();
         String[] slideContent = new String[]{"关", "低度", "中度", "高度"};
@@ -283,22 +270,31 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         mScaleSlideBar.setAdapter(mAdapter);
 
-        mScaleSlideBar.setPosition(2);
+        mScaleSlideBar.setPosition(mAudioMixingEntry.getTunerModel().getAiIndex());
 
         mScaleSlideBar.setOnGbSlideBarListener(position -> {
-            Toast.makeText(OlaTemplateFeedActivity.this, "selected " + position, Toast.LENGTH_SHORT).show();
-            Log.d("edanelx", "selected " + position);
+            Toast.makeText(OlaTemplateFeedActivity.this, "AI降噪 selected： " + position, Toast.LENGTH_SHORT).show();
         });
 
+        SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(0, 0, 0, SizeUtil.INSTANCE.dp2px(7));
 
         //调音面板内部混响条目
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRcMenuMulti.setLayoutManager(linearLayoutManager);
-        MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mixerList);
-        mRcMenuMulti.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
-        mRcMenuMulti.setAdapter(adapter);
-        adapter.setOnItemClickListener((view, data, position) -> Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data.getMixerTitle(), Toast.LENGTH_SHORT).show());
+        mRcMenuReverb.setLayoutManager(linearLayoutManager);
+        MixerReverbAdapter mixerReverbAdapter = new MixerReverbAdapter(this, mAudioMixingEntry.getReverbList(),mAudioMixingEntry.getTunerModel().getReverbIndex());
+        mRcMenuReverb.addItemDecoration(spaceItemDecoration);
+        mRcMenuReverb.setAdapter(mixerReverbAdapter);
+        mixerReverbAdapter.setOnItemClickListener((view, data, position) -> Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data, Toast.LENGTH_SHORT).show());
+
+        //调音面板内部均衡器条目
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(this);
+        linearLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRcMenuEqualizer.setLayoutManager(linearLayoutManager2);
+        MixerEqualizerAdapter mixerEqualizerAdapter = new MixerEqualizerAdapter(this, mAudioMixingEntry.getEqualizerEffects(),mAudioMixingEntry.getTunerModel().getEqualizerIndex());
+        mRcMenuEqualizer.addItemDecoration(spaceItemDecoration);
+        mRcMenuEqualizer.setAdapter(mixerEqualizerAdapter);
+        mixerEqualizerAdapter.setOnItemClickListener((view, data, position) -> Toast.makeText(OlaTemplateFeedActivity.this, "选择均衡器：" + data, Toast.LENGTH_SHORT).show());
     }
 
     private void showMixerMenu() {
@@ -312,7 +308,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
 
         mScaleSlideBar = inflate.findViewById(R.id.scale_slide_bar);
-        mRcMenuMulti = inflate.findViewById(R.id.recyclerview_mixer_menu_multi);
+        mRcMenuReverb = inflate.findViewById(R.id.recyclerview_mixer_reverb);
+        mRcMenuEqualizer = inflate.findViewById(R.id.recyclerview_mixer_equalizer);
         FrameLayout mSeekBarMixerPeople = inflate.findViewById(R.id.seekbar_mixer_people);
         FrameLayout mSeekBarMixerAccompany = inflate.findViewById(R.id.seekbar_mixer_accompany);
         initMixerSeekBar(mSeekBarMixerPeople, mSeekBarMixerAccompany);
@@ -326,9 +323,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         TextView tvPProgressT = mSeekBarMixerPeople.findViewById(R.id.tv_progress_title);
         TextView tvAProgress = mSeekBarMixerAccompany.findViewById(R.id.tv_progress);
         TextView tvAProgressT = mSeekBarMixerAccompany.findViewById(R.id.tv_progress_title);
-        peopleSeekBar.setProgress(68);
+        peopleSeekBar.setProgress(mAudioMixingEntry.getTunerModel().getAudioMixingVolume());
         tvPProgress.setText(String.valueOf(peopleSeekBar.getProgress()));
-        accompanySeekBar.setProgress(47);
+        accompanySeekBar.setProgress(mAudioMixingEntry.getTunerModel().getRecordSignalVolume());
         tvAProgress.setText(String.valueOf(accompanySeekBar.getProgress()));
         tvPProgressT.setText("人声音量");
         tvAProgressT.setText("伴奏音量");

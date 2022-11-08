@@ -5,6 +5,7 @@
     <application android:theme="@android:style/Theme.Light.NoTitleBar">
         <activity
             android:name=".OlaTemplateFeedActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="com.angelstar.ola.process.OlaTemplateFeedActivity" />
