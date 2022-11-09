@@ -27,7 +27,7 @@ public class MixerReverbAdapter extends RecyclerView.Adapter<MixerReverbAdapter.
 
     private final Context mContext;
     private final List<AudioMixingEntry.ReverbList> mReverbList;
-    private int activePosition = 0;
+    private int activePosition;
 
     public MixerReverbAdapter(Context context, List<AudioMixingEntry.ReverbList> reverbList, int activePosition) {
         this.mReverbList = reverbList;

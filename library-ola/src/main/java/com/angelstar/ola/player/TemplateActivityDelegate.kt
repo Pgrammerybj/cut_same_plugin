@@ -66,6 +66,7 @@ class TemplateActivityDelegate(
         filePathList.forEach { select.add(EditMedia(it, true)) }
         //先清空主轨道
         nleEditorContext!!.nleMainTrack.clearSlot()
+        //原预览视频静音
         nleEditorContext!!.videoEditor.importMedia(
             select,
             EditorSDK.instance.config.pictureTime,

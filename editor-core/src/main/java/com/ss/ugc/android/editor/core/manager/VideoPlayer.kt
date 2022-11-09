@@ -171,28 +171,6 @@ class VideoPlayer(val editorContext: IEditorContext) : IVideoPlayer {
                 playRangeHandler.postDelayed(PlayRunnable(seqOut,seek),30)
             }
         })
-
-        /*player?.seekDone(seqIn, object : ISeekListener {
-            override fun onSeekDone(ret: Int) {
-                player?.pause()
-                player?.setInOut(seqIn, seqOut)
-                addInfoListener(object : DefaultInfoListener() {
-
-                    override fun onPlayToEnd() {
-                        super.onPlayToEnd()
-                        val curPos = player?.getCurrentPosition()?.toInt() ?: 0
-                        GlobalScope.launch(Dispatchers.Main) {
-                            // bug,不同线程同时调用，卡3s左右
-                            player?.setInOut(0, -1)
-                            player?.seek(curPos / 1000, flags = SeekMode.EDITOR_SEEK_FLAG_LastSeek)
-                            player?.refreshCurrentFrame()
-                        }
-                        removeInfoListener(this)
-                    }
-                })
-                play()
-            }
-        })*/
     }
 
     fun addInfoListener(defaultInfoListener: DefaultInfoListener) {

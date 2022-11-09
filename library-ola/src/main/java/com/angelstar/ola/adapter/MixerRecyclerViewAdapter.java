@@ -26,11 +26,19 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
     private List<AudioMixingEntry.BoardEffects> mixerList;
     public static final int DEFAULT_ITEM = 0;
     public static final int MIXER_ITEM = 1;
+    private int activePosition = -1;
 
-    public MixerRecyclerViewAdapter(Context context, List<AudioMixingEntry.BoardEffects> mixerList) {
-        mixerList.add(0,new AudioMixingEntry.BoardEffects());
+    public MixerRecyclerViewAdapter(Context context, List<AudioMixingEntry.BoardEffects> mixerList, int activePosition) {
+        mixerList.add(0, new AudioMixingEntry.BoardEffects());
         this.mixerList = mixerList;
         this.mContext = context;
+        this.activePosition = activePosition;
+    }
+
+
+    public void setActivePosition(int activePosition) {
+        this.activePosition = activePosition;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -56,8 +64,12 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
             //用来加载网络
             Glide.with(this.mContext).load(itemEntry.getIcon()).apply(options).into(holder.itemImage);
             holder.itemTitle.setText(itemEntry.getName());
+            holder.itemSelect.setVisibility(itemEntry.getIndex() == activePosition ? View.VISIBLE : View.GONE);
         }
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(holder.itemView, itemEntry.getIndex(), position));
+        holder.itemView.setOnClickListener(v -> {
+            setActivePosition(itemEntry.getIndex());
+            onItemClickListener.onItemClick(holder.itemView, itemEntry.getIndex(), position);
+        });
     }
 
     @Override
@@ -75,14 +87,14 @@ public class MixerRecyclerViewAdapter extends RecyclerView.Adapter<MixerRecycler
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView itemImage;
-        ImageView itemLabel;
+        ImageView itemImage, itemLabel, itemSelect;
         TextView itemTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemImage = itemView.findViewById(R.id.iv_mixer_item_img);
             itemLabel = itemView.findViewById(R.id.iv_mixer_item_label);
+            itemSelect = itemView.findViewById(R.id.iv_mixer_item_select);
             itemTitle = itemView.findViewById(R.id.tv_mixer_item_title);
         }
     }

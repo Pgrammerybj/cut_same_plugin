@@ -24,6 +24,7 @@ import com.angelstar.ola.adapter.MixerEqualizerAdapter;
 import com.angelstar.ola.adapter.MixerRecyclerViewAdapter;
 import com.angelstar.ola.adapter.MixerReverbAdapter;
 import com.angelstar.ola.adapter.SlideAdapter;
+import com.angelstar.ola.effectcore.BbEffectCoreImpl;
 import com.angelstar.ola.entity.AudioMixingEntry;
 import com.angelstar.ola.entity.MixerItemEntry;
 import com.angelstar.ola.entity.OlaTemplateResponse;
@@ -68,6 +69,19 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private SurfaceView mSurfaceView;
     private TemplateNetPageModel templateNetPageModel;
 
+    private FloatSliderView mFloatSliderView;
+    private TextView mTvCurrentPlayTime;
+    private TextView mTvVideoTotalTime;
+    //当前获得焦点的View
+    private VideoItemView mVideoItemView;
+    private RecyclerView mMixerRecyclerView;
+    private ScaleSlideBar mScaleSlideBar;
+    private RecyclerView mRcMenuReverb, mRcMenuEqualizer;
+    private HttpProxyCacheServer httpProxyCacheServer;
+    //当前真实的选中的条目位置
+    private int currentRealPosition = 0;
+    private AudioMixingEntry mAudioMixingEntry;
+
     private final ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
         @Override
@@ -91,19 +105,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             }
         }
     };
-    private FloatSliderView mFloatSliderView;
-    private TextView mTvCurrentPlayTime;
-    private TextView mTvVideoTotalTime;
-    //当前获得焦点的View
-    private VideoItemView mVideoItemView;
-    private RecyclerView mMixerRecyclerView;
-    private final List<MixerItemEntry> mixerList = new ArrayList<>();
-    private ScaleSlideBar mScaleSlideBar;
-    private RecyclerView mRcMenuReverb, mRcMenuEqualizer;
-    private HttpProxyCacheServer httpProxyCacheServer;
-    //当前真实的选中的条目位置
-    private int currentRealPosition = 0;
-    private AudioMixingEntry mAudioMixingEntry;
+    private MixerRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
         mSurfaceView = new SurfaceView(this);
 
+        mAudioMixingEntry = JsonHelper.fromJson(MockJson.getJson(this, "AudioMixingJson.json"), AudioMixingEntry.class);
+
         TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
         templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
         templateNetPageModel.loadFeedList(true);
@@ -121,9 +125,48 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             TemplateItem templateItem = templateItems.get(0);
             Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
         });
+        //初始化调音台
+        intiAudioMixing();
         initActivityDelegate();
         initView();
         initPlayerView();
+    }
+
+    private void intiAudioMixing() {
+
+        String mixingFilePath = getExternalCacheDir().getAbsolutePath() + "/accompaniment_bea2c80d430f89100b643c8422193120.mp3";
+        String voiceFilePath = getExternalCacheDir().getAbsolutePath() + "/record_287_2022-11-09-11-27-04.pcm";
+
+        BbEffectCoreImpl.INSTANCE.createEffectCore(getApplicationContext());
+        BbEffectCoreImpl.INSTANCE.initialize(2);
+        BbEffectCoreImpl.INSTANCE.setAudioEffectDataSource(mAudioMixingEntry.getEffectJson());
+        BbEffectCoreImpl.INSTANCE.setAudioMixingFilePath(mixingFilePath, 0);
+        BbEffectCoreImpl.INSTANCE.setAudioRecordFilePath(voiceFilePath, false);
+
+        AudioMixingEntry.TunerModel tunerModel = mAudioMixingEntry.getTunerModel();
+        //设置AI级别
+        int aiLevel = tunerModel == null ? -1 : tunerModel.getAiIndex();
+        BbEffectCoreImpl.INSTANCE.setParameters("{\"che.audio.ainoise.level\": " + aiLevel + "}");
+        if (tunerModel != null) {
+            BbEffectCoreImpl.INSTANCE.setAudioEffectPreset(mAudioMixingEntry.getTunerModel().getEffectIndex());
+            BbEffectCoreImpl.INSTANCE.setCurrentEqualizerIndex(tunerModel.getEqualizerIndex());
+            BbEffectCoreImpl.INSTANCE.setCurrentReverbIndex(tunerModel.getReverbIndex());
+            if (mAudioMixingEntry.getTunerModel().isEnableInEarMonitoring()) {
+                BbEffectCoreImpl.INSTANCE.enableInEarMonitoring(true);
+            }
+
+            if (tunerModel.getMixingPitch() != 0) {
+                BbEffectCoreImpl.INSTANCE.setAudioMixingPitch(tunerModel.getMixingPitch());
+            }
+            BbEffectCoreImpl.INSTANCE.adjustRecordingSignalVolume(tunerModel.getRecordSignalVolume());
+            BbEffectCoreImpl.INSTANCE.adjustAudioMixingVolume(tunerModel.getAudioMixingVolume());
+
+            BbEffectCoreImpl.INSTANCE.adjustPlaybackSignalVolume(tunerModel.getPlaybackSignalVolume());
+        }
+
+//        BBEffectApi.onStateChanged = _innerAudioStateChanged;
+        BbEffectCoreImpl.INSTANCE.setAudioProfile(mAudioMixingEntry.getAudioProfile());
+//        BbEffectCoreImpl.INSTANCE.start(); //需要和视频同步播放
     }
 
     private void initActivityDelegate() {
@@ -142,9 +185,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         // TODO: 2022/11/7 mock 模版网络数据 
         OlaTemplateResponse olaTemplateResponse = JsonHelper.fromJson(MockJson.TEMPLATE_ITEM_JSON, OlaTemplateResponse.class);
-
-        mAudioMixingEntry = JsonHelper.fromJson(MockJson.getJson(this, "AudioMixingJson.json"), AudioMixingEntry.class);
-
 
         if (null == olaTemplateResponse || olaTemplateResponse.getList().size() == 0) {
             return;
@@ -247,17 +287,19 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     private void initRecyclerView() {
-        initMockData();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mMixerRecyclerView.setLayoutManager(linearLayoutManager);
-        MixerRecyclerViewAdapter adapter = new MixerRecyclerViewAdapter(this, mAudioMixingEntry.getBoardEffects());
+        adapter = new MixerRecyclerViewAdapter(this, mAudioMixingEntry.getBoardEffects(), -1);
         mMixerRecyclerView.addItemDecoration(new SpaceItemDecoration(0, 0, 0, 30));
         mMixerRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener((view, data, position) -> {
+        adapter.setOnItemClickListener((view, index, position) -> {
             //弹出调音面板
             if (position == 0) {
                 showMixerMenu();
+            } else {
+                BbEffectCoreImpl.INSTANCE.setAudioEffectPreset(index);
+                BbEffectCoreImpl.INSTANCE.changeReverbAndEqualizer(index, mAudioMixingEntry.getTunerModel());
             }
         });
     }
@@ -273,7 +315,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mScaleSlideBar.setPosition(mAudioMixingEntry.getTunerModel().getAiIndex());
 
         mScaleSlideBar.setOnGbSlideBarListener(position -> {
-            Toast.makeText(OlaTemplateFeedActivity.this, "AI降噪 selected： " + position, Toast.LENGTH_SHORT).show();
+            BbEffectCoreImpl.INSTANCE.setParameters("{\"che.audio.ainoise.level\":" + (position - 1) + "}");
         });
 
         SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(0, 0, 0, SizeUtil.INSTANCE.dp2px(7));
@@ -282,19 +324,27 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRcMenuReverb.setLayoutManager(linearLayoutManager);
-        MixerReverbAdapter mixerReverbAdapter = new MixerReverbAdapter(this, mAudioMixingEntry.getReverbList(),mAudioMixingEntry.getTunerModel().getReverbIndex());
+        MixerReverbAdapter mixerReverbAdapter = new MixerReverbAdapter(this, mAudioMixingEntry.getReverbList(), mAudioMixingEntry.getTunerModel().getReverbIndex());
         mRcMenuReverb.addItemDecoration(spaceItemDecoration);
         mRcMenuReverb.setAdapter(mixerReverbAdapter);
-        mixerReverbAdapter.setOnItemClickListener((view, data, position) -> Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data, Toast.LENGTH_SHORT).show());
+        mixerReverbAdapter.setOnItemClickListener((view, data, position) -> {
+            int boardEffectIndex = BbEffectCoreImpl.INSTANCE.changeAudioAndBoardEffect(0, data);
+            adapter.setActivePosition(boardEffectIndex);
+            Toast.makeText(OlaTemplateFeedActivity.this, "选择混响：" + data, Toast.LENGTH_SHORT).show();
+        });
 
         //调音面板内部均衡器条目
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(this);
         linearLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRcMenuEqualizer.setLayoutManager(linearLayoutManager2);
-        MixerEqualizerAdapter mixerEqualizerAdapter = new MixerEqualizerAdapter(this, mAudioMixingEntry.getEqualizerEffects(),mAudioMixingEntry.getTunerModel().getEqualizerIndex());
+        MixerEqualizerAdapter mixerEqualizerAdapter = new MixerEqualizerAdapter(this, mAudioMixingEntry.getEqualizerEffects(), mAudioMixingEntry.getTunerModel().getEqualizerIndex());
         mRcMenuEqualizer.addItemDecoration(spaceItemDecoration);
         mRcMenuEqualizer.setAdapter(mixerEqualizerAdapter);
-        mixerEqualizerAdapter.setOnItemClickListener((view, data, position) -> Toast.makeText(OlaTemplateFeedActivity.this, "选择均衡器：" + data, Toast.LENGTH_SHORT).show());
+        mixerEqualizerAdapter.setOnItemClickListener((view, data, position) -> {
+            int boardEffectIndex = BbEffectCoreImpl.INSTANCE.changeAudioAndBoardEffect(1, data);
+            adapter.setActivePosition(boardEffectIndex);
+            Toast.makeText(OlaTemplateFeedActivity.this, "选择均衡器：" + data, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void showMixerMenu() {
@@ -323,9 +373,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         TextView tvPProgressT = mSeekBarMixerPeople.findViewById(R.id.tv_progress_title);
         TextView tvAProgress = mSeekBarMixerAccompany.findViewById(R.id.tv_progress);
         TextView tvAProgressT = mSeekBarMixerAccompany.findViewById(R.id.tv_progress_title);
-        peopleSeekBar.setProgress(mAudioMixingEntry.getTunerModel().getAudioMixingVolume());
+        peopleSeekBar.setProgress(mAudioMixingEntry.getTunerModel().getRecordSignalVolume());
         tvPProgress.setText(String.valueOf(peopleSeekBar.getProgress()));
-        accompanySeekBar.setProgress(mAudioMixingEntry.getTunerModel().getRecordSignalVolume());
+        accompanySeekBar.setProgress(mAudioMixingEntry.getTunerModel().getAudioMixingVolume());
         tvAProgress.setText(String.valueOf(accompanySeekBar.getProgress()));
         tvPProgressT.setText("人声音量");
         tvAProgressT.setText("伴奏音量");
@@ -333,41 +383,22 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvPProgress.setText(String.valueOf(progress));
+                BbEffectCoreImpl.INSTANCE.adjustRecordingSignalVolume(progress);
             }
         });
         accompanySeekBar.setOnSeekBarChangeListener(new SimpleSeekBarListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 tvAProgress.setText(String.valueOf(progress));
+                BbEffectCoreImpl.INSTANCE.adjustAudioMixingVolume(progress);
             }
         });
-    }
-
-    //初始化调音台模拟数据
-    private void initMockData() {
-        MixerItemEntry defaultItem = new MixerItemEntry("", "调音", "label", false);
-        mixerList.add(defaultItem);
-        MixerItemEntry xiangCun = new MixerItemEntry("imag", "乡村", "label", true);
-        mixerList.add(xiangCun);
-        MixerItemEntry jiedao = new MixerItemEntry("imag", "街道", "label", false);
-        mixerList.add(jiedao);
-        MixerItemEntry tianYuan = new MixerItemEntry("imag", "田园", "label", false);
-        mixerList.add(tianYuan);
-        MixerItemEntry dianZi = new MixerItemEntry("imag", "电子", "label", false);
-        mixerList.add(dianZi);
-        MixerItemEntry jueShi = new MixerItemEntry("imag", "爵士", "label", false);
-        mixerList.add(jueShi);
-        MixerItemEntry shuoChang = new MixerItemEntry("imag", "说唱", "label", false);
-        mixerList.add(shuoChang);
-        MixerItemEntry yaoGun = new MixerItemEntry("imag", "摇滚", "label", false);
-        mixerList.add(yaoGun);
-        MixerItemEntry guoFeng = new MixerItemEntry("imag", "国风", "label", false);
-        mixerList.add(guoFeng);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        BbEffectCoreImpl.INSTANCE.resume();
         if (editorActivityDelegate != null) {
             editorActivityDelegate.onResume();
         }
@@ -376,14 +407,22 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     @Override
     protected void onPause() {
         super.onPause();
+        BbEffectCoreImpl.INSTANCE.pause();
         if (editorActivityDelegate != null) {
             editorActivityDelegate.onPause();
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        BbEffectCoreImpl.INSTANCE.stop();
+    }
+
     private void startPlay(ImageView videStateView) {
         if (null != nleEditorContext) {
             nleEditorContext.getVideoPlayer().play();
+            BbEffectCoreImpl.INSTANCE.start();
             if (null != videStateView) {
                 videStateView.setImageResource(R.mipmap.icon_video_stop);
             }

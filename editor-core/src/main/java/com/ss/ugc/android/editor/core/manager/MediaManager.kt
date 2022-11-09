@@ -102,6 +102,7 @@ class MediaManager(private val editorContext: IEditorContext) {
             }
             nleModel.clearTrack() // TODO: 先全部清空，仅保持只有一条轨道
             // 添加轨道到model
+            nleMainTrack.volume = 0F
             nleModel.addTrack(nleMainTrack)
             nleModel.canvasRatio = when (canvasRatioConfig) {
                 is RATIO_9_16 -> 9F / 16F
