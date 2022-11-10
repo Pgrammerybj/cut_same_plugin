@@ -5,7 +5,7 @@ import android.content.Context
 interface BbEffectInterface {
 
     // 1需要与Release成对存在
-    fun createEffectCore(applicationContext: Context)
+    fun createEffectCore(applicationContext: Context, handler: BbEffectCoreEventHandler)
 
     //1.初始化需要
     fun initialize(element: Int)
@@ -30,7 +30,12 @@ interface BbEffectInterface {
     /**
      * int profile
      */
-    fun setAudioProfile(profile:Int)
+    fun setAudioProfile(profile: Int)
+
+    /**
+     * seekTo
+     */
+    fun setAudioMixingPosition(pos: Int)
 
     fun start()
 
@@ -46,31 +51,31 @@ interface BbEffectInterface {
      * 伴奏音量 0-100
      * 节点：tunerModel.audioMixingVolume
      */
-    fun adjustAudioMixingVolume(volume:Int)
+    fun adjustAudioMixingVolume(volume: Int)
 
     /**
      * 人声音量 0-100
      * 节点：tunerModel.recordSignalVolume
      */
-    fun adjustRecordingSignalVolume(volume:Int)
+    fun adjustRecordingSignalVolume(volume: Int)
 
     /// 调整本地播放的音乐文件的音调。
     /// 按半音音阶调整本地播放的音乐文件的音调，默认值为 0，即不调整音调。
     // 取值范围为 [-12,12]，每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
-    fun setAudioMixingPitch(pitch:Int)
+    fun setAudioMixingPitch(pitch: Int)
 
-    fun getAudioMixingDuration():Int
+    fun getAudioMixingDuration(): Int
 
-    fun getAudioMixingCurrentPosition():Int
+    fun getAudioMixingCurrentPosition(): Int
 
     /**
      * volume 设置播放音量 0 - 100
      * 节点:tunerModel.playbackSignalVolume
      */
-    fun adjustPlaybackSignalVolume(volume:Int)
+    fun adjustPlaybackSignalVolume(volume: Int)
 
     /// 设置耳返音量
-    fun setInEarMonitoringVolume(volume:Int)
+    fun setInEarMonitoringVolume(volume: Int)
 
     ///1设置混响资源json,取值effectJson
     fun setAudioEffectDataSource(json: String)

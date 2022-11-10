@@ -1,31 +1,20 @@
 package com.angelstar.ola.effectcore
 
-object BbEffectConstants {
-    const val TAG = "EffectCore"
-}
+class BbEffectConstants {
+    companion object {
+        const val TAG = "Ola-EffectCore"
+        const val audioEffectCoreAudition = 0;
+        const val audioEffectCoreRecord = 1
+        const val audioEffectCoreEdit = 2
+        const val audioEffectCoreProduct = 3
+        const val audioEffectCoreRecordSingle = 4
+        const val audioEffectCoreMark = 5
 
-val audioEffectCoreAudition: Int = 0;
-val audioEffectCoreRecord = 1
-val audioEffectCoreEdit = 2
-val audioEffectCoreProduct = 3
-val audioEffectCoreRecordSingle = 4
-val audioEffectCoreMark = 5
+        const val stateAudioEffectFailed = -1
+        const val stateAudioEffectOk = 0
+        const val stateAudioEffectPlaying = 1
 
-enum class ErrorCode {
-    Zero,
-    UnInitialized,
-    SetInitialize,
-    NativeInitialize,
-    InValidLyrics,
-    AudioEffectPreset,
-    AudioProfile,
-    AdjustAudioMixingVolume,
-    AdjustRecordingSignalVolume,
-    AudioMixingPosition,
-    SwitchAccompany,
-    SetTolerance,
-    SetNoiseLevel,
-    Set3AType,
-    PushAudioDataMark,
-    SetAudioEffectDataSourceType
+        // 伴奏结束时回调，此时录音结束生成目标文件,主动调用Stop函数会有此回调
+        const val stateAudioEffectFinish: Int = 2
+    }
 }

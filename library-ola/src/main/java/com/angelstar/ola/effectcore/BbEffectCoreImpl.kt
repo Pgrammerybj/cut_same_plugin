@@ -9,18 +9,22 @@ import com.voice.core.BBEffectCore
 object BbEffectCoreImpl : BbEffectInterface {
 
     private var bbEffectCore: BBEffectCore? = null
+    private var audioIsPlay:Boolean = false
+    private var audioIsInit:Boolean = false
     private lateinit var appCtx: Context
     var currentReverbIndex: Int = -1
     var currentEqualizerIndex: Int = -1
     var currentBoardEffectIndex: Int = -1
+    private lateinit var handler: BbEffectCoreEventHandler
 
-    override fun createEffectCore(applicationContext: Context) {
+    override fun createEffectCore(applicationContext: Context, handler: BbEffectCoreEventHandler) {
         appCtx = applicationContext
+        this.handler = handler
         // 确保单实例
         innerRelease()
         bbEffectCore = BBEffectCore(appCtx)
-//    bbEffectCore!!.setEventHandler(handler.eventHandler)
-//    handler.engine = bbEffectCore
+        bbEffectCore!!.setEventHandler(handler.eventHandler)
+        handler.engine = bbEffectCore
     }
 
     override fun initialize(element: Int) {
@@ -41,6 +45,10 @@ object BbEffectCoreImpl : BbEffectInterface {
 
     override fun setAudioEffectPreset(effectIndex: Int) {
         bbEffectCore!!.audioEffectPreset = effectIndex
+    }
+
+    override fun setAudioMixingPosition(pos: Int) {
+        bbEffectCore!!.setAudioMixingPosition(pos)
     }
 
     override fun setAudioProfile(profile: Int) {

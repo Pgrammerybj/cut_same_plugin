@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,9 +27,10 @@ import com.angelstar.ola.adapter.MixerEqualizerAdapter;
 import com.angelstar.ola.adapter.MixerRecyclerViewAdapter;
 import com.angelstar.ola.adapter.MixerReverbAdapter;
 import com.angelstar.ola.adapter.SlideAdapter;
+import com.angelstar.ola.effectcore.BbEffectConstants;
+import com.angelstar.ola.effectcore.BbEffectCoreEventHandler;
 import com.angelstar.ola.effectcore.BbEffectCoreImpl;
 import com.angelstar.ola.entity.AudioMixingEntry;
-import com.angelstar.ola.entity.MixerItemEntry;
 import com.angelstar.ola.entity.OlaTemplateResponse;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
@@ -81,6 +85,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     //当前真实的选中的条目位置
     private int currentRealPosition = 0;
     private AudioMixingEntry mAudioMixingEntry;
+    private MixerRecyclerViewAdapter adapter;
 
     private final ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
@@ -105,7 +110,21 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             }
         }
     };
-    private MixerRecyclerViewAdapter adapter;
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 10001) {
+                switch (msg.arg1) {
+                    case BbEffectConstants.stateAudioEffectFinish:
+                        Toast.makeText(OlaTemplateFeedActivity.this, "我收到播放完成的消息啦", Toast.LENGTH_SHORT).show();
+                        //播放完成后，重置到开头继续播放
+                        BbEffectCoreImpl.INSTANCE.setAudioMixingPosition(0);
+                        break;
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +156,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         String mixingFilePath = getExternalCacheDir().getAbsolutePath() + "/accompaniment_bea2c80d430f89100b643c8422193120.mp3";
         String voiceFilePath = getExternalCacheDir().getAbsolutePath() + "/record_287_2022-11-09-11-27-04.pcm";
 
-        BbEffectCoreImpl.INSTANCE.createEffectCore(getApplicationContext());
+        BbEffectCoreImpl.INSTANCE.createEffectCore(getApplicationContext(), new BbEffectCoreEventHandler(mHandler));
         BbEffectCoreImpl.INSTANCE.initialize(2);
         BbEffectCoreImpl.INSTANCE.setAudioEffectDataSource(mAudioMixingEntry.getEffectJson());
         BbEffectCoreImpl.INSTANCE.setAudioMixingFilePath(mixingFilePath, 0);
@@ -164,9 +183,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             BbEffectCoreImpl.INSTANCE.adjustPlaybackSignalVolume(tunerModel.getPlaybackSignalVolume());
         }
 
-//        BBEffectApi.onStateChanged = _innerAudioStateChanged;
         BbEffectCoreImpl.INSTANCE.setAudioProfile(mAudioMixingEntry.getAudioProfile());
-//        BbEffectCoreImpl.INSTANCE.start(); //需要和视频同步播放
+        //先暂时这样吧，后续还需要优化结构和时机
+        BbEffectCoreImpl.INSTANCE.start(); //需要和视频同步播放
     }
 
     private void initActivityDelegate() {
@@ -216,8 +235,10 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                     //点击视频播放/暂停按钮
                     if (mVideoItemView.getVideStateView().isActivated()) {
                         nleEditorContext.getVideoPlayer().pause();
+                        BbEffectCoreImpl.INSTANCE.pause();
                     } else {
                         startPlay(videoItemView.getVideStateView());
+                        BbEffectCoreImpl.INSTANCE.resume();
                     }
                 }
 
@@ -422,7 +443,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private void startPlay(ImageView videStateView) {
         if (null != nleEditorContext) {
             nleEditorContext.getVideoPlayer().play();
-            BbEffectCoreImpl.INSTANCE.start();
             if (null != videStateView) {
                 videStateView.setImageResource(R.mipmap.icon_video_stop);
             }
@@ -435,6 +455,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         currentRealPosition = position;
         //切换ViewPager前先恢复播放器参数
         if (null != nleEditorContext && null != editorActivityDelegate) {
+            //切换视频后，应该从有歌词的位置开始播放，这个seekTo(0)目前不准确
+            BbEffectCoreImpl.INSTANCE.setAudioMixingPosition(0);
             List<String> filePathList = new ArrayList<>();
             filePathList.add(mVideoItemView.videoFilePath);
             editorActivityDelegate.importVideoMedia(filePathList);

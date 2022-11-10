@@ -15,7 +15,6 @@ import com.angelstar.ybj.xbanner.indicator.BaseIndicator;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.angelstar.ybj.xbanner.transformers.ScalePageTransformer;
 import com.angelstar.ybj.xbanner.utils.SizeUtils;
-import com.angelstar.ybj.xbanner.utils.ThreadUtils;
 
 import java.util.ArrayList;
 
@@ -175,32 +174,13 @@ public class OlaBannerView extends FrameLayout {
     };
 
     private void changeSurfaceView(final int smallPos) {
-        ThreadUtils.uiHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < mBannerUrlList.size() && (mBannerUrlList.get(i) != null); i++) {
-                    mBannerUrlList.get(i).onSelected(i == smallPos, mSurfaceView);
-                    if (i == smallPos && mScrollPageListener != null) {
-                        mScrollPageListener.onPageSelected(smallPos, mBannerUrlList.get(i));
-                    }
-                }
+        for (int i = 0; i < mBannerUrlList.size() && (mBannerUrlList.get(i) != null); i++) {
+            mBannerUrlList.get(i).onSelected(i == smallPos, mSurfaceView);
+            if (i == smallPos && mScrollPageListener != null) {
+                mScrollPageListener.onPageSelected(smallPos, mBannerUrlList.get(i));
             }
-        }, 200);
+        }
     }
-
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        int height;
-//        int hMode = MeasureSpec.getMode(heightMeasureSpec);
-//        int hSize = MeasureSpec.getSize(heightMeasureSpec);
-//        if (hMode == MeasureSpec.UNSPECIFIED || hMode == MeasureSpec.AT_MOST) {
-//            height = SizeUtils.dp2px(460,mContext);
-//        } else {
-//            height = hSize;
-//        }
-//        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//    }
 
     /**
      * 设置Banner图片地址数据

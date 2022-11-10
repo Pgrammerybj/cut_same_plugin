@@ -1,4 +1,4 @@
-package com.angelstar.ybj.xbanner.utils;
+package com.angelstar.ola.utils;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +10,6 @@ import android.os.Looper;
  * @Description: android
  */
 public class ThreadUtils {
-
     public static final Handler uiHandler= new Handler(Looper.getMainLooper());
 }
+
