@@ -6,6 +6,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 
 import com.angelstar.ola.OlaTemplateFeedActivity;
+import com.angelstar.ola.ResourceInitCheck;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,9 +40,7 @@ public class CutSamePlugin implements FlutterPlugin, MethodCallHandler, Activity
         } else if (call.method.equals("startCutSamePage")) {
             //跳转到目标页面
             if (null != activity) {
-                Intent intent = new Intent(activity, OlaTemplateFeedActivity.class);
-                intent.setPackage(activity.getPackageName());
-                activity.startActivity(intent);
+                ResourceInitCheck.INSTANCE.isSourceReady(activity);
             }
         } else {
             result.notImplemented();
