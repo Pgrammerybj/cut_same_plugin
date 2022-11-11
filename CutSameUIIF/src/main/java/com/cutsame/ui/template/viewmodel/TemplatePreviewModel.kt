@@ -8,10 +8,8 @@ import com.cutsame.solution.template.model.TemplateItem
 
 class TemplatePreviewModel(application: Application) : AndroidViewModel(application) {
     private val _pageStateIdle = MutableLiveData<Boolean>()
-    val pageStateIdle: LiveData<Boolean> get() = _pageStateIdle
 
     private val _selectedPage = MutableLiveData<TemplateItem>()
-    val selectedPage: LiveData<TemplateItem> get() = _selectedPage
 
     fun selectPage(item: TemplateItem) {
         _selectedPage.value = item

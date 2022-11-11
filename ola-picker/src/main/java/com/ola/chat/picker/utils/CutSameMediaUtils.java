@@ -35,7 +35,8 @@ public class CutSameMediaUtils {
                 mediaItem.type,
                 mediaItem.mediaSrcPath,
                 mediaItem.targetEndTime,
-                mediaItem.volume
+                mediaItem.volume,
+                mediaItem.relation_video_group
         );
     }
 
@@ -64,7 +65,8 @@ public class CutSameMediaUtils {
                 mediaItem.getType(),
                 mediaItem.getMediaSrcPath(),
                 mediaItem.getTargetEndTime(),
-                mediaItem.getVolume()
+                mediaItem.getVolume(),
+                mediaItem.getRelation_video_group()
         );
     }
 

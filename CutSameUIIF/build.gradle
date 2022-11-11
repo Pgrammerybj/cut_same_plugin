@@ -58,13 +58,11 @@ dependencies {
     implementation rootProject.ext.dependencies["videocache"]
 
     api project(":aar_cutsamef")
-//    api project(":aar_list_1.0.1")
     api project(":aar_nleeditor_ck")
-//    api project(":aar_vesdk")
 
-    api project(":vebase")
-    api project(":small-window")
-    implementation project(":verecorder")
-    implementation project(':record-tobres')
+//    api project(":vebase")
+//    api project(":small-window")
+//    implementation project(":verecorder")
+//    implementation project(':record-tobres')
     api project(":ola-picker")
 }

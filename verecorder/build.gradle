@@ -28,9 +28,9 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     // 引用base库
-    api project(':vebase')
+//    api project(':vebase')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':record-tobres')//内置素材
+//    implementation project(':record-tobres')//内置素材
 //    api project(':library-core')
 
 //    implementation project(":aar_cutsamef")

@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file('CutSameIF_ck2.6.6_20220714.aar'))
+artifacts.add("default", file('CutSameIF-release_ck2.6.7_20221108.aar'))

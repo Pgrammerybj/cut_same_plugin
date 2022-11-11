@@ -56,6 +56,57 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     var cutSamePlayer: CutSamePlayer? = null
     protected var templatePlayerErrorCode = TemplateError.SUCCESS
 
+    val playerStateListener = object : PlayerStateListener {
+        override fun onFirstFrameRendered() {
+            onPlayerFirstFrameOk()
+        }
+        override fun onChanged(state: Int) {
+            when (state) {
+                PlayerStateListener.PLAYER_STATE_PREPARED -> {
+                    LogUtil.d(TAG, "PLAYER_STATE_PREPARED")
+                    val textItems = cutSamePlayer?.getTextItems()
+                    if (textItems != null) {
+                        //视频合成之后，获取文本
+                        mutableTextItemList = ArrayList(textItems)
+                    }
+                    onPlayerPrepareOk()
+                    if (!isScreenOn(this@CutPlayerActivity)) {
+                        return
+                    }
+                    cutSamePlayer?.start()
+                }
+                PlayerStateListener.PLAYER_STATE_PLAYING -> {
+                    onPlayerPlaying(true)
+                }
+                PlayerStateListener.PLAYER_STATE_ERROR -> {
+                    onPlayerPlaying(false)
+                }
+                PlayerStateListener.PLAYER_STATE_IDLE -> {
+                    onPlayerPlaying(false)
+                }
+                PlayerStateListener.PLAYER_STATE_PAUSED -> {
+                    onPlayerPlaying(false)
+                }
+                PlayerStateListener.PLAYER_STATE_DESTROYED -> {
+                    Log.d(TAG, "PLAYER_STATE_DESTROYED")
+                    onPlayerDestroy()
+                }
+            }
+        }
+
+        override fun onPlayEof() {
+            onPlayerPlaying(false)
+        }
+
+        override fun onPlayError(what: Int, extra: String) {
+            Log.e(TAG, "onPlayError: " + extra)
+        }
+
+        override fun onPlayProgress(process: Long) {
+            onPlayerProgress(process)
+        }
+    }
+
     private var isPlayingOnPause = false
 
     private lateinit var templateItem: TemplateItem
@@ -82,6 +133,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             finish()
             return
         }
+
         val templateExtraList = Gson().fromJson(templateItem.extra, TemplateExtraList::class.java)
         LogUtil.d(TAG, "onCreate templateExtraList $templateExtraList")
         for (template in templateExtraList.list) {
@@ -122,6 +174,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             return
         }
         isForeground = true
+        cutSamePlayer?.registerPlayerStateListener(playerStateListener)
         compileNextIntent = null
         Log.d(TAG, "onResume  isPlayingOnPause $isPlayingOnPause")
         if (isPlayingOnPause) {
@@ -138,6 +191,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         } else {
             isPlayingOnPause = false
         }
+        cutSamePlayer?.unRegisterPlayerStateListener(playerStateListener)
     }
 
     override fun onDestroy() {
@@ -251,7 +305,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
      * 单选的逻辑
      */
     private fun launchPicker(): Boolean {
-
         val imagePickConfig = ImagePickConfig()
         imagePickConfig.crop = true
         imagePickConfig.cropStyle = ImagePickConfig.CIRCLE
@@ -328,57 +381,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         videoSurfaceView: SurfaceView
     ) {
         cutSamePlayer = CutSameSolution.createCutSamePlayer(videoSurfaceView, templateUrl)
-        cutSamePlayer?.preparePlay(mediaItemList, textItemList, object : PlayerStateListener {
-            override fun onFirstFrameRendered() {
-                onPlayerFirstFrameOk()
-            }
-
-            override fun onChanged(state: Int) {
-                when (state) {
-                    PlayerStateListener.PLAYER_STATE_PREPARED -> {
-                        LogUtil.d(TAG, "PLAYER_STATE_PREPARED")
-                        val textItems = cutSamePlayer?.getTextItems()
-                        if (textItems != null) {
-                            //视频合成之后，获取文本
-                            mutableTextItemList = ArrayList(textItems)
-                        }
-                        onPlayerPrepareOk()
-                        if (!isScreenOn(this@CutPlayerActivity)) {
-                            return
-                        }
-                        cutSamePlayer?.start()
-                    }
-                    PlayerStateListener.PLAYER_STATE_PLAYING -> {
-                        onPlayerPlaying(true)
-                    }
-                    PlayerStateListener.PLAYER_STATE_ERROR -> {
-                        onPlayerPlaying(false)
-                    }
-                    PlayerStateListener.PLAYER_STATE_IDLE -> {
-                        onPlayerPlaying(false)
-                    }
-                    PlayerStateListener.PLAYER_STATE_PAUSED -> {
-                        onPlayerPlaying(false)
-                    }
-                    PlayerStateListener.PLAYER_STATE_DESTROYED -> {
-                        Log.d(TAG, "PLAYER_STATE_DESTROYED")
-                        onPlayerDestroy()
-                    }
-                }
-            }
-
-            override fun onPlayEof() {
-                onPlayerPlaying(false)
-            }
-
-            override fun onPlayError(what: Int, extra: String) {
-                Log.e(TAG, "onPlayError: " + extra)
-            }
-
-            override fun onPlayProgress(process: Long) {
-                onPlayerProgress(process)
-            }
-        })
+        cutSamePlayer?.preparePlay(mediaItemList, textItemList)
     }
 
     private fun mergeMediaItemList(

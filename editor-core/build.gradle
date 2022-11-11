@@ -12,7 +12,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
     }
 
@@ -45,15 +44,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation rootProject.ext.support["recyclerview"]
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     api rootProject.ext.support["appcompat"]
 
-
-//    api project(':library-core')
-//    implementation project(":aar_cutsamef")
-//    implementation project(":aar_list_1.0.1")
     implementation project(":aar_nleeditor_ck")
     implementation project(":aar_vesdk")
 

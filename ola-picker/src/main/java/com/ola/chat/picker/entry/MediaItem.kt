@@ -34,7 +34,8 @@ data class MediaItem(
     var type: String,
     var mediaSrcPath: String,
     var targetEndTime: Long,
-    var volume: Float
+    var volume: Float,
+    var relation_video_group: String
 ) : Parcelable {
     companion object {
         const val TYPE_PHOTO = "photo"

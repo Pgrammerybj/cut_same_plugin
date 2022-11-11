@@ -1,2 +1,2 @@
 configurations.maybeCreate("default")
-artifacts.add("default", file('vesdk-11.3.2.1-tob.aar'))
+artifacts.add("default", file('vesdk-11.8.0.131-release-tob.aar'))
