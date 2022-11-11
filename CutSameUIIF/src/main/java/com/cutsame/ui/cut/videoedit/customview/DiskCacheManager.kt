@@ -3,32 +3,32 @@ package com.cutsame.ui.cut.videoedit.customview
 import com.bumptech.glide.load.Key
 import com.bumptech.glide.load.engine.cache.DiskCache
 import com.bumptech.glide.load.engine.cache.DiskLruCacheWrapper
-import com.cutsame.solution.CutSameSolution
+import com.cutsame.ui.AppContext
 import com.cutsame.ui.utils.FileUtil
 import java.io.File
 import java.security.MessageDigest
 
 object DiskCacheManager {
 
-    private val diskCache =
-        DiskLruCacheWrapper.get(CutSameSolution.getCatchPath(), 500 * 1024 * 1024)
+    private val diskCache: DiskCache? =
+        DiskLruCacheWrapper.get(AppContext.videoFrameCacheFile, (500 * 1024 * 1024).toLong())
 
-    fun get(key: String) = diskCache.get(StringKey(key))
+    fun get(key: String) = diskCache?.get(StringKey(key))
 
     fun put(key: String, file: File) {
-        diskCache.put(StringKey(key), FileWriter(file))
+        diskCache?.put(StringKey(key), FileWriter(file))
     }
 
     fun put(key: String, data: ByteArray) {
-        diskCache.put(StringKey(key), DataWriter(data))
+        diskCache?.put(StringKey(key), DataWriter(data))
     }
 
     fun put(key: String, writer: IWriter) {
-        diskCache.put(StringKey(key), WriterWrapper(writer))
+        diskCache?.put(StringKey(key), WriterWrapper(writer))
     }
 
     fun delete(key: String) {
-        diskCache.delete(StringKey(key))
+        diskCache?.delete(StringKey(key))
     }
 }
 

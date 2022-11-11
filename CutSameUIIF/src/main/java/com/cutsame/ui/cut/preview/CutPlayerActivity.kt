@@ -311,9 +311,8 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         imagePickConfig.defaultResourceType = ImagePickConfig.SELECT_IMAGE
         imagePickConfig.sceneType = ImagePickConfig.PICKER_SINGLE
 
-        val pickerIntent = PickerConstant.createSingleGalleryUIIntent(this, imagePickConfig)?.let {
-            it.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        }
+        val pickerIntent = PickerConstant.createSingleGalleryUIIntent(this, imagePickConfig)
+            ?.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         if (pickerIntent != null) {
             hasLaunchPicker = true
             startActivityForResult(pickerIntent, REQUEST_CODE_SINGLE_CHOOSE)
@@ -355,7 +354,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         val createExportUIIntent = CutSameUiIF.createExportUIIntent(
             this,
             templateItem.templateUrl,
-            templateItem.md5,
             cutSamePlayer!!.getConfigCanvasSize()
         )
         startActivityForResult(createExportUIIntent, REQUEST_CODE_NEXT)

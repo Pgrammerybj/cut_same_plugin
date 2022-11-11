@@ -47,7 +47,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    api project(":CutSameEditor")
     api project(":CutSameUIIF")
     api project(":ola-banner")
     api project(":ola-download")

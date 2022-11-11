@@ -84,7 +84,6 @@ object CutSameUiIF {
     fun createExportUIIntent(
         context: Context,
         templateUrl: String,
-        templateMd5: String,
         canvasSize: Size
     ): Intent? {
         val intent = Intent(INTERFACE_EXPORT)

@@ -6,12 +6,12 @@ import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import com.bytedance.ies.cutsame.util.SharedPreferencesUtils
-import com.cutsame.editor.EditorManager
 import com.cutsame.solution.AuthorityConfig
 import com.cutsame.solution.CutSameSolution
 import com.cutsame.solution.EffectFetcherConfig
 import com.cutsame.solution.TemplateFetcherConfig
 import com.cutsame.ui.ApiUtil
+import com.cutsame.ui.AppContext
 import com.ss.android.ugc.cut_log.LogConfig
 import com.ss.android.ugc.cut_log.LogIF
 import com.ss.android.ugc.cut_log.LogWrapper
@@ -32,6 +32,7 @@ open class APP : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppContext.init(this)
         SharedPreferencesUtils.init(applicationContext)
         val logWrapper = LogWrapper().apply {
             init(
@@ -53,8 +54,8 @@ open class APP : Application() {
             //authorityConfig：鉴权配置
             authorityConfig = AuthorityConfig.Builder()
                 .licensePath(getLicenseFilePath())
-                .audioAuthKey(AUDIO_AUTH_KEY)
-                .audioAuthToken(AUDIO_AUTH_TOKEN)
+                .audioAppKey(AUDIO_AUTH_KEY)
+                .audioToken(AUDIO_AUTH_TOKEN)
                 .authorityListener(object : AuthorityConfig.AuthorityListener {
                     override fun onError(errorCode: Int, errorMsg: String) {
                         Log.d(TAG, "onError $errorCode $errorMsg")
@@ -67,7 +68,6 @@ open class APP : Application() {
             //templateFetcherConfig: 模版拉取配置
             templateFetcherConfig = TemplateFetcherConfig.Builder()
                 .host(ApiUtil.host)
-                .pageSize(20)
                 .build(),
 
             effectFetcherConfig = EffectFetcherConfig.Builder()
@@ -81,7 +81,7 @@ open class APP : Application() {
                 )
                 .build()
         )
-        EditorManager.initEditor(this)
+//        EditorManager.initEditor(this)
     }
 
     private fun getExternalLicenseName(name: String = "test.licbag", context: Context): String {

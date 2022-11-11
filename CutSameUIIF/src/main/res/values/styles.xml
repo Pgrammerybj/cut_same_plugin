@@ -8,7 +8,7 @@
         <item name="android:backgroundDimAmount">0.2</item>
     </style>
 
-    <style name="Cut.Base" parent="Theme.AppCompat.Light.DarkActionBar"></style>
+    <style name="Cut.Base" parent="Theme.AppCompat.Light.DarkActionBar"/>
 
     <style name="Cut.Transparent" parent="Cut.Base">
         <item name="android:windowBackground">@android:color/transparent</item>

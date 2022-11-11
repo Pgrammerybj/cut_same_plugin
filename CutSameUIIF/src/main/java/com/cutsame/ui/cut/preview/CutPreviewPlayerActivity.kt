@@ -26,12 +26,11 @@ import com.cutsame.ui.cut.textedit.listener.PlayerTextEditListenerAdapter
 import com.cutsame.ui.cut.textedit.listener.PlayerTextItemThumbBitmapListener
 import com.cutsame.ui.cut.textedit.view.PlayerMaterialTextEditView
 import com.cutsame.ui.cut.videoedit.customview.PlayerMaterialVideoView
-import com.cutsame.ui.gallery.album.model.MaterialEditType
 import com.cutsame.ui.utils.showErrorTipToast
+import com.ola.chat.picker.album.model.MaterialEditType
 import com.ss.android.ugc.cut_log.LogUtil
 import com.ss.android.ugc.cut_ui.MediaItem
 import kotlinx.android.synthetic.main.activity_cut_player.*
-import kotlinx.android.synthetic.main.fragment_album.*
 import kotlinx.android.synthetic.main.fragment_cut_video_list.*
 import kotlinx.android.synthetic.main.fragment_cut_video_play.*
 import kotlinx.android.synthetic.main.layout_materail_video_progress.*

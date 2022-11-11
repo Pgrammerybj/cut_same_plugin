@@ -6,12 +6,9 @@ import android.os.Looper
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import java.lang.reflect.Constructor
 
-var FastMain = Looper.getMainLooper().asHandler(true).asCoroutineDispatcher("fast-main")
+var FastMain = Looper.getMainLooper().asHandler().asCoroutineDispatcher("fast-main")
 
-internal fun Looper.asHandler(async: Boolean): Handler {
-    if (!async || Build.VERSION.SDK_INT < 16) {
-        return Handler(this)
-    }
+internal fun Looper.asHandler(): Handler {
 
     if (Build.VERSION.SDK_INT >= 28) {
         // TODO compile against API 28 so this can be invoked without reflection.

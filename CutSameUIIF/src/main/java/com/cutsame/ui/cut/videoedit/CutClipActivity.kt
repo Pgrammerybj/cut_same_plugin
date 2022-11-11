@@ -141,7 +141,7 @@ class CutClipActivity : AppCompatActivity(), CoroutineScope {
 
     private fun initPlayer(mediaItem: MediaItem, canvasSize: Point) {
         isViewPrepared = false
-        mediaPlayer = CutSameSolution.createMediaPlayer(this@CutClipActivity, clipSurface)
+        mediaPlayer = CutSameSolution.createMediaPlayer(clipSurface)
         mediaPlayer?.preparePlayBySingleMedia(mediaItem, canvasSize, object : PlayerStateListener {
             override fun onFirstFrameRendered() {
             }

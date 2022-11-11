@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cutsame.ui.R
@@ -15,7 +14,7 @@ import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.cut.CutSameDesignDrawableFactory
 import com.cutsame.ui.cut.textedit.listener.PlayerTextEditItemListener
 import com.cutsame.ui.utils.SizeUtil
-import com.vesdk.vebase.view.RoundCornerImageView
+import com.ola.chat.picker.customview.RoundCornerImageView
 import java.util.*
 
 class PlayerTextEditAdapter(private val itemListener: PlayerTextEditItemListener?) :

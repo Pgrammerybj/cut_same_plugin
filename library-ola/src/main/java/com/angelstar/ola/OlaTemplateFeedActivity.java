@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,11 +40,9 @@ import com.angelstar.ola.utils.SizeUtil;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
 import com.angelstar.ola.viewmodel.TemplateNetPageModel;
-import com.angelstar.ola.viewmodel.TemplateNetPageViewModelFactory;
 import com.angelstar.ybj.xbanner.OlaBannerView;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
-import com.cutsame.solution.template.model.TemplateCategory;
 import com.cutsame.solution.template.model.TemplateItem;
 import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
@@ -137,13 +134,15 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         mAudioMixingEntry = JsonHelper.fromJson(MockJson.getJson(this, "AudioMixingJson.json"), AudioMixingEntry.class);
 
-        TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
-        templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
-        templateNetPageModel.loadFeedList(true);
-        templateNetPageModel.getTemplateItems().observe(this, templateItems -> {
-            TemplateItem templateItem = templateItems.get(0);
-            Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
-        });
+        //todo:拉取我们自己的服务端模版
+
+//        TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
+//        templateNetPageModel = ViewModelProviders.of(this, new TemplateNetPageViewModelFactory(templateCategory)).get(TemplateNetPageModel.class);
+//        templateNetPageModel.loadFeedList(true);
+//        templateNetPageModel.getTemplateItems().observe(this, templateItems -> {
+//            TemplateItem templateItem = templateItems.get(0);
+//            Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
+//        });
         //初始化调音台
         intiAudioMixing();
         initActivityDelegate();

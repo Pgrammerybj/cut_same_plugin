@@ -9,7 +9,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.cutsame.ui.cut.lyrics.PlayerMaterialLyricsView;
 import com.cutsame.ui.cut.textedit.view.PlayerMaterialTextEditView;
 import com.cutsame.ui.cut.videoedit.customview.PlayerMaterialVideoView;
-import com.cutsame.ui.gallery.album.model.MaterialEditType;
+import com.ola.chat.picker.album.model.MaterialEditType;
 
 import org.jetbrains.annotations.NotNull;
 
