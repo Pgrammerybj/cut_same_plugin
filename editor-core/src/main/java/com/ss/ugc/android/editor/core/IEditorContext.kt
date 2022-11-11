@@ -4,7 +4,8 @@ import android.view.SurfaceView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bytedance.ies.nle.editor_jni.*
-import com.bytedance.ies.nlemediajava.keyframe.bean.KeyframeInfo
+import com.bytedance.ies.nle.mediapublic.util.KeyframeInfo
+//import com.bytedance.ies.nlemediajava.keyframe.bean.KeyframeInfo
 import com.ss.ugc.android.editor.core.api.adjust.IAdjustEditor
 import com.ss.ugc.android.editor.core.api.animation.IAnimationEditor
 import com.ss.ugc.android.editor.core.api.audio.IAudioEditor
@@ -194,7 +195,7 @@ interface IEditorContext {
 
     fun done(actionMsg: String? = null)
 
-    fun transientDone();
+    fun transientDone()
 
     fun updateSelectedTrackSlot(nleTrack: NLETrack?, nleTrackSlot: NLETrackSlot?)
 

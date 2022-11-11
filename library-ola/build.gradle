@@ -47,9 +47,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    api project(":CutSameUIIF")
-    api project(":ola-banner")
-    api project(":ola-download")
+    implementation project(":CutSameUIIF")
+    implementation project(":ola-banner")
+    implementation project(":ola-download")
+    implementation project(path: ':editor-core')
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation rootProject.ext.dependencies["retrofit2_adapter-rxjava2"]

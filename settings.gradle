@@ -23,11 +23,11 @@ include ':ola-download'
 //剪同款库
 include ':CutSameUIIF'
 //基础编辑
-include ':editor-main'
-include ':editor-btmpanel'
+//include ':editor-main'
+//include ':editor-btmpanel'
 include ':editor-core'
-include ':editor-uibase'
-include ':editor-trackpanel'
-include ':editor-preview'
-include ':editor-tobres'
+//include ':editor-uibase'
+//include ':editor-trackpanel'
+//include ':editor-preview'
+//include ':editor-tobres'
 

@@ -48,12 +48,14 @@ import com.cutsame.ui.template.play.PlayCacheServer;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ola.chat.picker.utils.MTUtils;
+import com.ola.chat.picker.utils.SpaceItemDecoration;
 import com.ola.download.RxNetDownload;
 import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
-import com.ss.ugc.android.editor.core.utils.DLog;
-import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
+//import com.ss.ugc.android.editor.core.NLEEditorContext;
+//import com.ss.ugc.android.editor.core.utils.DLog;
+//import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -67,7 +69,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     NLEEditorContext nleEditorContext;
     private IPlayerActivityDelegate editorActivityDelegate;
     private SurfaceView mSurfaceView;
-    private TemplateNetPageModel templateNetPageModel;
 
     private FloatSliderView mFloatSliderView;
     private TextView mTvCurrentPlayTime;

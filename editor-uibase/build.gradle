@@ -33,20 +33,12 @@ dependencies {
     api project(':aar_nleeditor_ck')
     api project(':aar_vesdk')
 
-//    公用资源在base中依赖
-
     //公用的support相关库在base中依赖
     api 'com.google.android.material:material:1.4.0'
     api rootProject.ext.support["constraint-layout"]
-
-    //noinspection GradleCompatible
     api rootProject.ext.support["recyclerview"]
 
-    // For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'
-    // For developers using the Android Support Library
-//    api 'pub.devrel:easypermissions:2.0.1'
-
     api rootProject.ext.dependencies["smoothprogressbar"]
     api rootProject.ext.dependencies["lottie"]
 

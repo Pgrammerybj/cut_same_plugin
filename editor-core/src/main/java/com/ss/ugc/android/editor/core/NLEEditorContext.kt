@@ -9,9 +9,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.bytedance.ies.nle.editor_jni.*
+import com.bytedance.ies.nle.mediapublic.util.KeyframeInfo
 import com.bytedance.ies.nleeditor.getMainSegment
-import com.bytedance.ies.nlemedia.KeyFrameListener
-import com.bytedance.ies.nlemediajava.keyframe.bean.KeyframeInfo
+//import com.bytedance.ies.nlemedia.KeyFrameListener
+//import com.bytedance.ies.nlemediajava.keyframe.bean.KeyframeInfo
 import com.ss.ugc.android.editor.core.api.adjust.IAdjustEditor
 import com.ss.ugc.android.editor.core.api.animation.IAnimationEditor
 import com.ss.ugc.android.editor.core.api.audio.IAudioEditor
@@ -653,24 +654,24 @@ class NLEEditorContext(activity: FragmentActivity) : BaseViewModel(activity), IE
     }
 
     private fun setKeyframeListener() {
-        videoPlayer.player?.setKeyframeListener(object : KeyFrameListener {
-            override fun onDisplayCallback(time: Int, mode: Int, type: Int) {
-            }
-
-            //这个方法目前在子线程被回调
-            override fun onProcessCallback(filterIndex: Int, time: Int, param: String) {
-                val selectSlot = selectedNleTrackSlot ?: return
-                val selectTrack = selectedNleTrack ?: return
-                val curSlotTime = videoPlayer.player?.getCurrentPosition() ?: 0L
-                if (curSlotTime < selectSlot.startTime || curSlotTime > selectSlot.endTime) {
-                    return
-                }
-                keyframeEditor.updateSlotFromLocal(curSlotTime)//ve未回调音量，手动触发下刷新
-                videoPlayer.player?.refreshAllKeyframeInfo(filterIndex, param, selectTrack, selectSlot)
-                mMutableKeyframeUpdateEvent.postValue(KeyframeUpdate(filterIndex, time, param))
-            }
-
-        })
+//        videoPlayer.player?.setKeyframeListener(object : KeyFrameListener {
+//            override fun onDisplayCallback(time: Int, mode: Int, type: Int) {
+//            }
+//
+//            //这个方法目前在子线程被回调
+//            override fun onProcessCallback(filterIndex: Int, time: Int, param: String) {
+//                val selectSlot = selectedNleTrackSlot ?: return
+//                val selectTrack = selectedNleTrack ?: return
+//                val curSlotTime = videoPlayer.player?.getCurrentPosition() ?: 0L
+//                if (curSlotTime < selectSlot.startTime || curSlotTime > selectSlot.endTime) {
+//                    return
+//                }
+//                keyframeEditor.updateSlotFromLocal(curSlotTime)//ve未回调音量，手动触发下刷新
+//                videoPlayer.player?.refreshAllKeyframeInfo(filterIndex, param, selectTrack, selectSlot)
+//                mMutableKeyframeUpdateEvent.postValue(KeyframeUpdate(filterIndex, time, param))
+//            }
+//
+//        })
     }
 
     override fun getKeyframeInfo(filterIndex: Int): KeyframeInfo? =
