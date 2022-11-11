@@ -50,19 +50,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation rootProject.ext.support["recyclerview"]
     implementation rootProject.ext.support["constraint-layout"]
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation rootProject.ext.support["swiperefreshlayout"]
     implementation rootProject.ext.support["androidx-lifecycle"]
+    implementation rootProject.ext.dependencies["glide"]
+    implementation rootProject.ext.dependencies["videocache"]
     implementation ('com.airbnb.android:lottie:5.2.0')
     implementation 'com.google.code.gson:gson:2.9.1'
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-    implementation rootProject.ext.dependencies["videocache"]
 
     api project(":aar_cutsamef")
     api project(":aar_nleeditor_ck")
-
-//    api project(":vebase")
-//    api project(":small-window")
-//    implementation project(":verecorder")
-//    implementation project(':record-tobres')
     api project(":ola-picker")
 }

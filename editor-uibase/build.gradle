@@ -41,10 +41,6 @@ dependencies {
 
     //noinspection GradleCompatible
     api rootProject.ext.support["recyclerview"]
-    // 列表库
-
-    //权限
-//    api rootProject.ext.dependencies["easy-permission"]
 
     // For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'

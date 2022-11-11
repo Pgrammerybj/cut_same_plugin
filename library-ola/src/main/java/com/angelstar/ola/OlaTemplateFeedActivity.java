@@ -39,7 +39,6 @@ import com.angelstar.ola.utils.JsonHelper;
 import com.angelstar.ola.utils.SizeUtil;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
-import com.angelstar.ola.viewmodel.TemplateNetPageModel;
 import com.angelstar.ybj.xbanner.OlaBannerView;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
@@ -95,7 +94,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         public void onPlayTimeChanged(String curPlayerTime, String totalPlayerTime, boolean isPause) {
             mTvCurrentPlayTime.setText(String.format("%s", curPlayerTime));
             mTvVideoTotalTime.setText(String.format("%s", totalPlayerTime));
-            DLog.d("update seek progress/" + curPlayerTime + "//" + totalPlayerTime);
             if (nleEditorContext != null && !nleEditorContext.getVideoPlayer().isPlaying()
                     && nleEditorContext.getVideoPlayer().totalDuration() != 0) {
                 //视频播放时动态更新全屏状态下的进度条

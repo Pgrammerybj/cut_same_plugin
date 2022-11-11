@@ -18,37 +18,13 @@ ext {
     //依赖的第三方库
     dependencies = [
             "gson"                     : "com.google.code.gson:gson:2.7",
-            "MVVMHabit"                : "com.github.goldze:MVVMHabit:3.1.4",
-            "arouter-api"              : "com.alibaba:arouter-api:1.4.1",
-            "arouter-compiler"         : "com.alibaba:arouter-compiler:1.2.2",
-            "butterknife"              : "com.jakewharton:butterknife:8.5.1",
-            "butterknife-compiler"     : "com.jakewharton:butterknife-compiler:8.5.1",
-            "zxing"                    : "com.google.zxing:core:3.3.3",
             "glide"                    : "com.github.bumptech.glide:glide:4.13.1",
-            "bugly"                    : "com.tencent.bugly:crashreport:latest.release",
             "mediapicker"              : "com.dmcBig.focus:mediapicker:4.7",
-            "easy-permission"          : "pub.devrel:easypermissions:3.0.0",
             "okhttp"                   : "com.squareup.okhttp3:okhttp:3.10.0",
-            "leakcanary-debug"         : "com.squareup.leakcanary:leakcanary-android:1.6.3",
-            "leakcanary-release"       : "com.squareup.leakcanary:leakcanary-android-no-op:1.6.3",
             "smoothprogressbar"        : "com.github.castorflex.smoothprogressbar:library:1.1.0",
-            "photoView"                : "com.github.chrisbanes.photoview:library:1.2.4",
             "lottie"                   : "com.airbnb.android:lottie:2.8.0",
             "retrofit2_adapter-rxjava2": "com.squareup.retrofit2:adapter-rxjava2:2.9.0",
             "retrofit2_converter-gson" : "com.squareup.retrofit2:converter-gson:2.9.0",
             "videocache"               : "com.danikula:videocache:2.7.1",
-//            "fragment-rigger"          : "com.justkiddingbaby:fragment-rigger:1.4.4",
     ]
-
-    // 依赖的内部库
-//    versions = [
-//            "vesdk"         : "11.3.2.1-tob",
-//            "nleplatform"   : "11.6.1.0-rc.5-ck",
-//            "effectplatform": "760.0.0.175-cktob",
-//            "editor"        : "0.5.0-alpha.87-ck",
-//            "cutsameconsumer": "2.0.6-alpha.12-ck",
-//            'veRecorder'     : '0.0.1-alpha.19'
-//    ]
-//    vesdk_version = versions['vesdk']
-//    VESDK_VERSION = versions['vesdk']//NLE源码依赖版本
 }
