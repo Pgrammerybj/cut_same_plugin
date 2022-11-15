@@ -103,11 +103,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                     Log.i(TAG, "curPlayerTime:" + 100 * nleEditorContext.getPlayer().curPosition() + " | totalPlayerTime:" + nleEditorContext.getPlayer().totalDuration());
                 }
                 mFloatSliderView.setCurrPosition(position);
-
-                if (position >= 100) {
-                    nleEditorContext.looperPlay();
-                }
-
             }
 
             if (isPause) {

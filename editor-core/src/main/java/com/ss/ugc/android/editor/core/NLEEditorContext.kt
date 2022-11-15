@@ -80,15 +80,4 @@ class NLEEditorContext(activity: FragmentActivity) : BaseViewModel(activity), IE
     }
 
     override fun getString(resId: Int): String = activity.getString(resId)
-
-
-    fun looperPlay() {
-        nleSession.playerApi?.apply {
-            seekTime(0, NLESeekFlag.EDITOR_SEEK_FLAG_LastSeek) {
-                refreshCurrentFrame()
-                play()
-            }
-        }
-    }
-
 }

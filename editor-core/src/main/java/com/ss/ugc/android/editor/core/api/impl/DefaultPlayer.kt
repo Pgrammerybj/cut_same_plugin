@@ -56,7 +56,6 @@ class DefaultPlayer(val editorContext: IEditorContext) : IPlayer {
             // source --0 播放   source -> 1 seek
             if (source == 0) {
                 if (isRangePlay && time + 33000 >= rangeEndTime) {
-
                     pause()
                     playHandler.post {
 //                        seekAndMoveTrackAsync(rangeEndTime - 1000) //需要误差1ms来触发seek到当前段的尾帧
