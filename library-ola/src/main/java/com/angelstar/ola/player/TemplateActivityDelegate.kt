@@ -2,21 +2,22 @@ package com.angelstar.ola.player
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.SurfaceView
 import androidx.fragment.app.FragmentActivity
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener
 import com.bytedance.ies.nle.editor_jni.NLEEditorListener
 import com.bytedance.ies.nle.editor_jni.NLEModel
-import com.bytedance.ies.nle.editor_jni.TemplateInfo
-import com.ss.ugc.android.editor.base.EditorSDK
-import com.ss.ugc.android.editor.base.utils.FileUtil
-import com.ss.ugc.android.editor.base.utils.runOnUiThread
 import com.ss.ugc.android.editor.core.Constants
+import com.ss.ugc.android.editor.core.Constants.Companion.STATE_PAUSE
+import com.ss.ugc.android.editor.core.Constants.Companion.STATE_PLAY
+import com.ss.ugc.android.editor.core.Constants.Companion.STATE_SEEK
 import com.ss.ugc.android.editor.core.NLEEditorContext
-import com.ss.ugc.android.editor.core.api.video.EditMedia
+import com.ss.ugc.android.editor.core.api.params.EditMedia
+import com.ss.ugc.android.editor.core.getNLEEditor
 import com.ss.ugc.android.editor.core.utils.DLog
+import com.ss.ugc.android.editor.core.utils.FileUtil
 import com.ss.ugc.android.editor.core.utils.LiveDataBus
+import com.ss.ugc.android.editor.core.utils.runOnUiThread
 import com.ss.ugc.android.editor.core.vm.EditViewModelFactory
 import java.util.*
 
@@ -40,11 +41,13 @@ class TemplateActivityDelegate(
     private val mHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate() {
-        nleEditorContext =
-            EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
-        nleEditorContext!!.nleEditor.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
+        nleEditorContext = EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
+        nleEditorContext?.getNLEEditor()?.addConsumer(nleEditorListener)//往nleEditor中加入 监听器
+//        nleEditorContext.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
         initNLEPlayer()//1️⃣
         registerEvent()
+
+
     }
 
     /**
@@ -52,10 +55,9 @@ class TemplateActivityDelegate(
      *
      */
     private fun initNLEPlayer() {
-        nleEditorContext?.templateInfo = TemplateInfo()
         val rootPath = activity.filesDir.absolutePath
         if (surfaceView != null) {
-            nleEditorContext!!.init(rootPath, surfaceView)
+            nleEditorContext?.init(rootPath, surfaceView)
         }
     }
 
@@ -65,25 +67,22 @@ class TemplateActivityDelegate(
         val select: MutableList<EditMedia> = ArrayList()
         filePathList.forEach { select.add(EditMedia(it, true)) }
         //先清空主轨道
-        nleEditorContext!!.nleMainTrack.clearSlot()
+        nleEditorContext?.getMainTrack()?.clearSlot()
         //原预览视频静音
-        nleEditorContext!!.videoEditor.importMedia(
-            select,
-            EditorSDK.instance.config.pictureTime,
-            EditorSDK.instance.config.isFixedRatio
-        )
+        nleEditorContext?.editor?.initMainTrack(select)
+        nleEditorContext?.player?.prepare()
         activity.lifecycle.addObserver(nleEditorContext!!)
     }
 
     //4️⃣
     private val nleEditorListener: NLEEditorListener = object : NLEEditorListener() {
         override fun onChanged() {
-            val model = nleEditorContext!!.nleModel  //获取nle model
-            if (model.tracks?.size == 0) {
+            val model = nleEditorContext?.nleModel  //获取nle model
+            if (model?.tracks?.size == 0) {
                 return
             }
             //日志耗时约50ms
-            if (model.stage != null) {
+            if (model?.stage != null) {
                 nleModel = model
                 runOnUiThread {
                     handleVEEditor()
@@ -99,7 +98,7 @@ class TemplateActivityDelegate(
                 FileUtil.stringForTime(getTotalDuration()),
                 false
             )
-            mHandler.postDelayed(this, 50)
+            mHandler.postDelayed(this, 100)
         }
     }
 
@@ -107,35 +106,29 @@ class TemplateActivityDelegate(
         LiveDataBus.getInstance().with(Constants.KEY_MAIN, Int::class.java)
             .observe(activity, { position ->
                 when (position) {
-                    NLEEditorContext.STATE_PLAY -> { //代表播放
+                    STATE_PLAY -> { //代表播放
                         mHandler.removeCallbacks(runnable) // 防止多次调play的时候 有重复
-                        nleEditorContext!!.stopTrack()
+                        nleEditorContext?.player?.isPlaying = true
                         mHandler.post(runnable)
                         viewStateListener?.onPlayViewActivate(true)
                     }
-                    NLEEditorContext.STATE_PAUSE -> { //代表暂停 统一处理ui状态
+                    STATE_PAUSE -> { //代表暂停 统一处理ui状态
                         DLog.d("editorModel.STATE_PAUSE....")
                         mHandler.removeCallbacks(runnable)
                         viewStateListener?.onPlayViewActivate(false)
-                        nleEditorContext!!.stopTrack()
+                        nleEditorContext?.player?.isPlaying = false
                         viewStateListener?.onPlayTimeChanged(
                             FileUtil.stringForTime(getCurrentPosition()),
                             FileUtil.stringForTime(getTotalDuration()),
                             true
                         )
-                        if (nleEditorContext!!.videoPlayer.isPlayingInFullScreen) {
-                            nleEditorContext!!.videoPlayer.isPlayingInFullScreen = false
-                        }
                         DLog.d("暂停了,当前播放位置：" + getCurrentPosition())
                     }
-                    NLEEditorContext.STATE_BACK -> { // 点击关闭转场面板按钮
-                        DLog.d("取消转场按钮的选中态和所选slot....")
-                    }
-                    NLEEditorContext.STATE_SEEK -> { // seek了
+                    STATE_SEEK -> { // seek了
                         DLog.d("editorModel.STATE_SEEK....")
                         mHandler.removeCallbacks(runnable)
                         viewStateListener?.onPlayViewActivate(false)
-                        nleEditorContext!!.stopTrack()
+                        nleEditorContext?.player?.isPlaying = false
                         DLog.d("seek了: " + getCurrentPosition())
                         viewStateListener?.onPlayTimeChanged(
                             FileUtil.stringForTime(getCurrentPosition()),
@@ -151,42 +144,38 @@ class TemplateActivityDelegate(
      * 5️⃣ NLE数据驱动触发VEEditor
      */
     private fun handleVEEditor() {
-        if ((nleEditorContext != null) && (null != nleEditorContext?.videoPlayer) && (null != nleEditorContext?.videoPlayer?.player)) {
-            //此处很重要！
-            nleEditorContext?.videoPlayer?.player?.dataSource = nleEditorContext!!.nleModel
-        }
+        nleEditorContext?.nleSession?.dataSource = nleEditorContext?.nleModel
     }
 
     override fun onResume() {
         nleEditorContext?.apply {
             if (nleEditorContext?.nleModel?.stage != null) {
-                videoPlayer.resume()
+                player.resume()
             }
         }
     }
 
     override fun onPause() {
-        nleEditorContext!!.videoPlayer.posWhenEditorSwitch =
-            nleEditorContext!!.videoPlayer.curPosition()
+        nleEditorContext?.player?.curPosition()
     }
 
     override fun play() {
-        nleEditorContext!!.videoPlayer.play()
+        nleEditorContext?.player?.play()
     }
 
     override fun pause() {
-        nleEditorContext!!.videoPlayer.pause()
+        nleEditorContext?.player?.pause()
     }
 
     override fun onDestroy() {
         mHandler.removeCallbacksAndMessages(null)
     }
 
-    private fun getCurrentPosition(): Int {
-        return nleEditorContext!!.videoPlayer.curPosition()
+    private fun getCurrentPosition(): Long {
+        return nleEditorContext?.player?.curPosition()!!
     }
 
-    private fun getTotalDuration(): Int {
-        return nleEditorContext!!.videoPlayer.totalDuration()
+    private fun getTotalDuration(): Long {
+        return nleEditorContext?.player?.totalDuration()!!
     }
 }

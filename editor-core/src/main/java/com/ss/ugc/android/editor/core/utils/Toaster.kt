@@ -33,39 +33,3 @@ object DefaultToast : IToast {
         toast?.show()
     }
 }
-
-/**
- * 基础模块不推荐外部使用
- */
-object Toaster {
-
-    lateinit var context: Context
-
-    private var toast: IToast = DefaultToast
-
-    @JvmStatic
-    fun init(context: Context) {
-        this.context = context.applicationContext
-    }
-
-    @JvmStatic
-    fun setToast(toast: IToast) {
-        this.toast = toast
-    }
-
-    @JvmStatic
-    fun show(message: String) {
-        show(message, null)
-    }
-
-    @JvmStatic
-    fun toast(message: String) {
-        show(message, Toast.LENGTH_LONG)
-    }
-
-    @JvmStatic
-    fun show(message: String, duration: Int? = null) {
-        toast.onToast(context, message, duration)
-    }
-
-}

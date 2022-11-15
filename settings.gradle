@@ -15,6 +15,9 @@ include ':aar_cutsamef'
 include ':aar_list'
 include ':aar_nleeditor_ck'
 include ':aar_vesdk'
+//Ola音频播放器
+include ':LocalRepo:aar_effect_core'
+include ':LocalRepo:aar_karaoke'
 //Ola业务组件库
 include ':library-ola'
 include ':ola-banner'
@@ -23,11 +26,4 @@ include ':ola-download'
 //剪同款库
 include ':CutSameUIIF'
 //基础编辑
-//include ':editor-main'
-//include ':editor-btmpanel'
 include ':editor-core'
-//include ':editor-uibase'
-//include ':editor-trackpanel'
-//include ':editor-preview'
-//include ':editor-tobres'
-

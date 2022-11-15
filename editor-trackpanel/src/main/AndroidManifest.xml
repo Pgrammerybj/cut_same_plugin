@@ -1,8 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ss.ugc.android.editor.track" >
-    <application>
-        <meta-data
-            android:name="ELEMENT_com.ss.ugc.android.editortrack.MAIN"
-            android:value="com.ss.ugc.android.editortrack.TrackElement" />
-    </application>
-</manifest>

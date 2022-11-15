@@ -25,7 +25,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
             android:text="调音台"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/white"
             android:textSize="18sp" />
     </RelativeLayout>
 

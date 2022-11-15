@@ -3,6 +3,8 @@ package com.angelstar.ybj.xbanner;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -185,7 +187,7 @@ public class OlaBannerView extends FrameLayout {
     /**
      * 设置Banner图片地址数据
      */
-    public void setBannerData(final ArrayList<VideoItemView> bannerData, SurfaceView mSurfaceView) {
+    public void setBannerData(final ArrayList<VideoItemView> bannerData, final SurfaceView mSurfaceView) {
         int currentPos = MAX_VALUE / 2 - (MAX_VALUE / 2) % getRealCount(bannerData);
         this.mSurfaceView = mSurfaceView;
         mBannerViewPager.setCurrentItem(currentPos);
@@ -193,12 +195,17 @@ public class OlaBannerView extends FrameLayout {
         mBannerUrlList.addAll(bannerData);
         mIndicator.setCellCount(bannerData.size());
 
-
         if (bannerData.size() != 0) {
             //首次进入mSurfaceView应添加到默认显示的条目0
             final VideoItemView videoItemView = bannerData.get(0);
-            mScrollPageListener.onPageSelected(0, videoItemView);
-            videoItemView.onSelected(true, mSurfaceView);
+            Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+                @Override
+                public boolean queueIdle() {
+                    mScrollPageListener.onPageSelected(0, videoItemView);
+                    videoItemView.onSelected(true, mSurfaceView);
+                    return false;
+                }
+            });
         }
 
         mAdapter.notifyDataSetChanged();

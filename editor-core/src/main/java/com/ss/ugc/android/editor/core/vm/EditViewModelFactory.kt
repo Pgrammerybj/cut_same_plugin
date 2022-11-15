@@ -1,12 +1,12 @@
 package com.ss.ugc.android.editor.core.vm
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import java.lang.reflect.InvocationTargetException
 
-class EditViewModelFactory(val activity: FragmentActivity) : ViewModelProvider.AndroidViewModelFactory(activity.application) {
+class EditViewModelFactory(private val activity: FragmentActivity) : ViewModelProvider.AndroidViewModelFactory(activity.application) {
     companion object {
         private var sInstance: EditViewModelFactory? = null
         private fun getInstance(activity: FragmentActivity): EditViewModelFactory {

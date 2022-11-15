@@ -50,10 +50,15 @@ dependencies {
     implementation project(":CutSameUIIF")
     implementation project(":ola-banner")
     implementation project(":ola-download")
-    implementation project(path: ':editor-core')
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation project(":editor-core")
+    //Ola音频播放器
+    implementation project(":LocalRepo:aar_effect_core")
+    implementation project(":LocalRepo:aar_karaoke")
+
     implementation 'com.google.android.material:material:1.4.0'
+    implementation rootProject.ext.support["appcompat"]
     implementation rootProject.ext.dependencies["retrofit2_adapter-rxjava2"]
     implementation rootProject.ext.dependencies["retrofit2_converter-gson"]
     implementation rootProject.ext.dependencies["videocache"]
+    implementation rootProject.ext.dependencies["glide"]
 }

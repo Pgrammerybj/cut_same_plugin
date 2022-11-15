@@ -31,7 +31,7 @@
         android:background="@mipmap/composite_video_button"
         android:gravity="center"
         android:text="生成作品"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 
     <LinearLayout

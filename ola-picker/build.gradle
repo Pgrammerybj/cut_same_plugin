@@ -42,9 +42,9 @@ dependencies {
     implementation rootProject.ext.support["constraint-layout"]
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation ('com.airbnb.android:lottie:5.2.0')
+    implementation rootProject.ext.dependencies["lottie"]
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+//    implementation 'androidx.appcompat:appcompat:1.4.1'
 
     api project(":aar_cutsamef")
 }

@@ -3,7 +3,6 @@ package com.angelstar.ola.player
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener
 import com.ss.ugc.android.editor.core.NLEEditorContext
 
-//import com.ss.ugc.android.editor.core.NLEEditorContext
 
 interface IPlayerActivityDelegate {
 

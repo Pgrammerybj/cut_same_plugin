@@ -54,8 +54,8 @@ dependencies {
     implementation rootProject.ext.support["androidx-lifecycle"]
     implementation rootProject.ext.dependencies["glide"]
     implementation rootProject.ext.dependencies["videocache"]
-    implementation ('com.airbnb.android:lottie:5.2.0')
-    implementation 'com.google.code.gson:gson:2.9.1'
+    implementation rootProject.ext.dependencies["lottie"]
+    implementation rootProject.ext.dependencies["gson"]
 
     api project(":aar_cutsamef")
     api project(":aar_nleeditor_ck")

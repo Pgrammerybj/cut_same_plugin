@@ -1,8 +1,5 @@
 package com.ss.ugc.android.editor.core.utils;
 
-
-
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;

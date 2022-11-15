@@ -2,6 +2,7 @@ package com.ss.ugc.android.editor.core
 
 import android.content.Context
 import android.text.TextUtils
+import com.ss.ugc.android.editor.core.monitor.IMonitorService
 import com.ss.ugc.android.editor.core.utils.AssetsUtils
 import java.io.File
 import java.util.Locale
@@ -20,12 +21,16 @@ class EditorCoreInitializer {
 
     var resourcePath: String? = null
 
-    var localResourcePath: String? = null
+    var monitorService: IMonitorService? = null
+
+//    var draftHelper: IDraftHelper? = null
+
+    var draftDir: File? = null
 
     fun getWaterMarkPath(): String {
-        localResourcePath ?: throw IllegalStateException("ResourceRootPath is null.")
+        resourcePath ?: throw IllegalStateException("ResourceRootPath is null.")
         // file/editor/EditorResource/Filter/
-        return File(localResourcePath, "watermark.bundle").absolutePath + File.separator + "ve-watermark.png"
+        return File(resourcePath, "watermark").absolutePath + File.separator + "ve-watermark.png"
     }
 
     fun getDefaultTextStyle(): String? {

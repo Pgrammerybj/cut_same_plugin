@@ -12,17 +12,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.vesdk.vebase.view.RoundCornerImageView
+        <com.ola.chat.picker.customview.RoundCornerImageView
             android:id="@+id/thumbView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:cutradius="8dp"
+            app:cutRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/default_album_art"
             tools:visibility="visible" />
 
         <TextView

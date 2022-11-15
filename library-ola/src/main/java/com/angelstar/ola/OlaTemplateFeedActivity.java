@@ -52,6 +52,7 @@ import com.ola.chat.picker.utils.SpaceItemDecoration;
 import com.ola.download.RxNetDownload;
 import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
+import com.ss.android.ugc.cut_log.LogUtil;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 //import com.ss.ugc.android.editor.core.NLEEditorContext;
 //import com.ss.ugc.android.editor.core.utils.DLog;
@@ -95,12 +96,20 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         public void onPlayTimeChanged(String curPlayerTime, String totalPlayerTime, boolean isPause) {
             mTvCurrentPlayTime.setText(String.format("%s", curPlayerTime));
             mTvVideoTotalTime.setText(String.format("%s", totalPlayerTime));
-            if (nleEditorContext != null && !nleEditorContext.getVideoPlayer().isPlaying()
-                    && nleEditorContext.getVideoPlayer().totalDuration() != 0) {
+            if (nleEditorContext != null && nleEditorContext.getPlayer().isPlaying() && nleEditorContext.getPlayer().totalDuration() != 0) {
                 //视频播放时动态更新全屏状态下的进度条
-                float position = 100 * nleEditorContext.getVideoPlayer().curPosition() / nleEditorContext.getVideoPlayer().totalDuration();
+                float position = 100 * nleEditorContext.getPlayer().curPosition() / nleEditorContext.getPlayer().totalDuration();
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "curPlayerTime:" + 100 * nleEditorContext.getPlayer().curPosition() + " | totalPlayerTime:" + nleEditorContext.getPlayer().totalDuration());
+                }
                 mFloatSliderView.setCurrPosition(position);
+
+                if (position >= 100) {
+                    nleEditorContext.looperPlay();
+                }
+
             }
+
             if (isPause) {
                 mVideoItemView.getVideStateView().setImageResource(R.mipmap.icon_video_play);
             }
@@ -232,7 +241,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 public void onVideoClick(View view) {
                     //点击视频播放/暂停按钮
                     if (mVideoItemView.getVideStateView().isActivated()) {
-                        nleEditorContext.getVideoPlayer().pause();
+                        nleEditorContext.getPlayer().pause();
                         BbEffectCoreImpl.INSTANCE.pause();
                     } else {
                         startPlay(videoItemView.getVideStateView());
@@ -440,7 +449,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
     private void startPlay(ImageView videStateView) {
         if (null != nleEditorContext) {
-            nleEditorContext.getVideoPlayer().play();
+            nleEditorContext.getPlayer().play();
             if (null != videStateView) {
                 videStateView.setImageResource(R.mipmap.icon_video_stop);
             }
@@ -458,7 +467,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             List<String> filePathList = new ArrayList<>();
             filePathList.add(mVideoItemView.videoFilePath);
             editorActivityDelegate.importVideoMedia(filePathList);
-            nleEditorContext.getVideoPlayer().resume();
+            nleEditorContext.getPlayer().resume();
             startPlay(videoItemView.getVideStateView());
         }
     }

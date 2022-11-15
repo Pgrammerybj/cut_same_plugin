@@ -9,7 +9,7 @@
         android:id="@+id/text_box_view"
         android:layout_width="100dp"
         android:layout_height="60dp"
-        android:background="@color/tab_red"
+        android:background="@android:color/holo_red_light"
         android:visibility="gone"
         tools:visibility="visible" />
 

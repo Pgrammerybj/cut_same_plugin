@@ -450,8 +450,8 @@ public class FileUtil {
      * @param timeMs
      * @return
      */
-    public static String stringForTime(int timeMs){
-        int totalSeconds = timeMs/1000;
+    public static String stringForTime(Long timeMs){
+        int totalSeconds = (int) (timeMs/1000);
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds/60)%60;
         int hours = totalSeconds/3600;
