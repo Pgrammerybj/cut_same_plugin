@@ -46,6 +46,19 @@ fun IEditorContext.getNLEEditor(): NLEEditor {
     return editor.nleEditor
 }
 
+fun IEditorContext.getCurSlotIndex(): Int {
+    var insertIndex = -1
+    val selectedTrackSlot = getSelectedTrackSlot()
+    selectedTrackSlot ?: return insertIndex
+    val curSlotEndTime = selectedTrackSlot.measuredEndTime / 1000
+    getSelectedTrack()!!.sortedSlots.forEachIndexed { index, nleTrackSlot ->
+        if (nleTrackSlot.measuredEndTime / 1000 == curSlotEndTime) {
+            insertIndex = index
+        }
+    }
+    return insertIndex
+}
+
 fun IEditorContext.getNLEModel(): NLEModel {
     return editor.getNleModel().apply {
         if ("true" != getExtra("DisableGlobalEffect")) {

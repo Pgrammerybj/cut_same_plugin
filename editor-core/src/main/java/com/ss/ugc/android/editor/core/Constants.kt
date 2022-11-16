@@ -10,10 +10,13 @@ class Constants {
         const val TRACK_AUDIO = "audio"
         const val TRACK_STICKER = "sticker"
 
+        const val TRACK_SUBTITLE_STICKER = "subtitle_sticker"
+
         const val MAIN_TRACK_MUTE_KEY = "is_maintrack_mute"
         const val MAIN_TRACK_MUTE_ENABLE = "is_maintrack_mute_enable"
         const val SLOT_MUTE_VOLUME_KEY = "slot_mute_volume"
-        const val SELECTED_NLE_TRACK = "selected_nle_track"                                 //当前选中的视频轨道
+        const val SELECTED_NLE_TRACK =
+            "selected_nle_track"                                 //当前选中的视频轨道
 
         const val TRACK_FILTER_ADJUST = "type_filter_adjust"
         const val TRACK_FILTER_FILTER = "type_filter_filter"
@@ -24,6 +27,10 @@ class Constants {
         const val CLIP_REVERSE_VIDEO_PATH = "clip_reverse_video_path"
         const val KEY_ADD_FILTER = "key_add_filter"
 
+        //和iOS对齐的 谨慎修改
+        const val TEXT_STICKER_HAS_VOICE = "textDidSelectVoiceKey"
+        const val VOICE_HAS_TEXT_STICKER = "voiceDidAttachTextKey"
+
 
         ///////////////////////////////////////////////////////////////////////////
         // ExtraKeys
@@ -31,20 +38,71 @@ class Constants {
         // slot素材来源，共4种value：来自：拍摄页、Editor Pro；方式：拍摄、上传
         const val SLOT_EXTRA_SOURCE_TYPE = "slot_extra_source_type"
 
+        //当前选中的音频片段
+        const val SELECTED_AUDIO_TRACK_SLOT = "selected_audio_track_slot"
+
+        // 是否删除过音频轨道的素材
+        const val MODEL_EXTRA_IS_AUDIO_DELETED = "model_extra_is_audio_deleted"
+
+        // 音乐id
+        const val SLOT_EXTRA_MUSIC_ID = "slot_extra_music_id"
+
         /**
          * 文字模板，依赖资源的urs_id
          */
         const val DEP_RES_URS_ID = "dependency_res_id"
+
         /**
          * 是否支持外网访问
          */
         var EXTRANET_ENVIRONMENT = true
 
-
-
         const val STATE_PAUSE = 0
         const val STATE_PLAY = 1
         const val STATE_SEEK = 3
 
+    }
+}
+
+class TrackType {
+    companion object {
+        const val EDITOR_MUSIC = "EDITOR_MUSIC"
+        const val BGM = "BGM"
+        const val ORIGIN = "ORIGIN"
+        const val TEXT_SPEAK = "TEXT_SPEAK"
+    }
+}
+
+class LocalSubtitleStickerPath {
+    companion object {
+        const val DEFAULT_SUBTITLE_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/kalaok/kalaok"
+        const val DEFAULT_FONT_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/kalaok/kalaokfont"
+
+        const val SUBTITLE_BIANHUAN =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/bianhuan/bianhuan"
+        const val SUBTITLE_BIANHUAN_FONT_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/bianhuan/bianhuanfont"
+
+        const val SUBTITLE_DAZIJI =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/daziji/daziji"
+        const val SUBTITLE_DAZIJI_FONT_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/daziji/dazijifont"
+
+        const val SUBTITLE_JINGDIAN =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/jingdian/jingdian"
+        const val SUBTITLE_JINGDIAN_FONT_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/jingdian/jingdianfont"
+
+        const val SUBTITLE_SHOUXIE =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/shouxie/shouxie"
+        const val SUBTITLE_SHOUXIE_FONT_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/shouxie/shouxiefont"
+
+        const val SUBTITLE_WENYI =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/wenyi/wenyi"
+        const val SUBTITLE_WENYI_FONT_PATH =
+            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/wenyi/wenyifont"
     }
 }

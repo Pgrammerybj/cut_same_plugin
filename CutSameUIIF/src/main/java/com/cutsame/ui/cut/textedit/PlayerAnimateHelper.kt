@@ -2,7 +2,6 @@ package com.cutsame.ui.cut.textedit
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.SurfaceView
 import android.view.View
@@ -46,94 +45,6 @@ object PlayerAnimateHelper {
         surfaceViewWidth = surfaceView.measuredWidth
     }
 
-    fun scaleIn(videListView: View?, editTextView: View?, scaleListener: PlayerSurfaceScaleListener?) {
-        if (videListView == null || editTextView == null) {
-            return
-        }
-        val surfaceChangeHeight = editTextViewHeight - videoListViewHeigth
-        //隐藏的头部title也算作展示区域
-        val targetScale = (surfaceViewHeight - surfaceChangeHeight) * 1.0f / surfaceViewHeight
-
-        val disappearSet = createAlphaAndTransAnimate(videListView, videoListViewHeigth, false, true)
-        val appearSet = createAlphaAndTransAnimate(editTextView, editTextViewHeight, true, false)
-
-        appearSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator) {
-                editTextView.visibility = View.VISIBLE
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                scaleListener?.scaleEnd(targetScale, targetScale, 0, surfaceChangeHeight, true)
-            }
-        })
-        (appearSet.childAnimations[0] as ObjectAnimator).addUpdateListener { animation ->
-            val newScale = 1 - (1 - targetScale) * animation.animatedFraction
-            val tranY = surfaceChangeHeight * animation.animatedFraction
-            scaleListener?.scale(newScale, newScale, 0, tranY.toInt(), animation.animatedFraction, true)
-        }
-
-        appearSet.start()
-        disappearSet.start()
-    }
-
-    fun scaleOut(videListView: View?, editTextView: View?, scaleListener: PlayerSurfaceScaleListener?) {
-        if (videListView == null || editTextView == null) {
-            return
-        }
-        val surfaceChangeHeight = editTextViewHeight - videoListViewHeigth
-        val targetScale = (surfaceViewHeight - surfaceChangeHeight) * 1.0f / surfaceViewHeight
-
-        val disappearSet = createAlphaAndTransAnimate(editTextView, editTextViewHeight, false, false)
-        val appearSet = createAlphaAndTransAnimate(videListView, videoListViewHeigth, true, true)
-
-        disappearSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                editTextView.visibility = View.GONE
-            }
-        })
-
-        appearSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                scaleListener?.scaleEnd(targetScale, targetScale, 0, surfaceChangeHeight, false)
-            }
-        })
-        (disappearSet.childAnimations[0] as ObjectAnimator).addUpdateListener { animation ->
-            val newScale = targetScale - (targetScale - 1) * animation.animatedFraction
-            val tranY = surfaceChangeHeight * (1 - animation.animatedFraction)
-            scaleListener?.scale(newScale, newScale, 0, tranY.toInt(), animation.animatedFraction, false)
-        }
-
-        disappearSet.start()
-        appearSet.start()
-    }
-
-    fun animateAlphaShowOrHide(targetView: View?, isShow: Boolean, isDelay: Boolean) {
-        if (targetView == null) {
-            return
-        }
-        val alpha: ObjectAnimator
-        if (isShow) {
-            alpha = ObjectAnimator.ofFloat(targetView, "alpha", 0f, 1f)
-            alpha.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator) {
-                    super.onAnimationStart(animation)
-                    if (targetView.visibility == View.GONE) {
-                        targetView.visibility = View.VISIBLE
-                    }
-                }
-            })
-        } else {
-            alpha = ObjectAnimator.ofFloat(targetView, "alpha", 1f, 0f)
-        }
-        alpha.duration = ANIMA_TIME.toLong()
-        alpha.interpolator = AccelerateDecelerateInterpolator()
-        alpha.startDelay = (if (isDelay) ANIMA_TIME else 0).toLong()
-        alpha.start()
-    }
-
     fun animateTransHeightShowOrHide(targetView: View?, height: Int, isShow: Boolean, isDelay: Boolean) {
         if (targetView == null) {
             return
@@ -156,32 +67,6 @@ object PlayerAnimateHelper {
         alpha.interpolator = AccelerateDecelerateInterpolator()
         alpha.startDelay = (if (isDelay) ANIMA_TIME else 0).toLong()
         alpha.start()
-    }
-
-    private fun createAlphaAndTransAnimate(targetView: View, transY: Int, isShow: Boolean, isOnlyAlpha: Boolean): AnimatorSet {
-        val animatorSet = AnimatorSet()
-        val alpha: ObjectAnimator
-        var translation: ObjectAnimator? = null
-
-        if (isShow) {
-            alpha = ObjectAnimator.ofFloat(targetView, "alpha", 0f, 1f)
-            if (!isOnlyAlpha) {
-                translation = ObjectAnimator.ofFloat(targetView, "translationY", transY.toFloat(), 0f)
-            }
-        } else {
-            alpha = ObjectAnimator.ofFloat(targetView, "alpha", 1f, 0f)
-            if (!isOnlyAlpha) {
-                translation = ObjectAnimator.ofFloat(targetView, "translationY", transY.toFloat())
-            }
-        }
-        if (translation != null) {
-            animatorSet.playTogether(alpha, translation)
-        } else {
-            animatorSet.playTogether(alpha)
-        }
-        animatorSet.interpolator = AccelerateDecelerateInterpolator()
-        animatorSet.duration = ANIMA_TIME.toLong()
-        return animatorSet
     }
 
     interface PlayerSurfaceScaleListener {

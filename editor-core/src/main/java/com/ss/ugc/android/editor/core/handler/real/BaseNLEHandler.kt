@@ -1,11 +1,8 @@
-package com.ss.ugc.android.editor.core.handler
+package com.ss.ugc.android.editor.core.handler.real
 
 import android.os.Handler
 import android.os.Looper
-import com.bytedance.ies.nle.editor_jni.INLEMediaSession
-import com.bytedance.ies.nle.editor_jni.NLEEditor
-import com.bytedance.ies.nle.editor_jni.NLEModel
-import com.bytedance.ies.nle.editor_jni.NLETrack
+import com.bytedance.ies.nle.editor_jni.*
 import com.ss.ugc.android.editor.core.*
 import com.ss.ugc.android.editor.core.api.CommitLevel
 import com.ss.ugc.android.editor.core.api.CommitLevel.*
@@ -31,6 +28,11 @@ open class BaseNLEHandler(protected val editorContext: IEditorContext) {
     protected val nleSession: INLEMediaSession by lazy {
         editorContext.nleSession
     }
+
+    protected val selectedNleTrackSlot: NLETrackSlot?
+        get() {
+            return editorContext.getSelectedTrackSlot()
+        }
 
     protected val selectedNleTrack: NLETrack?
         get() {

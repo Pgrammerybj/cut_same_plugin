@@ -5,11 +5,14 @@ import com.ss.ugc.android.editor.core.IEditorContext
 import com.ss.ugc.android.editor.core.api.CommitLevel
 import com.ss.ugc.android.editor.core.api.CommitLevel.*
 import com.ss.ugc.android.editor.core.api.IEditor
+import com.ss.ugc.android.editor.core.api.params.AudioParam
 import com.ss.ugc.android.editor.core.api.params.EditMedia
 import com.ss.ugc.android.editor.core.commit
 import com.ss.ugc.android.editor.core.done
+import com.ss.ugc.android.editor.core.handler.IAudioNLEHandler
 import com.ss.ugc.android.editor.core.handler.ITrackNLEHandler
-import com.ss.ugc.android.editor.core.handler.TrackNLEHandler
+import com.ss.ugc.android.editor.core.handler.real.AudioNLEHandler
+import com.ss.ugc.android.editor.core.handler.real.TrackNLEHandler
 import com.ss.ugc.android.editor.core.proxy.dynamicProxy
 
 /**
@@ -27,6 +30,14 @@ class DefaultEditor(private val editorContext: IEditorContext) : IEditor {
             (TrackNLEHandler(editorContext) as ITrackNLEHandler).dynamicProxy()
         } else {
             TrackNLEHandler(editorContext)
+        }
+    }
+
+    private val audioHandlerProxy: IAudioNLEHandler by lazy {
+        if (useDynamicProxy) {
+            (AudioNLEHandler(editorContext) as IAudioNLEHandler).dynamicProxy()
+        } else {
+            AudioNLEHandler(editorContext)
         }
     }
 
@@ -59,4 +70,26 @@ class DefaultEditor(private val editorContext: IEditorContext) : IEditor {
     override fun initMainTrack(selectedMedias: MutableList<EditMedia>) {
         trackHandlerProxy.initMainTrack(selectedMedias)
     }
-   }
+
+    /**
+     * 添加音频轨道
+     */
+    override fun addAudioTrack(
+        param: AudioParam,
+        autoSeekFlag: Int,
+        commitLevel: CommitLevel?,
+        slotCallBack: ((NLETrackSlot) -> Unit)?
+    ): Boolean {
+        return audioHandlerProxy.addAudioTrack(param, autoSeekFlag, commitLevel, slotCallBack)
+    }
+
+    /**
+     * 移除音频轨道
+     */
+    override fun deleteAudioTrack(
+        slot: NLETrackSlot?,
+        commitLevel: CommitLevel?
+    ): Pair<NLETrack?, NLETrackSlot?> {
+        return audioHandlerProxy.deleteAudioTrack(slot, commitLevel)
+    }
+}

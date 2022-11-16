@@ -3,10 +3,13 @@ package com.ss.ugc.android.editor.core.api
 import com.bytedance.ies.nle.editor_jni.NLEEditor
 import com.bytedance.ies.nle.editor_jni.NLEModel
 import com.ss.ugc.android.editor.core.api.CommitLevel.DONE
+import com.ss.ugc.android.editor.core.handler.IAudioNLEHandler
 import com.ss.ugc.android.editor.core.handler.ITrackNLEHandler
 
 interface IEditor :
-    ITrackNLEHandler{
+    ITrackNLEHandler,
+    IAudioNLEHandler
+{
 
     val nleEditor: NLEEditor
 

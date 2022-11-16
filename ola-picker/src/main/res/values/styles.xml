@@ -4,15 +4,6 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-
-    <style name="CutDialog" parent="@android:style/Theme.Holo.Light.Dialog">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.2</item>
-    </style>
-
     <style name="ImagePickerTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

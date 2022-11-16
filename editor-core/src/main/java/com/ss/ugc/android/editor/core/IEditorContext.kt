@@ -30,6 +30,8 @@ interface IEditorContext {
 
     fun getSelectedTrack(): NLETrack?
 
+    fun getSelectedTrackSlot(): NLETrackSlot?
+
     /**
      * 环境变量接口
      */

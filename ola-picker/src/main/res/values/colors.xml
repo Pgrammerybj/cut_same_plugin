@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="style_slider_line">#a7c3b5</color>
-    <color name="light_grey">#C4C4C4</color>
-    <color name="line_choose_color">#FBCD60</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 
-    <color name="ip_color_primary">#393A3F</color>
     <color name="ic_back_press">#323336</color>
-    <color name="ip_color_accent">#1AAD19</color>
 </resources>

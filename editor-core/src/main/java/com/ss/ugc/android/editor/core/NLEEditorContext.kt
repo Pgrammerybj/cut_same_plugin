@@ -9,6 +9,7 @@ import com.bytedance.ies.nle.mediapublic.nlesession.NLEMediaSessionPublic
 import com.bytedance.ies.nleeditor.NLE
 import com.ss.ugc.android.editor.core.Constants.Companion.SELECTED_NLE_TRACK
 import com.ss.ugc.android.editor.core.api.*
+import com.ss.ugc.android.editor.core.api.VariableKeys.Companion.SELECTED_NLE_TRACK_SLOT
 import com.ss.ugc.android.editor.core.api.impl.DefaultEditor
 import com.ss.ugc.android.editor.core.api.impl.DefaultPlayer
 import com.ss.ugc.android.editor.core.vm.BaseViewModel
@@ -47,6 +48,10 @@ class NLEEditorContext(activity: FragmentActivity) : BaseViewModel(activity), IE
 
     override fun getSelectedTrack(): NLETrack? {
         return getVariable(SELECTED_NLE_TRACK)
+    }
+
+    override fun getSelectedTrackSlot(): NLETrackSlot? {
+        return getVariable(SELECTED_NLE_TRACK_SLOT)
     }
 
     override lateinit var nleSession: INLEMediaSession

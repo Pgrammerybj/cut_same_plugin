@@ -1,10 +1,11 @@
-package com.ss.ugc.android.editor.core.handler
+package com.ss.ugc.android.editor.core.handler.real
 
 import com.bytedance.ies.nle.editor_jni.*
 import com.ss.android.vesdk.VEUtils
 import com.ss.ugc.android.editor.core.*
 import com.ss.ugc.android.editor.core.api.VariableKeys
 import com.ss.ugc.android.editor.core.api.params.*
+import com.ss.ugc.android.editor.core.handler.ITrackNLEHandler
 import com.ss.ugc.android.editor.core.settings.KVSettingsManager
 import com.ss.ugc.android.editor.core.settings.SettingsKey.FIXED_CANVAS_RATIO
 import com.ss.ugc.android.editor.core.settings.SettingsKey.PICTURE_TRACK_TIME
@@ -14,7 +15,8 @@ import java.util.concurrent.TimeUnit
 /**
  * @desc 轨道操作
  */
-class TrackNLEHandler(editorContext: IEditorContext) : BaseNLEHandler(editorContext), ITrackNLEHandler {
+class TrackNLEHandler(editorContext: IEditorContext) : BaseNLEHandler(editorContext),
+    ITrackNLEHandler {
 
     override fun initMainTrack(selectedMedias: MutableList<EditMedia>) {
         val nleMainTrack: NLETrack = NLETrack().apply { mainTrack = true }
