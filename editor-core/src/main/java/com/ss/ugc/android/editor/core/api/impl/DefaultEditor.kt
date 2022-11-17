@@ -83,6 +83,10 @@ class DefaultEditor(private val editorContext: IEditorContext) : IEditor {
         return audioHandlerProxy.addAudioTrack(param, autoSeekFlag, commitLevel, slotCallBack)
     }
 
+    override fun addLyricsStickerTrack(param: AudioParam): Boolean {
+        return audioHandlerProxy.addLyricsStickerTrack(param)
+    }
+
     /**
      * 移除音频轨道
      */

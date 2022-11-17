@@ -15,10 +15,23 @@ interface IAudioNLEHandler {
      * flag 为1 时 seek 到添加音频结束的位置
      *
      */
-    fun addAudioTrack(param: AudioParam, autoSeekFlag: Int = 0, commitLevel: CommitLevel? = DONE, slotCallBack: ((NLETrackSlot) -> Unit)? = null): Boolean
+    fun addAudioTrack(
+        param: AudioParam,
+        autoSeekFlag: Int = 0,
+        commitLevel: CommitLevel? = DONE,
+        slotCallBack: ((NLETrackSlot) -> Unit)? = null
+    ): Boolean
+
+    /**
+     * 添加歌词贴纸
+     */
+    fun addLyricsStickerTrack(param: AudioParam): Boolean
 
     /**
      * 删除音频轨道
      */
-    fun deleteAudioTrack(slot: NLETrackSlot? = null, commitLevel: CommitLevel? = COMMIT): Pair<NLETrack?, NLETrackSlot?>
+    fun deleteAudioTrack(
+        slot: NLETrackSlot? = null,
+        commitLevel: CommitLevel? = COMMIT
+    ): Pair<NLETrack?, NLETrackSlot?>
 }

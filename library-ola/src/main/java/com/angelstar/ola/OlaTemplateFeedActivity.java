@@ -30,6 +30,7 @@ import com.angelstar.ola.effectcore.BbEffectConstants;
 import com.angelstar.ola.effectcore.BbEffectCoreEventHandler;
 import com.angelstar.ola.effectcore.BbEffectCoreImpl;
 import com.angelstar.ola.entity.AudioMixingEntry;
+import com.angelstar.ola.entity.OlaLyricsConvertSrtFile;
 import com.angelstar.ola.entity.OlaTemplateResponse;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
@@ -54,6 +55,7 @@ import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
 import com.ss.android.ugc.cut_log.LogUtil;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
+import com.ss.ugc.android.editor.core.api.params.AudioParam;
 //import com.ss.ugc.android.editor.core.NLEEditorContext;
 //import com.ss.ugc.android.editor.core.utils.DLog;
 //import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
@@ -125,6 +127,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             }
         }
     };
+    private AudioParam audioParam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         mAudioMixingEntry = JsonHelper.fromJson(MockJson.getJson(this, "AudioMixingJson.json"), AudioMixingEntry.class);
 
+        audioParam = OlaLyricsConvertSrtFile.INSTANCE.startConvert(mAudioMixingEntry, this);
         //todo:拉取我们自己的服务端模版
 
 //        TemplateCategory templateCategory = new TemplateCategory(0, "Vlog");
@@ -153,8 +157,10 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         initPlayerView();
     }
 
+    /**
+     * 调音台相关音效
+     */
     private void intiAudioMixing() {
-
         String mixingFilePath = getExternalCacheDir().getAbsolutePath() + "/accompaniment_bea2c80d430f89100b643c8422193120.mp3";
         String voiceFilePath = getExternalCacheDir().getAbsolutePath() + "/record_287_2022-11-09-11-27-04.pcm";
 
@@ -191,15 +197,13 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     private void initActivityDelegate() {
-        Log.i(TAG, "initActivityDelegate: 开始创建TemplateActivityDelegate");
-        editorActivityDelegate = new TemplateActivityDelegate(this, mSurfaceView);
+        editorActivityDelegate = new TemplateActivityDelegate(this, mSurfaceView,audioParam);
         editorActivityDelegate.setViewStateListener(videoStateListener);
         editorActivityDelegate.onCreate();
         nleEditorContext = editorActivityDelegate.getNleEditorContext();
     }
 
     private void initView() {
-
         OlaBannerView mBannerView = findViewById(R.id.banner_view);
         mBannerView.setIndicator(new RectangleIndicator(this));
         mBannerView.setScrollPageListener(this);
@@ -257,7 +261,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                         return;
                     }
                     String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
-                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, videoCache);
+                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem,videoCache);
                     if (cutSameIntent != null) {
                         cutSameIntent.setPackage(getPackageName());
                         startActivity(cutSameIntent);

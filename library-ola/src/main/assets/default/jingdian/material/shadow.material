@@ -1,0 +1,29 @@
+%YAML 1.1
+--- !Material &1
+name: shadow_mat
+guid: {a: 3118186887275366749, b: 4263068227427335358}
+xshader: {localId: 1, path: xshader/shadow.xshader}
+properties:
+  __class: PropertySheet
+  name: sprite_propertySheet
+  guid: {a: 14647380380090892111, b: 12395674130605372805}
+  floatmap:
+    __class: Map
+  vec4map:
+    __class: Map
+  vec3map:
+    __class: Map
+  vec2map:
+    __class: Map
+    _ShadowOffset: {x: 0.1, y: -0.1}
+  mat4map:
+    __class: Map
+  texmap:
+    __class: Map
+  intmap:
+    __class: Map
+renderQueue: 3030
+enabledMacros:
+  __class: Map
+  BLUR: 1
+mshaderPath: ""

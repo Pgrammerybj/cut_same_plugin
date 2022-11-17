@@ -1,0 +1,254 @@
+%YAML 1.1
+--- !XShader &1
+name: sprite/xshader
+guid: {a: 10755914896505847401, b: 7375082407156578713}
+renderQueue: 3030
+passes:
+  - __class: Pass
+    name: ""
+    guid: {a: 6361219598065286008, b: 17832321816552022922}
+    shaders:
+      __class: Map
+      gles30:
+        - {localId: 2}
+        - {localId: 3}
+    semantics:
+      __class: Map
+      charcolor:
+        __class: VertexAttribType
+        value: COLOR
+      position:
+        __class: VertexAttribType
+        value: POSITION
+      texcoord0:
+        __class: VertexAttribType
+        value: TEXCOORD0
+      texcoord1:
+        __class: VertexAttribType
+        value: TEXCOORD1
+      texcoord2:
+        __class: VertexAttribType
+        value: TEXCOORD2
+      texcoord3:
+        __class: VertexAttribType
+        value: TEXCOORD3
+      texcoord4:
+        __class: VertexAttribType
+        value: TEXCOORD4
+      texcoord5:
+        __class: VertexAttribType
+        value: TEXCOORD5
+      texcoord6:
+        __class: VertexAttribType
+        value: TEXCOORD6
+    clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    clearDepth: 1
+    clearType:
+      __class: CameraClearType
+      value: DONT
+    renderState:
+      __class: RenderState
+      name: ""
+      guid: {a: 19237955639159616, b: 13887871826080556176}
+      depthstencil:
+        __class: DepthStencilState
+        name: ""
+        guid: {a: 13353001925178557599, b: 9678001645797175174}
+        depthTestEnable: true
+        depthTestEnableName: ""
+        depthCompareOp:
+          __class: CompareOp
+          value: LESS
+        depthCompareOpName: ""
+        depthWriteEnable: true
+        stencilTestEnable: false
+        stencilTestEnableName: ""
+      colorBlend:
+        __class: ColorBlendState
+        name: ""
+        guid: {a: 11693280695353492049, b: 4707353425886578069}
+        blendConstants: {x: 0, y: 0, z: 0, w: 0}
+        blendEnableName: ""
+        blendFactorName: ""
+        blendOpName: ""
+        attachments:
+          - __class: ColorBlendAttachmentState
+            name: ""
+            guid: {a: 12487498521827579076, b: 11539226540336584110}
+            blendEnable: true
+            srcColorBlendFactor:
+              __class: BlendFactor
+              value: ONE
+            dstColorBlendFactor:
+              __class: BlendFactor
+              value: ONE_MINUS_SRC_ALPHA
+            srcAlphaBlendFactor:
+              __class: BlendFactor
+              value: ONE
+            dstAlphaBlendFactor:
+              __class: BlendFactor
+              value: ONE_MINUS_SRC_ALPHA
+            colorWriteMask: 15
+            ColorBlendOp:
+              __class: BlendOp
+              value: ADD
+            AlphaBlendOp:
+              __class: BlendOp
+              value: ADD
+    useFBOTexture: false
+    useCameraRT: false
+    useFBOFetch: false
+    isFullScreenShading: false
+    macrosMap:
+      __class: Map
+    preprocess: false
+    passType:
+      __class: PassType
+      value: NORMAL
+  - __class: Pass
+    name: ""
+    guid: {a: 1174899495357877677, b: 8142581189792209579}
+    shaders:
+      __class: Map
+      gles30:
+        - {localId: 2}
+        - {localId: 4}
+    semantics:
+      __class: Map
+      charcolor:
+        __class: VertexAttribType
+        value: COLOR
+      position:
+        __class: VertexAttribType
+        value: POSITION
+      texcoord0:
+        __class: VertexAttribType
+        value: TEXCOORD0
+      texcoord1:
+        __class: VertexAttribType
+        value: TEXCOORD1
+      texcoord2:
+        __class: VertexAttribType
+        value: TEXCOORD2
+      texcoord3:
+        __class: VertexAttribType
+        value: TEXCOORD3
+      texcoord4:
+        __class: VertexAttribType
+        value: TEXCOORD4
+      texcoord5:
+        __class: VertexAttribType
+        value: TEXCOORD5
+      texcoord6:
+        __class: VertexAttribType
+        value: TEXCOORD6
+    clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    clearDepth: 1
+    clearType:
+      __class: CameraClearType
+      value: DONT
+    renderState:
+      __class: RenderState
+      name: ""
+      guid: {a: 11189055762356585646, b: 582919039932988596}
+      depthstencil:
+        __class: DepthStencilState
+        name: ""
+        guid: {a: 12917512103707728759, b: 2748786331778451348}
+        depthTestEnable: true
+        depthTestEnableName: ""
+        depthCompareOp:
+          __class: CompareOp
+          value: GREATER
+        depthCompareOpName: ""
+        depthWriteEnable: true
+        stencilTestEnable: false
+        stencilTestEnableName: ""
+      colorBlend:
+        __class: ColorBlendState
+        name: ""
+        guid: {a: 10469672291505394729, b: 6736116068415080874}
+        blendConstants: {x: 0, y: 0, z: 0, w: 0}
+        blendEnableName: ""
+        blendFactorName: ""
+        blendOpName: ""
+        attachments:
+          - __class: ColorBlendAttachmentState
+            name: ""
+            guid: {a: 2110275670097379460, b: 4390993054842725286}
+            blendEnable: true
+            srcColorBlendFactor:
+              __class: BlendFactor
+              value: ONE
+            dstColorBlendFactor:
+              __class: BlendFactor
+              value: ONE_MINUS_SRC_ALPHA
+            srcAlphaBlendFactor:
+              __class: BlendFactor
+              value: ONE
+            dstAlphaBlendFactor:
+              __class: BlendFactor
+              value: ONE_MINUS_SRC_ALPHA
+            colorWriteMask: 0
+            ColorBlendOp:
+              __class: BlendOp
+              value: ADD
+            AlphaBlendOp:
+              __class: BlendOp
+              value: ADD
+    useFBOTexture: false
+    useCameraRT: false
+    useFBOFetch: false
+    isFullScreenShading: false
+    macrosMap:
+      __class: Map
+    preprocess: false
+    passType:
+      __class: PassType
+      value: NORMAL
+--- !Shader &2
+name: ""
+guid: {a: 11332751888445240845, b: 12952691392622364319}
+type:
+  __class: ShaderType
+  value: VERTEX
+sourcePath: xshader/effect.vert
+macros:
+  - SHADOW
+--- !Shader &3
+name: ""
+guid: {a: 9315177352235306078, b: 8285857977315061678}
+type:
+  __class: ShaderType
+  value: FRAGMENT
+sourcePath: xshader/effect.frag
+macros:
+  - COLOR2
+  - COLOR3
+  - LINEAR
+  - INLINE1
+  - INLINE1COLOR2
+  - INLINE1COLOR3
+  - INLINE1LINEAR
+  - OUTLINE1
+  - OUTLINE1COLOR2
+  - OUTLINE1COLOR3
+  - OUTLINE1LINEAR
+  - OUTLINE2
+  - OUTLINE2COLOR2
+  - OUTLINE2COLOR3
+  - OUTLINE2LINEAR
+  - OUTLINE3
+  - OUTLINE3COLOR2
+  - OUTLINE3COLOR3
+  - OUTLINE3LINEAR
+  - TEXTURE_LEVEL
+  - INNERSHADOW
+  - BLUR
+--- !Shader &4
+name: ""
+guid: {a: 18321001846523132923, b: 18089351012629975719}
+type:
+  __class: ShaderType
+  value: FRAGMENT
+sourcePath: xshader/depth.frag

@@ -1,0 +1,32 @@
+%YAML 1.1
+--- !Material &1
+name: Sprite2D.material
+guid: {a: 11476321324368260512, b: 11087438648414085267}
+xshader: {localId: 1, path: xshader/Sprite2D.xshader}
+properties:
+  __class: PropertySheet
+  name: bow_propertySheet
+  guid: {a: 6576926165480314697, b: 10409890877046138019}
+  floatmap:
+    __class: Map
+    u_alpha: 1
+  vec4map:
+    __class: Map
+  vec3map:
+    __class: Map
+  vec2map:
+    __class: Map
+  mat4map:
+    __class: Map
+  texmap:
+    __class: Map
+    _MainTex: {localId: 1, path: image/logo.png}
+  intmap:
+    __class: Map
+renderQueue: 1
+enabledMacros:
+  __class: Map
+  AE_DirLightNum: !<str> 0
+  AE_PointLightNum: !<str> 0
+  AE_SpotLightNum: !<str> 0
+mshaderPath: ""

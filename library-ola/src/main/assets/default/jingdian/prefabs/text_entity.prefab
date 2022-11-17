@@ -1,0 +1,297 @@
+%YAML 1.1
+--- !Prefab &1
+name: ""
+guid: {a: 18036886329849570063, b: 17062513147708287908}
+entities:
+  - __class: Entity
+    name: text_entity
+    guid: {a: 10756689549763233006, b: 1390202638261962936}
+    selfvisible: true
+    components:
+      - {localId: 167}
+      - __class: SDFText
+        name: ""
+        guid: {a: 8164934307332269198, b: 17079165974506380192}
+        enabled: true
+        prefabObjectGuid: {a: 4126343692107671039, b: 5144654307071494297}
+        forceDegeneratedEs2Enabled: false
+        str: ""
+        fontSize: 10
+        fontPath: ""
+        fallbackFontPath: ""
+        wordGap: 0
+        horizontalPadding: 0
+        verticalPadding: 0
+        lineGap: 0.2
+        typeSettingKind:
+          __class: TypeSettingKind
+          value: HORIZONTAL
+        textAlign:
+          __class: TextAlign
+          value: CENTER
+        fixedRectEnabled: false
+        autoFontSize: false
+        rect: {x: 0, y: 0, w: 0, h: 0}
+        autoWrapWidth: 500
+        drivenByScript: true
+        textColor: {x: 1, y: 1, z: 1, w: 1}
+        randomGridSize: {x: 1, y: 1}
+        shadowEnabled: false
+        shadowColor: {x: 0, y: 0, z: 0, w: 1}
+        shadowOffset: {x: 0.1, y: -0.1}
+        shadowSmoothing: 0.1000000014901161
+        shadowBlur: 0.01999999955296516
+        outlineEnabled: false
+        outlineWidth: 0.2000000029802322
+        outlineMaxWidth: 0.2000000029802322
+        outlineColor: {x: 0, y: 0, z: 0, w: 1}
+        boldWidth: 0
+        italicDegree: 0
+        underlineEnabled: false
+        underlineWidth: 0.03999999910593033
+        underlineOffset: 0.1500000059604645
+        backgroundEnabled: false
+        backgroundColor: {x: 1, y: 0, z: 0, w: 1}
+        alpha: 1
+        ktvEnabled: false
+        ktvDirection: 1
+        ktvAlpha: 1
+        renderToRT: false
+        targetRTExtraSize: {x: 0, y: 0}
+        ktvTransparentRatio: 0
+        maxRTSize: 4096
+      - __class: MeshRenderer
+        name: SDFTextMeshRenderer
+        guid: {a: 11478721736240828475, b: 5895603723119773092}
+        enabled: true
+        prefabObjectGuid: {a: 958199969463194816, b: 12186281449599762348}
+        sortingOrder: 0
+        autoSortingOrder: false
+        useFrustumCulling: true
+        castShadow: false
+      - __class: ScriptComponent
+        name: ""
+        guid: {a: 5857650791288799241, b: 1003613605455976356}
+        enabled: true
+        prefabObjectGuid: {a: 5209019082086726938, b: 9638801912931881915}
+        path: lua/main.lua
+        properties:
+          __class: Map
+        className: main
+    layer: 0
+  - __class: Entity
+    name: row_1
+    guid: {a: 15729399560378375862, b: 7625994452716267929}
+    selfvisible: true
+    components:
+      - {localId: 168}
+      - __class: SDFText
+        name: ""
+        guid: {a: 3768160484688676450, b: 5039443731389195702}
+        enabled: true
+        prefabObjectGuid: {a: 10539375443268714025, b: 10009394674600172194}
+        forceDegeneratedEs2Enabled: false
+        str: ""
+        fontSize: 10
+        fontPath: ""
+        fallbackFontPath: ""
+        wordGap: 0
+        horizontalPadding: 0
+        verticalPadding: 0
+        lineGap: 0
+        typeSettingKind:
+          __class: TypeSettingKind
+          value: HORIZONTAL
+        textAlign:
+          __class: TextAlign
+          value: CENTER
+        fixedRectEnabled: false
+        autoFontSize: false
+        rect: {x: 0, y: 0, w: 0, h: 0}
+        autoWrapWidth: 500
+        drivenByScript: false
+        textColor: {x: 1, y: 1, z: 1, w: 1}
+        randomGridSize: {x: 1, y: 1}
+        shadowEnabled: false
+        shadowColor: {x: 0, y: 0, z: 0, w: 1}
+        shadowOffset: {x: 0.1, y: -0.1}
+        shadowSmoothing: 0.1000000014901161
+        shadowBlur: 0.01999999955296516
+        outlineEnabled: false
+        outlineWidth: 0.2000000029802322
+        outlineMaxWidth: 0.2000000029802322
+        outlineColor: {x: 0, y: 0, z: 0, w: 1}
+        boldWidth: 0
+        italicDegree: 0
+        underlineEnabled: false
+        underlineWidth: 0.03999999910593033
+        underlineOffset: 0.1500000059604645
+        backgroundEnabled: false
+        backgroundColor: {x: 1, y: 0, z: 0, w: 1}
+        alpha: 1
+        ktvEnabled: false
+        ktvDirection: 1
+        ktvAlpha: 1
+        renderToRT: false
+        targetRTExtraSize: {x: 0, y: 0}
+        ktvTransparentRatio: 0
+        maxRTSize: 4096
+      - __class: MeshRenderer
+        name: SDFTextMeshRenderer
+        guid: {a: 7730558129106167305, b: 17182726429035177892}
+        enabled: true
+        prefabObjectGuid: {a: 15224968198560324932, b: 13605670593864346017}
+        sortingOrder: 0
+        autoSortingOrder: false
+        useFrustumCulling: true
+        castShadow: false
+    layer: 0
+  - __class: Entity
+    name: row_2
+    guid: {a: 4487199342214700585, b: 2823854818452147874}
+    selfvisible: true
+    components:
+      - {localId: 169}
+      - __class: SDFText
+        name: ""
+        guid: {a: 4345683131329019467, b: 2069112103386463138}
+        enabled: true
+        prefabObjectGuid: {a: 307262239096849352, b: 13549110802803542411}
+        forceDegeneratedEs2Enabled: false
+        str: ""
+        fontSize: 10
+        fontPath: ""
+        fallbackFontPath: ""
+        wordGap: 0
+        horizontalPadding: 0
+        verticalPadding: 0
+        lineGap: 0
+        typeSettingKind:
+          __class: TypeSettingKind
+          value: HORIZONTAL
+        textAlign:
+          __class: TextAlign
+          value: CENTER
+        fixedRectEnabled: false
+        autoFontSize: false
+        rect: {x: 0, y: 0, w: 0, h: 0}
+        autoWrapWidth: 500
+        drivenByScript: false
+        textColor: {x: 1, y: 1, z: 1, w: 1}
+        randomGridSize: {x: 1, y: 1}
+        shadowEnabled: false
+        shadowColor: {x: 0, y: 0, z: 0, w: 1}
+        shadowOffset: {x: 0.1, y: -0.1}
+        shadowSmoothing: 0.1000000014901161
+        shadowBlur: 0.01999999955296516
+        outlineEnabled: false
+        outlineWidth: 0.2000000029802322
+        outlineMaxWidth: 0.2000000029802322
+        outlineColor: {x: 0, y: 0, z: 0, w: 1}
+        boldWidth: 0
+        italicDegree: 0
+        underlineEnabled: false
+        underlineWidth: 0.03999999910593033
+        underlineOffset: 0.1500000059604645
+        backgroundEnabled: false
+        backgroundColor: {x: 1, y: 0, z: 0, w: 1}
+        alpha: 1
+        ktvEnabled: false
+        ktvDirection: 1
+        ktvAlpha: 1
+        renderToRT: false
+        targetRTExtraSize: {x: 0, y: 0}
+        ktvTransparentRatio: 0
+        maxRTSize: 4096
+      - __class: MeshRenderer
+        name: SDFTextMeshRenderer
+        guid: {a: 9531905651473306809, b: 12131776230465402047}
+        enabled: true
+        prefabObjectGuid: {a: 4991987454625346965, b: 5575396890151135133}
+        sortingOrder: 0
+        autoSortingOrder: false
+        useFrustumCulling: true
+        castShadow: false
+    layer: 0
+  - __class: Entity
+    name: loading
+    guid: {a: 2326717401663149028, b: 3365093077610761626}
+    selfvisible: true
+    components:
+      - {localId: 170}
+      - __class: Sprite2DRenderer
+        name: ""
+        guid: {a: 596756536805196047, b: 4491118221615596441}
+        enabled: true
+        sharedMaterials:
+          - {localId: 1, path: material/Sprite2DAlpha.material}
+        sortingOrder: 1
+        autoSortingOrder: true
+        useFrustumCulling: true
+        stretchMode:
+          __class: StretchMode
+          value: texture_size
+        pivot: {x: 0, y: 0}
+        flip: false
+        mirror: false
+        color: {x: 1, y: 1, z: 1, w: 1}
+      - __class: AnimSeqComponent
+        name: ""
+        guid: {a: 9966257371153069216, b: 16238824724616697475}
+        enabled: true
+        animSeq: {localId: 1, path: seq/lyrics_loading_cut/lyrics_loading_cut.seq}
+        texName: _MainTex
+        frameName: _MainTex_ST
+        frameRotateName: _Atlas_Rotated
+        frameInnerName: _Atlas_InnerTex_ST
+        playmode:
+          __class: PlayMode
+          value: loop
+        loopCount: -1
+        speed: 1
+        autoplay: true
+        animSeqMap:
+          __class: Map
+          "": {localId: 1, path: seq/Hdj.seq}
+          lyrics_loading_cut_seq: {localId: 1, path: seq/lyrics_loading_cut/lyrics_loading_cut.seq}
+    layer: 0
+standaloneResources:
+  __class: Map
+--- !Transform &167
+name: ""
+guid: {a: 1028609009443295590, b: 15522606332588009383}
+enabled: true
+prefabObjectGuid: {a: 596458604054916682, b: 3239660090979270561}
+localPosition: {x: 0, y: 0, z: -20}
+localScale: {x: 1, y: 1, z: 1}
+localOrientation: {w: 1, x: 0, y: 0, z: 0}
+children:
+  - {localId: 168}
+  - {localId: 169}
+  - {localId: 170}
+--- !Transform &168
+name: ""
+guid: {a: 13064633519883058941, b: 16846664668888100537}
+enabled: true
+prefabObjectGuid: {a: 5281514306289472637, b: 15384586805989684413}
+localPosition: {x: 0, y: 0.04214621, z: 20}
+localScale: {x: 1, y: 1, z: 1}
+localOrientation: {w: 1, x: 0, y: 0, z: 0}
+parent: {localId: 167}
+--- !Transform &169
+name: ""
+guid: {a: 15295117378282335238, b: 453879865781005963}
+enabled: true
+prefabObjectGuid: {a: 16664911158986686164, b: 4906116020661035143}
+localPosition: {x: 0, y: -0.1373091, z: 20}
+localScale: {x: 1, y: 1, z: 1}
+localOrientation: {w: 1, x: 0, y: 0, z: 0}
+parent: {localId: 167}
+--- !Transform &170
+name: ""
+guid: {a: 15224225447018485000, b: 7820228733952838332}
+enabled: true
+localPosition: {x: 0, y: 0, z: 20}
+localScale: {x: 1, y: 1, z: 1}
+localOrientation: {w: 1, x: 0, y: 0, z: 0}
+parent: {localId: 167}

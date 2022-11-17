@@ -1,0 +1,103 @@
+%YAML 1.1
+--- !XShader &1
+name: sprite2d/2dxshader
+guid: {a: 15654966332680248348, b: 1342948500646938531}
+renderQueue: 2000
+passes:
+  - __class: Pass
+    name: ""
+    guid: {a: 15441076234001286297, b: 13996793869914043827}
+    shaders:
+      __class: Map
+      gles2:
+        - {localId: 2}
+        - {localId: 3}
+    semantics:
+      __class: Map
+      color:
+        __class: VertexAttribType
+        value: COLOR
+      position:
+        __class: VertexAttribType
+        value: POSITION
+      texcoord0:
+        __class: VertexAttribType
+        value: TEXCOORD0
+    clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    clearDepth: 1
+    clearType:
+      __class: CameraClearType
+      value: DONT
+    renderState:
+      __class: RenderState
+      name: ""
+      guid: {a: 4992971411208268215, b: 1856381879999167885}
+      depthstencil:
+        __class: DepthStencilState
+        name: ""
+        guid: {a: 15586309022972942780, b: 2314879254927870594}
+        depthTestEnable: false
+        depthTestEnableName: ""
+        depthCompareOp:
+          __class: CompareOp
+          value: LESS
+        depthCompareOpName: ""
+        depthWriteEnable: false
+        stencilTestEnable: false
+        stencilTestEnableName: ""
+      colorBlend:
+        __class: ColorBlendState
+        name: ""
+        guid: {a: 4272984991449013394, b: 15812173774989429642}
+        blendConstants: {x: 0, y: 0, z: 0, w: 0}
+        blendEnableName: ""
+        blendFactorName: ""
+        blendOpName: ""
+        attachments:
+          - __class: ColorBlendAttachmentState
+            name: ""
+            guid: {a: 10254344366342543946, b: 3365452110709767075}
+            blendEnable: true
+            srcColorBlendFactor:
+              __class: BlendFactor
+              value: ONE
+            dstColorBlendFactor:
+              __class: BlendFactor
+              value: ONE_MINUS_SRC_ALPHA
+            srcAlphaBlendFactor:
+              __class: BlendFactor
+              value: ONE
+            dstAlphaBlendFactor:
+              __class: BlendFactor
+              value: ONE_MINUS_SRC_ALPHA
+            colorWriteMask: 15
+            ColorBlendOp:
+              __class: BlendOp
+              value: ADD
+            AlphaBlendOp:
+              __class: BlendOp
+              value: ADD
+    useFBOTexture: false
+    useCameraRT: false
+    useFBOFetch: false
+    isFullScreenShading: false
+    macrosMap:
+      __class: Map
+    preprocess: false
+    passType:
+      __class: PassType
+      value: NORMAL
+--- !Shader &2
+name: ""
+guid: {a: 10757692661897362584, b: 16761746173215209653}
+type:
+  __class: ShaderType
+  value: VERTEX
+sourcePath: xshader/gles2_sprite2d_alpha.vert
+--- !Shader &3
+name: ""
+guid: {a: 12416049538562042244, b: 9460775453543234465}
+type:
+  __class: ShaderType
+  value: FRAGMENT
+sourcePath: xshader/gles2_sprite2d_alpha.frag

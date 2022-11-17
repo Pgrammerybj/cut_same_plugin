@@ -1,0 +1,30 @@
+%YAML 1.1
+--- !Material &1
+name: effect_mat
+guid: {a: 3261601686522915093, b: 9737989000338365826}
+xshader: {localId: 1, path: xshader/effect.xshader}
+properties:
+  __class: PropertySheet
+  name: sprite_propertySheet
+  guid: {a: 13927063349266018101, b: 13673883144286009229}
+  floatmap:
+    __class: Map
+  vec4map:
+    __class: Map
+  vec3map:
+    __class: Map
+  vec2map:
+    __class: Map
+  mat4map:
+    __class: Map
+  texmap:
+    __class: Map
+  intmap:
+    __class: Map
+renderQueue: 3050
+enabledMacros:
+  __class: Map
+  AE_DirLightNum: !<str> 0
+  AE_PointLightNum: !<str> 0
+  AE_SpotLightNum: !<str> 0
+mshaderPath: ""

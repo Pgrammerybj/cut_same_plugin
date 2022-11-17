@@ -1,0 +1,467 @@
+%YAML 1.1
+--- !AnimSeq &1
+name: lyrics_loading_cut_seq
+guid: {a: 7443669009474057893, b: 13407342706829587901}
+assettype:
+  __class: SeqAssetType
+  value: atlas
+assetfilename: ""
+fps: 30
+lazyload: true
+cache: false
+atlases:
+  - {localId: 2}
+  - {localId: 3}
+  - {localId: 4}
+  - {localId: 5}
+  - {localId: 6}
+  - {localId: 7}
+  - {localId: 8}
+  - {localId: 9}
+  - {localId: 10}
+  - {localId: 11}
+  - {localId: 12}
+  - {localId: 13}
+  - {localId: 14}
+  - {localId: 15}
+  - {localId: 16}
+  - {localId: 17}
+  - {localId: 18}
+  - {localId: 19}
+  - {localId: 20}
+  - {localId: 21}
+  - {localId: 22}
+  - {localId: 23}
+  - {localId: 24}
+  - {localId: 25}
+  - {localId: 26}
+  - {localId: 27}
+  - {localId: 28}
+  - {localId: 29}
+  - {localId: 30}
+  - {localId: 31}
+memoryLimit: 0
+preload: false
+indexAction:
+  __class: Map
+preloadCount: 0
+--- !ImageAtlas &2
+name: lyrics_loading_cut_01_atlas
+guid: {a: 10971638264521547154, b: 4946838312969332382}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 15440605563826294078, b: 7516989854925420166}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_01.png
+--- !ImageAtlas &3
+name: lyrics_loading_cut_02_atlas
+guid: {a: 17315537432639784103, b: 12830204553855693737}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 7515076831135971083, b: 2779723200086270642}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_02.png
+--- !ImageAtlas &4
+name: lyrics_loading_cut_03_atlas
+guid: {a: 19667906733429411, b: 14434468478850800561}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 3332780496349327570, b: 11666738474953706681}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_03.png
+--- !ImageAtlas &5
+name: lyrics_loading_cut_04_atlas
+guid: {a: 14503003569178620918, b: 5186262886970752414}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 16735706194742869760, b: 15471713771034216632}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_04.png
+--- !ImageAtlas &6
+name: lyrics_loading_cut_05_atlas
+guid: {a: 12488179826109594759, b: 828520960149884058}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 5135422819515578051, b: 1047141054825778361}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_05.png
+--- !ImageAtlas &7
+name: lyrics_loading_cut_06_atlas
+guid: {a: 16952891987718395494, b: 6725542702275804833}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 14143187107248352913, b: 13226754879938646175}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_06.png
+--- !ImageAtlas &8
+name: lyrics_loading_cut_07_atlas
+guid: {a: 16016070079545296478, b: 5298749993184763068}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 8376835423043138244, b: 15138769399442599860}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_07.png
+--- !ImageAtlas &9
+name: lyrics_loading_cut_08_atlas
+guid: {a: 1607462258317122070, b: 13521918368524658344}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 1389004880971304547, b: 14504466277536475014}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_08.png
+--- !ImageAtlas &10
+name: lyrics_loading_cut_09_atlas
+guid: {a: 6505350230656881357, b: 12561195932558032059}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 6866861587260555335, b: 11282315524446990484}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_09.png
+--- !ImageAtlas &11
+name: lyrics_loading_cut_10_atlas
+guid: {a: 7441781257347036273, b: 14210395912924710578}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 11910295941894030114, b: 11404453423337420221}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_10.png
+--- !ImageAtlas &12
+name: lyrics_loading_cut_11_atlas
+guid: {a: 10325788677407260231, b: 1458703828367715997}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 4273030205574669447, b: 17815761427670285751}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_11.png
+--- !ImageAtlas &13
+name: lyrics_loading_cut_12_atlas
+guid: {a: 9962052835745909712, b: 4781526849145162408}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 9746313569041502744, b: 1396271009838951300}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_12.png
+--- !ImageAtlas &14
+name: lyrics_loading_cut_13_atlas
+guid: {a: 8740940727647950639, b: 9549672931667673248}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 237656093676780538, b: 26176853461316243}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_13.png
+--- !ImageAtlas &15
+name: lyrics_loading_cut_14_atlas
+guid: {a: 4777949663359269943, b: 6968332052941162916}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 1533787589079739529, b: 12841195216882769556}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_14.png
+--- !ImageAtlas &16
+name: lyrics_loading_cut_15_atlas
+guid: {a: 8235985428676480917, b: 18446421340772370342}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 13853397976136368772, b: 14950943301475419318}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_15.png
+--- !ImageAtlas &17
+name: lyrics_loading_cut_16_atlas
+guid: {a: 15153175016285173078, b: 11628427757623217828}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 12845893308152231489, b: 17243905411411041966}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_16.png
+--- !ImageAtlas &18
+name: lyrics_loading_cut_17_atlas
+guid: {a: 11476324941856044890, b: 11955838336487265169}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 1461457255951508823, b: 8162338421669259671}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_17.png
+--- !ImageAtlas &19
+name: lyrics_loading_cut_18_atlas
+guid: {a: 15297931418710862472, b: 4651200195891617409}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 15586549276342753840, b: 525094122959437244}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_18.png
+--- !ImageAtlas &20
+name: lyrics_loading_cut_19_atlas
+guid: {a: 16305436849939499581, b: 4846330901671616140}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 13925641672690352645, b: 9175433353255027083}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_19.png
+--- !ImageAtlas &21
+name: lyrics_loading_cut_20_atlas
+guid: {a: 6579230341867927428, b: 5625482363149682324}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 5639154173807952842, b: 8618731495206139060}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_20.png
+--- !ImageAtlas &22
+name: lyrics_loading_cut_21_atlas
+guid: {a: 13278562490388681323, b: 16600925337275054243}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 4344015914382120700, b: 6760022496502745018}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_21.png
+--- !ImageAtlas &23
+name: lyrics_loading_cut_22_atlas
+guid: {a: 4920891452435705976, b: 7630826918519655356}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 8092091733563985698, b: 16731605675153431466}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_22.png
+--- !ImageAtlas &24
+name: lyrics_loading_cut_23_atlas
+guid: {a: 15944527682483363929, b: 5950700558299803021}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 740509983649877557, b: 4954719783200353202}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_23.png
+--- !ImageAtlas &25
+name: lyrics_loading_cut_24_atlas
+guid: {a: 8809585379195755617, b: 2815659736416470927}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 2039969993341543757, b: 10082636316907402142}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_24.png
+--- !ImageAtlas &26
+name: lyrics_loading_cut_25_atlas
+guid: {a: 6579372681812423557, b: 16144458845693277594}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 10971241768906283921, b: 5674735555733668787}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_25.png
+--- !ImageAtlas &27
+name: lyrics_loading_cut_26_atlas
+guid: {a: 2540713372463006920, b: 11551751662651966396}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 10683743301205175245, b: 4889677892126320785}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_26.png
+--- !ImageAtlas &28
+name: lyrics_loading_cut_27_atlas
+guid: {a: 17961285037025386717, b: 14394948055348363663}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 11693354641102387967, b: 18026284934280984978}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_27.png
+--- !ImageAtlas &29
+name: lyrics_loading_cut_28_atlas
+guid: {a: 7010357942899421407, b: 12875656907745276059}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 18178266313212395457, b: 8167644859478553263}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_28.png
+--- !ImageAtlas &30
+name: lyrics_loading_cut_29_atlas
+guid: {a: 526498326704350586, b: 7614440885504941739}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 11046776915780234865, b: 4051877905254577806}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_29.png
+--- !ImageAtlas &31
+name: lyrics_loading_cut_30_atlas
+guid: {a: 2397923924874312412, b: 17598398282544913300}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 5857597959737462416, b: 2518415046209523334}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading_cut/lyrics_loading_cut_30.png

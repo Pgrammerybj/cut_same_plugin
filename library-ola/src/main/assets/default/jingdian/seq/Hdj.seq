@@ -1,0 +1,37 @@
+%YAML 1.1
+--- !AnimSeq &1
+name: ""
+guid: {a: 15152091469172214193, b: 9376620402404170376}
+assettype:
+  __class: SeqAssetType
+  value: atlas
+assetfilename: ""
+fps: 30
+lazyload: true
+cache: false
+atlases:
+  - {localId: 2}
+  - {localId: 3}
+  - {localId: 4}
+  - {localId: 5}
+memoryLimit: 0
+preload: false
+indexAction:
+  __class: Map
+preloadCount: 0
+--- !ImageAtlas &2
+name: ""
+guid: {a: 3910396106773964168, b: 5543990154837867454}
+uri: seq/hdj/hdj_000.png
+--- !ImageAtlas &3
+name: ""
+guid: {a: 17026618036926947364, b: 4789263808705611427}
+uri: seq/hdj/hdj_001.png
+--- !ImageAtlas &4
+name: ""
+guid: {a: 12198563419152603900, b: 4184026927601173663}
+uri: seq/hdj/hdj_002.png
+--- !ImageAtlas &5
+name: ""
+guid: {a: 18180247307787803644, b: 11162494200542931871}
+uri: seq/hdj/hdj_003.png

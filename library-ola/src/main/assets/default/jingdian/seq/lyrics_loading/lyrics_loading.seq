@@ -1,0 +1,32 @@
+%YAML 1.1
+--- !AnimSeq &1
+name: lyrics_loading_seq
+guid: {a: 4489977621647265626, b: 17394721996552426129}
+assettype:
+  __class: SeqAssetType
+  value: atlas
+assetfilename: ""
+fps: 30
+lazyload: true
+cache: false
+atlases:
+  - {localId: 2}
+memoryLimit: 0
+preload: false
+indexAction:
+  __class: Map
+preloadCount: 0
+--- !ImageAtlas &2
+name: lyrics_loading__atlas
+guid: {a: 10179785227939990905, b: 2776968276776027062}
+frames:
+  - __class: ImageFrame
+    name: ""
+    guid: {a: 9026572415985877152, b: 8218888243889564349}
+    rotate:
+      __class: RotateType
+      value: ROTATE_0
+    trimed: false
+    outerRect: {x: 1, y: 1, z: 0, w: 0}
+    innerRect: {x: 1, y: 1, z: 0, w: 0}
+uri: seq/lyrics_loading/lyrics_loading_.png

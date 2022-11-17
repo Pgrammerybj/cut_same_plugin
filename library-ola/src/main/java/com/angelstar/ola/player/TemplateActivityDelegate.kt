@@ -12,6 +12,7 @@ import com.ss.ugc.android.editor.core.Constants.Companion.STATE_PAUSE
 import com.ss.ugc.android.editor.core.Constants.Companion.STATE_PLAY
 import com.ss.ugc.android.editor.core.Constants.Companion.STATE_SEEK
 import com.ss.ugc.android.editor.core.NLEEditorContext
+import com.ss.ugc.android.editor.core.api.params.AudioParam
 import com.ss.ugc.android.editor.core.api.params.EditMedia
 import com.ss.ugc.android.editor.core.getNLEEditor
 import com.ss.ugc.android.editor.core.utils.DLog
@@ -29,7 +30,8 @@ import java.util.*
  */
 class TemplateActivityDelegate(
     private val activity: FragmentActivity,
-    private val surfaceView: SurfaceView?
+    private val surfaceView: SurfaceView?,
+    private val audioParam: AudioParam
 ) : IPlayerActivityDelegate {
 
     private var nleModel: NLEModel? = null
@@ -46,8 +48,6 @@ class TemplateActivityDelegate(
 //        nleEditorContext.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
         initNLEPlayer()//1️⃣
         registerEvent()
-
-
     }
 
     /**
@@ -70,6 +70,9 @@ class TemplateActivityDelegate(
         nleEditorContext?.getMainTrack()?.clearSlot()
         //原预览视频静音
         nleEditorContext?.editor?.initMainTrack(select)
+        //导入歌曲音频和歌词贴纸
+        nleEditorContext?.editor?.addAudioTrack(audioParam)
+        nleEditorContext?.editor?.addLyricsStickerTrack(audioParam)
         nleEditorContext?.player?.prepare()
         activity.lifecycle.addObserver(nleEditorContext!!)
     }

@@ -1,5 +1,7 @@
 package com.ss.ugc.android.editor.core
 
+import android.annotation.SuppressLint
+
 class Constants {
     companion object {
         const val TRACK_TYPE = "track_type"
@@ -75,34 +77,7 @@ class TrackType {
 
 class LocalSubtitleStickerPath {
     companion object {
-        const val DEFAULT_SUBTITLE_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/kalaok/kalaok"
-        const val DEFAULT_FONT_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/kalaok/kalaokfont"
-
-        const val SUBTITLE_BIANHUAN =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/bianhuan/bianhuan"
-        const val SUBTITLE_BIANHUAN_FONT_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/bianhuan/bianhuanfont"
-
-        const val SUBTITLE_DAZIJI =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/daziji/daziji"
-        const val SUBTITLE_DAZIJI_FONT_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/daziji/dazijifont"
-
-        const val SUBTITLE_JINGDIAN =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/jingdian/jingdian"
-        const val SUBTITLE_JINGDIAN_FONT_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/jingdian/jingdianfont"
-
-        const val SUBTITLE_SHOUXIE =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/shouxie/shouxie"
-        const val SUBTITLE_SHOUXIE_FONT_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/shouxie/shouxiefont"
-
-        const val SUBTITLE_WENYI =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/wenyi/wenyi"
-        const val SUBTITLE_WENYI_FONT_PATH =
-            "/storage/emulated/0/Android/data/com.bytedance.solution.ck/files/assets/resource/subtitle_sticker.bundle/wenyi/wenyifont"
+        const val SUBTITLE_JINGDIAN = "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdian"
+        const val SUBTITLE_JINGDIAN_FONT_PATH = "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdianfont"
     }
 }

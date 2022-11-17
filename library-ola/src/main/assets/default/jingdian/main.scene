@@ -1,0 +1,144 @@
+%YAML 1.1
+--- !Scene &1
+name: Sticker_empty
+guid: {a: 2253253807170055763, b: 15462013878522171267}
+editSceneGuid: {a: 0, b: 0}
+calibrateVer: V4
+entities:
+  - __class: Entity
+    name: Camera_entity
+    guid: {a: 6938601231578999092, b: 4687892168404763296}
+    scene: {localId: 1}
+    selfvisible: true
+    components:
+      - {localId: 3}
+      - __class: Camera
+        name: Camera_camera
+        guid: {a: 16447656025903425241, b: 4417389992427659401}
+        enabled: true
+        layerVisibleMask: {__class: DynamicBitset, numBits: 1, values: [1]}
+        renderOrder: 1
+        type:
+          __class: CameraType
+          value: ORTHO
+        clearColor: {r: 0, g: 0, b: 0, a: 0}
+        clearType:
+          __class: CameraClearType
+          value: DEPTH
+        alwaysClear: true
+        viewport: {x: 0, y: 0, w: 1, h: 1}
+        fovy: 60
+        orthoScale: 1
+        zNear: 0.1000000014901161
+        zFar: 1000
+        renderTexture: {localId: 1, path: rt/outputTex.rt}
+        isRootCamera: true
+    layer: 0
+  - __class: Entity
+    name: loading
+    guid: {a: 8161477411897620056, b: 17007073593717175430}
+    scene: {localId: 1}
+    selfvisible: true
+    components:
+      - {localId: 4}
+      - __class: Sprite2DRenderer
+        name: ""
+        guid: {a: 8811518216098537002, b: 10434784569517590438}
+        enabled: true
+        prefab: {localId: 1, path: prefabs/text_entity.prefab}
+        prefabObjectGuid: {a: 596756536805196047, b: 4491118221615596441}
+        sharedMaterials:
+          - {localId: 1, path: material/Sprite2DAlpha.material}
+        sortingOrder: 1
+        autoSortingOrder: true
+        useFrustumCulling: true
+        stretchMode:
+          __class: StretchMode
+          value: texture_size
+        pivot: {x: 0, y: 0}
+        flip: false
+        mirror: false
+        color: {x: 1, y: 1, z: 1, w: 1}
+      - __class: AnimSeqComponent
+        name: ""
+        guid: {a: 8019851316383628697, b: 8650860712506976644}
+        enabled: true
+        prefab: {localId: 1, path: prefabs/text_entity.prefab}
+        prefabObjectGuid: {a: 9966257371153069216, b: 16238824724616697475}
+        animSeq: {localId: 1, path: seq/lyrics_loading_cut/lyrics_loading_cut.seq}
+        texName: _MainTex
+        frameName: _MainTex_ST
+        frameRotateName: _Atlas_Rotated
+        frameInnerName: _Atlas_InnerTex_ST
+        playmode:
+          __class: PlayMode
+          value: loop
+        loopCount: -1
+        speed: 1
+        autoplay: true
+        animSeqMap:
+          __class: Map
+          "": {localId: 1, path: seq/Hdj.seq}
+          lyrics_loading_cut_seq: {localId: 1, path: seq/lyrics_loading_cut/lyrics_loading_cut.seq}
+    layer: 0
+    prefab: {localId: 1, path: prefabs/text_entity.prefab}
+    prefabObjectGuid: {a: 2326717401663149028, b: 3365093077610761626}
+visible: true
+config:
+  __class: Map
+msaa:
+  __class: MSAAMode
+  value: NONE
+scriptSystems:
+  - lua/main.lua
+  - lua/LyricRecordPlaceHolder.lua
+enableMultiTouch: false
+prefabInstanceConfig:
+  __class: PrefabInstanceConfig
+  name: ""
+  guid: {a: 2686576601928402565, b: 10018115473841957289}
+  configVersion: V1
+  prefabInstanceIdMap:
+    __class: Map
+  prefabInstanceList:
+    - __class: PrefabInstance
+      name: ""
+      guid: {a: 3910455496899555639, b: 442148541438429605}
+      overrides:
+        - __class: ComponentOverride
+          name: ""
+          guid: {a: 17168313586209727561, b: 17347441799302525339}
+          overrideObjectGuid: {a: 9241714481313897910, b: 15155566334111123365}
+          componentOverrideType:
+            __class: ComponentOverrideType
+            value: Modify
+          modifyProperties:
+            __class: Map
+        - __class: ComponentOverride
+          name: ""
+          guid: {a: 11621815904445192133, b: 10047785874897668496}
+          overrideObjectGuid: {a: 8813407921384930538, b: 11961542261998057358}
+          componentOverrideType:
+            __class: ComponentOverrideType
+            value: Modify
+          modifyProperties:
+            __class: Map
+      prefab: {localId: 1, path: prefabs/text_entity.prefab}
+      prefabInstancId: {a: 0, b: 0}
+      parentId: {a: 0, b: 0}
+--- !Transform &3
+name: Camera_transform
+guid: {a: 11406354796801129495, b: 13987851659782164395}
+enabled: true
+localPosition: {x: 0, y: 0, z: 10}
+localScale: {x: 1, y: 1, z: 1}
+localOrientation: {w: 1, x: 0, y: 0, z: 0}
+--- !Transform &4
+name: ""
+guid: {a: 11763510718561273868, b: 15481877305055011968}
+enabled: true
+prefab: {localId: 1, path: prefabs/text_entity.prefab}
+prefabObjectGuid: {a: 15224225447018485000, b: 7820228733952838332}
+localPosition: {x: 0, y: 0, z: 20}
+localScale: {x: 1, y: 1, z: 1}
+localOrientation: {w: 1, x: 0, y: 0, z: 0}
