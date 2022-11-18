@@ -70,13 +70,6 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
         }
         textRecyclerView.setHasFixedSize(true)
         textRecyclerView.addItemDecoration(SpacesItemDecoration(0, SizeUtil.dp2px(16f), rowCountLimit = 1))
-
-//        contentRootView.findViewById<View>(R.id.save_btn).setGlobalDebounceOnClickListener {
-//            editListener?.clickSave()
-//        }
-//        contentRootView.findViewById<View>(R.id.cancel_btn).setGlobalDebounceOnClickListener {
-//            editListener?.clickCancel()
-//        }
     }
 
     fun initData() {
@@ -107,10 +100,6 @@ class PlayerMaterialTextEditView @JvmOverloads constructor(context: Context, att
     fun updateCurEditItemStatus(pos: Int) {
         textEditViewAdapter.updateCurSelectStatusView(pos)
     }
-
-//    fun scrollToPos(pos: Int) {
-//        textRecyclerView.scrollToPosition(pos)
-//    }
 
     fun setEditListener(editListener: PlayerTextEditListener?) {
         this.editListener = editListener

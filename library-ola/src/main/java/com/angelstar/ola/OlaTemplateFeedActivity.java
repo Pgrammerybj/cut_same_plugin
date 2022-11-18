@@ -53,12 +53,8 @@ import com.ola.chat.picker.utils.SpaceItemDecoration;
 import com.ola.download.RxNetDownload;
 import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
-import com.ss.android.ugc.cut_log.LogUtil;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.api.params.AudioParam;
-//import com.ss.ugc.android.editor.core.NLEEditorContext;
-//import com.ss.ugc.android.editor.core.utils.DLog;
-//import com.ss.ugc.android.editor.main.template.SpaceItemDecoration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,6 +82,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private int currentRealPosition = 0;
     private AudioMixingEntry mAudioMixingEntry;
     private MixerRecyclerViewAdapter adapter;
+    private AudioParam audioParam;
 
     private final ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
@@ -127,7 +124,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             }
         }
     };
-    private AudioParam audioParam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,7 +193,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     private void initActivityDelegate() {
-        editorActivityDelegate = new TemplateActivityDelegate(this, mSurfaceView,audioParam);
+        editorActivityDelegate = new TemplateActivityDelegate(this, mSurfaceView, audioParam);
         editorActivityDelegate.setViewStateListener(videoStateListener);
         editorActivityDelegate.onCreate();
         nleEditorContext = editorActivityDelegate.getNleEditorContext();
@@ -261,7 +257,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                         return;
                     }
                     String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
-                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem,videoCache);
+                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, audioParam, videoCache);
                     if (cutSameIntent != null) {
                         cutSameIntent.setPackage(getPackageName());
                         startActivity(cutSameIntent);

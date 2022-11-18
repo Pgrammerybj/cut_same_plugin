@@ -43,14 +43,12 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
 
     fun init(activity: FragmentActivity, contentView: View, editListener: PlayerTextEditListener?) {
         fragmentActivity = activity
-
+        playerTextEditView.initData()
         playerTextEditView.setGlobalDebounceOnClickListener { }
-
         playerTextExtraController.init(contentView.findViewById(R.id.play_edit_extra_view))
         playerTextExtraController.setPlayerTextEditListenerAdapter(this)
 
         playerTextEditListener = editListener
-        playerTextEditView.initData()
         playerTextEditView.setEditListener(this)
 
         //获取视频的画布大小

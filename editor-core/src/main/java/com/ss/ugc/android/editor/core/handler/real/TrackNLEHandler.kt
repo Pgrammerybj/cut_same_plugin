@@ -1,15 +1,19 @@
 package com.ss.ugc.android.editor.core.handler.real
 
 import com.bytedance.ies.nle.editor_jni.*
+import com.bytedance.ies.nleeditor.getMainSegment
 import com.ss.android.vesdk.VEUtils
 import com.ss.ugc.android.editor.core.*
+import com.ss.ugc.android.editor.core.api.CommitLevel
 import com.ss.ugc.android.editor.core.api.VariableKeys
 import com.ss.ugc.android.editor.core.api.params.*
 import com.ss.ugc.android.editor.core.handler.ITrackNLEHandler
 import com.ss.ugc.android.editor.core.settings.KVSettingsManager
 import com.ss.ugc.android.editor.core.settings.SettingsKey.FIXED_CANVAS_RATIO
 import com.ss.ugc.android.editor.core.settings.SettingsKey.PICTURE_TRACK_TIME
+import com.ss.ugc.android.editor.core.utils.DLog
 import com.ss.ugc.android.editor.core.utils.EditorCoreUtil
+import com.ss.ugc.android.editor.core.utils.GsonUtil
 import java.util.concurrent.TimeUnit
 
 /**
@@ -105,5 +109,20 @@ class TrackNLEHandler(editorContext: IEditorContext) : BaseNLEHandler(editorCont
             nleEditor.commitDone()
         }
     }
-    var currentFreezeSlot: NLETrackSlot? = null
+
+    override fun closeOriVolume(commitLevel: CommitLevel?) {
+        editorContext.getMainTrack().sortedSlots?.forEach { slot ->
+            val segment = slot.getMainSegment<NLESegmentVideo>()
+            val originVolume = segment?.volume ?: 0f
+            slot.setExtra(Constants.SLOT_MUTE_VOLUME_KEY, originVolume.toString())
+            segment?.volume = 0F
+            slot.keyframes.forEach { keyframe ->
+                val keyframeOriVolume = keyframe.getMainSegment<NLESegmentVideo>()?.volume ?: 0f
+                keyframe.setExtra(Constants.SLOT_MUTE_VOLUME_KEY, keyframeOriVolume.toString())
+                DLog.d("muteVolume open save keyframe volume $keyframeOriVolume slot ${keyframe.uuid}")
+                keyframe.getMainSegment<NLESegmentVideo>()?.volume = 0f
+            }
+        }
+        executeCommit(commitLevel)
+    }
 }

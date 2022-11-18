@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
 import java.io.*
+import java.nio.charset.StandardCharsets
 
 class FileUtil {
     companion object {
@@ -16,36 +17,27 @@ class FileUtil {
             return dir.absolutePath + File.separator + name
         }
 
-
-        /**
-         * 获取合适的 cache 路径.
-         *
-         * android 官方推荐使用 external-storage 的 cache 路径, 当 external-storage
-         * 不可用的时候, 回退到系统内置的 cache 路径.
-         *
-         * @see Context.getCacheDir
-         * @see Context.getExternalCacheDir
-         */
-        @JvmStatic
-        fun getCacheDir(context: Context): File? {
-            var cacheDir = context.externalCacheDir
-            if (cacheDir == null) {
-                cacheDir = context.cacheDir
+        //读取json文件
+        fun readJsonFile(fileName: String?): String {
+            val jsonStr: String
+            return try {
+                val jsonFile = File(fileName)
+                val fileReader = FileReader(jsonFile)
+                val reader: Reader =
+                    InputStreamReader(FileInputStream(jsonFile), StandardCharsets.UTF_8)
+                var ch: Int
+                val sb = StringBuilder()
+                while (reader.read().also { ch = it } != -1) {
+                    sb.append(ch.toChar())
+                }
+                fileReader.close()
+                reader.close()
+                jsonStr = sb.toString()
+                jsonStr
+            } catch (e: IOException) {
+                e.printStackTrace()
+                ""
             }
-            return cacheDir
-        }
-
-        /**
-         * @return sd卡是否可写
-         */
-        @JvmStatic
-        fun isSdcardWritable(): Boolean {
-            try {
-                return Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
-            } catch (ignored: Exception) {
-            }
-
-            return false
         }
 
         fun saveBmpToFile(bmp: Bitmap?, file: File?, format: Bitmap.CompressFormat): Boolean {

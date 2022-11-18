@@ -20,19 +20,23 @@ import com.cutsame.solution.source.SourceInfo
 import com.cutsame.solution.template.model.TemplateExtraList
 import com.cutsame.solution.template.model.TemplateItem
 import com.cutsame.ui.CutSameUiIF
+import com.cutsame.ui.CutSameUiIF.ARG_CUT_SAME_AUDIO_PARAM
 import com.cutsame.ui.CutSameUiIF.ARG_TEMPLATE_ITEM
 import com.cutsame.ui.R
 import com.cutsame.ui.exten.FastMain
-import com.ola.chat.picker.utils.CutSameMediaUtils
 import com.cutsame.ui.utils.CutSameTemplateUtils
+import com.cutsame.ui.utils.FileUtil
 import com.cutsame.ui.utils.ScreenUtil.isScreenOn
 import com.google.gson.Gson
 import com.ola.chat.picker.entry.ImagePickConfig
+import com.ola.chat.picker.utils.CutSameMediaUtils
 import com.ola.chat.picker.utils.PickerConstant
 import com.ss.android.ugc.cut_log.LogUtil
 import com.ss.android.ugc.cut_ui.ItemCrop
 import com.ss.android.ugc.cut_ui.MediaItem
+import com.ss.android.ugc.cut_ui.SubtitleInfo
 import com.ss.android.ugc.cut_ui.TextItem
+import com.ss.ugc.android.editor.core.api.params.AudioParam
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.io.File
@@ -50,7 +54,14 @@ private const val TAG = "cut.CutPlayerActivity"
  * 剪同款成品播放页
  */
 abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
+
     override val coroutineContext: CoroutineContext = FastMain + Job()
+
+    //内置的歌曲默认动效和字体
+    val SUBTITLE_EFFECT_FILE =
+        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdian"
+    val SUBTITLE_TEXT_FONT_PATH =
+        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdianfont"
 
     var cutSameSource: CutSameSource? = null
     var cutSamePlayer: CutSamePlayer? = null
@@ -60,6 +71,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         override fun onFirstFrameRendered() {
             onPlayerFirstFrameOk()
         }
+
         override fun onChanged(state: Int) {
             when (state) {
                 PlayerStateListener.PLAYER_STATE_PREPARED -> {
@@ -99,7 +111,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         }
 
         override fun onPlayError(what: Int, extra: String) {
-            Log.e(TAG, "onPlayError: " + extra)
+            Log.e(TAG, "onPlayError: $extra")
         }
 
         override fun onPlayProgress(process: Long) {
@@ -107,12 +119,11 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private var isPlayingOnPause = false
 
     private lateinit var templateItem: TemplateItem
-    private var hasLaunchClip = false
-    private var hasLaunchPicker = false
-    private var hasLaunchNext = false
+//    private lateinit var audioParam: AudioParam
+
+    private var isPlayingOnPause = false
     var isForeground = true // 此页面是否在前台
     protected var mutableMediaItemList: ArrayList<MediaItem> = ArrayList()
     private var mutableTextItemList: ArrayList<TextItem>? = null
@@ -120,6 +131,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     // 用于记录原始数据是否更改过 目前仅用于弹窗判断
     private var originMediaItemList: ArrayList<MediaItem>? = null
     private var compileNextIntent: Intent? = null
+    private var audioParam: AudioParam? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,6 +140,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
 
         val templateItem =
             intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
+        audioParam = intent.getParcelableExtra(ARG_CUT_SAME_AUDIO_PARAM)
         if (templateItem == null || templateItem.templateUrl.isEmpty() || templateItem.md5.isEmpty()) {
             LogUtil.e(TAG, "onCreate templateItem == null，return")
             finish()
@@ -135,7 +148,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         }
 
         val templateExtraList = Gson().fromJson(templateItem.extra, TemplateExtraList::class.java)
-        LogUtil.d(TAG, "onCreate templateExtraList $templateExtraList")
         for (template in templateExtraList.list) {
             mutableMediaItemList.add(
                 MediaItem(
@@ -156,15 +168,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 templateItem.template_type
             )
         )
-        if (savedInstanceState != null) {
-            hasLaunchPicker = savedInstanceState.getBoolean("hasLaunchPicker", false)
-            hasLaunchNext = savedInstanceState.getBoolean("hasLaunchNext", false)
-            hasLaunchClip = savedInstanceState.getBoolean("hasLaunchClip", false)
-            LogUtil.d(
-                TAG,
-                "onCreate restore hasLaunchPicker=$hasLaunchPicker, hasLaunchNext=$hasLaunchNext, hasLaunchClip=$hasLaunchClip"
-            )
-        }
         checkDataOkOrNot()
     }
 
@@ -265,12 +268,10 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 cutSamePlayer?.getMediaItems()
             )
             createClipUIIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            hasLaunchClip = true
             startActivityForResult(createClipUIIntent, REQUEST_CODE_CLIP)
             onClipStart(item)
             return true
         }
-
         LogUtil.d(TAG, "createClipUIIntent == null, can not launchClip")
         return false
     }
@@ -292,7 +293,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                 it.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         if (pickerIntent != null) {
-            hasLaunchPicker = true
             startActivityForResult(pickerIntent, REQUEST_CODE_PICKER)
             return true
         }
@@ -314,7 +314,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         val pickerIntent = PickerConstant.createSingleGalleryUIIntent(this, imagePickConfig)
             ?.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         if (pickerIntent != null) {
-            hasLaunchPicker = true
             startActivityForResult(pickerIntent, REQUEST_CODE_SINGLE_CHOOSE)
             return true
         }
@@ -368,6 +367,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             onPlayerDataOk()
             initTemplateData(templateUrl, mediaItemList, textItemList, getPlayerSurfaceView())
             onPlayerInitOk()
+
         }
         window.decorView.setBackgroundColor(Color.BLACK)
     }
@@ -379,7 +379,22 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         videoSurfaceView: SurfaceView
     ) {
         cutSamePlayer = CutSameSolution.createCutSamePlayer(videoSurfaceView, templateUrl)
-        cutSamePlayer?.preparePlay(mediaItemList, textItemList)
+        val subtitleInfo = SubtitleInfo(
+            audioName = audioParam?.audioName!!,
+            audioDuration = 20277000,
+            startTime = 0,
+            endTime = 20277000,
+            timeClipStart = 0,
+            timeClipEnd = 20277000,
+            audioFilePath = "",
+            subtitleSrtFile = FileUtil.readJsonFile(audioParam?.srtPath),
+            subtitleEffectFile = SUBTITLE_EFFECT_FILE,
+            subtitleTextColor = Color.parseColor("#FFFFFFFF").toLong(),
+            subtitleTextFontPath = SUBTITLE_TEXT_FONT_PATH,
+            screenTransformX = 0.0f,
+            screenTransformY = -0.1f
+        )
+        cutSamePlayer?.preparePlay(mediaItemList, textItemList, subtitleInfo)
     }
 
     private fun mergeMediaItemList(
@@ -409,6 +424,15 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
+    /**
+     *关闭原声音效
+     */
+    fun closeCutSameOriVolume() {
+        mutableMediaItemList.forEach {
+            cutSamePlayer?.setVolume(it.materialId, 0F)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -422,7 +446,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
 
             REQUEST_CODE_PICKER -> {
                 //选择素材返回到该页面
-                hasLaunchPicker = false
                 LogUtil.d(TAG, "REQUEST_CODE_PICKER resultCode=$resultCode, data=$data")
                 if (resultCode == RESULT_OK && data != null) {
                     val items = PickerConstant.getGalleryPickResultData(data)
@@ -449,7 +472,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
 
             REQUEST_CODE_CLIP -> {
                 //裁剪素材返回到该页面
-                hasLaunchClip = false
                 var processItem: MediaItem? = null
                 LogUtil.d(TAG, "REQUEST_CODE_CLIP resultCode $resultCode")
                 if (resultCode == Activity.RESULT_OK) {

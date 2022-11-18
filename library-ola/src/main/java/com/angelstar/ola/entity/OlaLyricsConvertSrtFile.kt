@@ -25,7 +25,8 @@ object OlaLyricsConvertSrtFile {
         val header = SongHeader(audioMixingEntry.songName, "artist", "musicBy", "writtenBy")
         val lyricsList = ArrayList<SongContent>()
         audioMixingEntry.singTimeLyricList.forEach {
-            lyricsList.add(SongContent(it.lyric, (it.startTime/1000 - 25).toString()))
+            //:todo写死逻辑需要处理
+            lyricsList.add(SongContent(it.lyric, (it.startTime / 1000 - 25).toString()))
         }
 
         //1️⃣获取到SRT格式的歌词文件实体
@@ -33,21 +34,22 @@ object OlaLyricsConvertSrtFile {
         //2️⃣TODO：将实体装换成JSON写入文件
         val lyricsSrtString = JsonHelper.toJsonString(lyricsSrtEntry)
         val localResourcePath = getLocalResourcePath(mContext)
-//        FileUtil.writeTxtToFile(
-//            lyricsSrtString,
-//            localResourcePath,
-//            "ola_jackyang_lyrics.json"
-//        )
+        val audioPath = getLocalResourcePath(mContext) + File.separator
+        val lyricName = audioMixingEntry.songName
+        FileUtil.writeTxtToFile(
+            lyricsSrtString,
+            localResourcePath,
+            "$lyricName.json"
+        )
 
         //将对应的asset文件也一并copy
-        FileUtil.copyAssets(mContext.assets,"default",localResourcePath)
-
+        FileUtil.copyAssets(mContext.assets, "default", localResourcePath)
         return AudioParam(
-            audioName = audioMixingEntry.songName,
-            audioPath = getLocalResourcePath(mContext) + File.separator + "ola_jackyang_lyrics",
+            audioName = lyricName,
+            audioPath = audioPath + "ola_jackyang_lyrics",
             startTime = 0,
             isAudioEffect = false,
-            srtPath = getLocalResourcePath(mContext) + File.separator + "ola_jackyang_lyrics.json"
+            srtPath = "$audioPath$lyricName.json"
         )
     }
 

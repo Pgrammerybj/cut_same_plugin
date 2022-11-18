@@ -95,7 +95,6 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         hasInitUi = true
 
         setContentView(R.layout.activity_cut_player)
-
         initPaper()
         playerMaterialVideoView.initData(mutableMediaItemList, { item, position, isSelect ->
             cutSamePlayer?.pause()
@@ -110,9 +109,13 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
             selectMediaItem = item
             hideSlotEditLayout()
         })
-
         floatSliderView.setOnSliderChangeListener(onFloatSliderChangeListener())
         initListener()
+    }
+
+    override fun onPlayerInitOk() {
+        //关闭原声音效
+        closeCutSameOriVolume()
     }
 
     private fun onFloatSliderChangeListener() = object : OnFloatSliderChangeListener() {

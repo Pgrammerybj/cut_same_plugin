@@ -1,5 +1,6 @@
 package com.ss.ugc.android.editor.core.handler
 
+import com.ss.ugc.android.editor.core.api.CommitLevel
 import com.ss.ugc.android.editor.core.api.params.EditMedia
 
 interface ITrackNLEHandler {
@@ -22,7 +23,7 @@ interface ITrackNLEHandler {
     /**
      * 点击关闭/开启原声按钮
      */
-//    fun closeOriVolume(isAllMute: Boolean, commitLevel: CommitLevel? = CommitLevel.COMMIT)
+    fun closeOriVolume(commitLevel: CommitLevel? = CommitLevel.COMMIT)
 
     /**
      * 删除视频

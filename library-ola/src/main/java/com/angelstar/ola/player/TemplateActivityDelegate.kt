@@ -68,11 +68,12 @@ class TemplateActivityDelegate(
         filePathList.forEach { select.add(EditMedia(it, true)) }
         //先清空主轨道
         nleEditorContext?.getMainTrack()?.clearSlot()
-        //原预览视频静音
         nleEditorContext?.editor?.initMainTrack(select)
         //导入歌曲音频和歌词贴纸
         nleEditorContext?.editor?.addAudioTrack(audioParam)
         nleEditorContext?.editor?.addLyricsStickerTrack(audioParam)
+        //原预览视频静音
+        nleEditorContext?.editor?.closeOriVolume()
         nleEditorContext?.player?.prepare()
         activity.lifecycle.addObserver(nleEditorContext!!)
     }

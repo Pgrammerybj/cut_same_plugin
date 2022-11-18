@@ -1,12 +1,15 @@
 package com.ss.ugc.android.editor.core.api.params
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
 /**
  * @param audioName 音频名称
  * @param audioPath 音频文件本地路径
- * @param playTime 播放时长
  */
+@Parcelize
 data class AudioParam(
-    var audioName: String,
+    var audioName: String?,
     var audioPath: String,
     var audioId: String? = null,
     val startTime: Long = 0L,
@@ -19,4 +22,4 @@ data class AudioParam(
     val extraId: String? = null,
     val notifySlotChanged: Boolean = true,
     val srtPath: String? = null
-)
+): Parcelable

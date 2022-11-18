@@ -71,6 +71,10 @@ class DefaultEditor(private val editorContext: IEditorContext) : IEditor {
         trackHandlerProxy.initMainTrack(selectedMedias)
     }
 
+    override fun closeOriVolume(commitLevel: CommitLevel?) {
+        trackHandlerProxy.closeOriVolume()
+    }
+
     /**
      * 添加音频轨道
      */

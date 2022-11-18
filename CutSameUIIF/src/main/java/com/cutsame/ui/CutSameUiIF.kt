@@ -5,6 +5,7 @@ import android.content.Intent
 import com.bytedance.ies.cutsame.util.Size
 import com.cutsame.solution.template.model.TemplateItem
 import com.ss.android.ugc.cut_ui.MediaItem
+import com.ss.ugc.android.editor.core.api.params.AudioParam
 
 
 object CutSameUiIF {
@@ -14,6 +15,7 @@ object CutSameUiIF {
 
     // 模板的预览视频
     const val ARG_CUT_TEMPLATE_VIDEO_PATH = "arg_cut_template_video_path"
+    const val ARG_CUT_SAME_AUDIO_PARAM = "arg_cut_same_audio_param"
     const val ARG_TEMPLATE_ITEM = "arg_template_item"
 
     /**
@@ -23,14 +25,15 @@ object CutSameUiIF {
     fun createCutUIIntent(
         context: Context,
         templateItem: TemplateItem,
+        audioParam: AudioParam,
         videoCache: String
     ): Intent? {
         val intent = Intent(INTERFACE_PLAYER)
         intent.setPackage(context.packageName)
         intent.putExtra(ARG_TEMPLATE_ITEM, templateItem)
         intent.putExtra(ARG_CUT_TEMPLATE_VIDEO_PATH, videoCache)
-        return if (checkIntent(context, intent)
-        ) {
+        intent.putExtra(ARG_CUT_SAME_AUDIO_PARAM, audioParam)
+        return if (checkIntent(context, intent)) {
             intent
         } else {
             null
@@ -61,7 +64,7 @@ object CutSameUiIF {
     }
 
     fun getGalleryPickResultData(intent: Intent): ArrayList<MediaItem>? {
-        return intent.getParcelableArrayListExtra<MediaItem>(ARG_DATA_PICK_RESULT_MEDIA_ITEMS)
+        return intent.getParcelableArrayListExtra(ARG_DATA_PICK_RESULT_MEDIA_ITEMS)
     }
 
     /**
