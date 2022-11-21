@@ -1,7 +1,7 @@
 package com.angelstar.ola.entity;
 
 import android.content.Context
-import com.angelstar.ola.utils.JsonHelper
+import com.cutsame.ui.utils.JsonHelper
 import com.ss.ugc.android.editor.core.api.params.AudioParam
 import com.ss.ugc.android.editor.core.utils.FileUtil
 import java.io.File

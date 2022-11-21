@@ -2,6 +2,8 @@ package com.cutsame.ui.cut.lyrics;
 
 import androidx.annotation.Keep;
 
+import java.util.List;
+
 /**
  * @Author：yangbaojiang
  * @Date: 2022/11/2 11:49
@@ -11,54 +13,77 @@ import androidx.annotation.Keep;
 @Keep
 public class FontItemEntry {
 
-    public FontItemEntry() {
+    private String type;
+    private FontResource resource;
+
+    public String getType() {
+        return type;
     }
 
-    public FontItemEntry(String fontCover, String fontName, boolean isSelect, boolean isDownload) {
-        this.fontCover = fontCover;
-        this.fontName = fontName;
-        this.isSelect = isSelect;
-        this.isDownload = isDownload;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    //字体封面
-    String fontCover;
-    //字体名称
-    String fontName;
-    //当前是否选中
-    boolean isSelect = false;
-    //当前字体是否已经下载
-    boolean isDownload = false;
-
-    public String getFontCover() {
-        return fontCover;
+    public FontResource getResource() {
+        return resource;
     }
 
-    public void setFontCover(String fontCover) {
-        this.fontCover = fontCover;
+    public void setResource(FontResource resource) {
+        this.resource = resource;
     }
 
-    public String getFontName() {
-        return fontName;
-    }
+    static class FontResource{
+        private List<FontItem> list;
 
-    public void setFontName(String fontName) {
-        this.fontName = fontName;
-    }
+        public List<FontItem> getList() {
+            return list;
+        }
 
-    public boolean isSelect() {
-        return isSelect;
-    }
+        public void setList(List<FontItem> list) {
+            this.list = list;
+        }
 
-    public void setSelect(boolean select) {
-        isSelect = select;
-    }
+        static class FontItem{
+            //字体封面
+            String icon;
+            //字体名称
+            String name;
+            //字体在本地的路径
+            String path;
+            //当前字体是否已经下载
+            boolean isDownload = false;
 
-    public boolean isDownload() {
-        return isDownload;
-    }
+            public String getIcon() {
+                return icon;
+            }
 
-    public void setDownload(boolean download) {
-        isDownload = download;
+            public void setIcon(String icon) {
+                this.icon = icon;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getPath() {
+                return path;
+            }
+
+            public void setPath(String path) {
+                this.path = path;
+            }
+
+            public boolean isDownload() {
+                return isDownload;
+            }
+
+            public void setDownload(boolean download) {
+                isDownload = download;
+            }
+        }
     }
 }

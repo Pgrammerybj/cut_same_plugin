@@ -80,8 +80,6 @@ class PlayerTextEditController(var playerTextEditView: PlayerMaterialTextEditVie
         if (dataList == null || dataList!!.isEmpty()) {
             dataList = PlayerTextEditHelper.covertItemTextData(textItems)
         }
-        // TODO: 2022/10/14 此处为临时添加，记得删除
-//        dataList?.get(4)?.let { dataList?.add(it) }
         playerTextEditView.updateTextData(dataList)
     }
 

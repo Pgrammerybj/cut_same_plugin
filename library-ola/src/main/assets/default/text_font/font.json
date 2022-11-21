@@ -1,0 +1,36 @@
+{
+    "type": "fonts",
+    "resource": {
+        "list": [{
+            "name": "咏楷体",
+            "path": "yongkaiti/yongkaiti",
+            "icon": "yongkaiti/yongkaiti.png",
+            "hint": "",
+            "tags": ""
+        }, {
+            "name": "软糖体",
+            "path": "ruantangti/ruantangti",
+            "icon": "ruantangti/ruantangti.png",
+            "hint": "",
+            "tags": ""
+        }, {
+            "name": "嘟嘟体",
+            "path": "duduti/duduti",
+            "icon": "duduti/duduti.png",
+            "hint": "",
+            "tags": ""
+        }, {
+            "name": "初心体",
+            "path": "chuxinti/chuxinti",
+            "icon": "chuxinti/chuxinti.png",
+            "hint": "",
+            "tags": ""
+        }, {
+            "name": "童谣体",
+            "path": "tongyaoti/tongyaoti",
+            "icon": "tongyaoti/tongyaoti.png",
+            "hint": "",
+            "tags": ""
+        }]
+    }
+}

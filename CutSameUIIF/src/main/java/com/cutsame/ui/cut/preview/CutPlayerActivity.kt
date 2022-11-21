@@ -60,8 +60,12 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     //内置的歌曲默认动效和字体
     val SUBTITLE_EFFECT_FILE =
         "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdian"
+    //默认的经典
     val SUBTITLE_TEXT_FONT_PATH =
         "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdianfont"
+    //全量的字体列表，注意动态替换SUBTITLE_TEXT_FONT_PATH中的.ttf一个文件即可
+    val LYRICS_STYLE_FONT_PATH =
+        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/text_font"
 
     var cutSameSource: CutSameSource? = null
     var cutSamePlayer: CutSamePlayer? = null
@@ -75,7 +79,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         override fun onChanged(state: Int) {
             when (state) {
                 PlayerStateListener.PLAYER_STATE_PREPARED -> {
-                    LogUtil.d(TAG, "PLAYER_STATE_PREPARED")
                     val textItems = cutSamePlayer?.getTextItems()
                     if (textItems != null) {
                         //视频合成之后，获取文本
@@ -100,7 +103,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                     onPlayerPlaying(false)
                 }
                 PlayerStateListener.PLAYER_STATE_DESTROYED -> {
-                    Log.d(TAG, "PLAYER_STATE_DESTROYED")
                     onPlayerDestroy()
                 }
             }
@@ -138,8 +140,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         overridePendingTransition(0, 0)
         supportActionBar?.hide()
 
-        val templateItem =
-            intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
+        val templateItem = intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
         audioParam = intent.getParcelableExtra(ARG_CUT_SAME_AUDIO_PARAM)
         if (templateItem == null || templateItem.templateUrl.isEmpty() || templateItem.md5.isEmpty()) {
             LogUtil.e(TAG, "onCreate templateItem == null，return")
@@ -179,7 +180,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         isForeground = true
         cutSamePlayer?.registerPlayerStateListener(playerStateListener)
         compileNextIntent = null
-        Log.d(TAG, "onResume  isPlayingOnPause $isPlayingOnPause")
         if (isPlayingOnPause) {
             cutSamePlayer?.start()
         }
@@ -213,14 +213,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         val videoCachePath = CutSameUiIF.getTemplateVideoCacheByIntent(intent)
 
         if (!needPickMediaItems.isNullOrEmpty()) {
-
-            // TODO: 2022/10/18 模拟其他业务的单选逻辑
-            val isSingleChoose = false
-            if (isSingleChoose) {
-                launchPicker()
-            } else {
-                launchPicker(ArrayList(needPickMediaItems), videoCachePath!!)
-            }
+            launchPicker(ArrayList(needPickMediaItems), videoCachePath!!)
         } else {
             initTemplateWhileDataReady(
                 templateItem.templateUrl,
@@ -255,7 +248,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
      * @return 是否真的唤起了
      */
     fun launchClip(item: MediaItem): Boolean {
-        LogUtil.d(TAG, "launchClip templatePlayerErrorCode $templatePlayerErrorCode")
         if (templatePlayerErrorCode != TemplateError.SUCCESS) {
             return false
         }
@@ -301,33 +293,12 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         return false
     }
 
-    /**
-     * 单选的逻辑
-     */
-    private fun launchPicker(): Boolean {
-        val imagePickConfig = ImagePickConfig()
-        imagePickConfig.crop = true
-        imagePickConfig.cropStyle = ImagePickConfig.CIRCLE
-        imagePickConfig.defaultResourceType = ImagePickConfig.SELECT_IMAGE
-        imagePickConfig.sceneType = ImagePickConfig.PICKER_SINGLE
-
-        val pickerIntent = PickerConstant.createSingleGalleryUIIntent(this, imagePickConfig)
-            ?.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        if (pickerIntent != null) {
-            startActivityForResult(pickerIntent, REQUEST_CODE_SINGLE_CHOOSE)
-            return true
-        }
-        LogUtil.d(TAG, "can not launchPicker, pickerIntent==null")
-        return false
-    }
-
     fun launchMediaReplace(mediaItem: MediaItem) {
         val items = ArrayList<MediaItem>().apply {
             add(mediaItem)
         }
 
-        val galleryUIIntent =
-            PickerConstant.createGalleryUIIntent(
+        val galleryUIIntent = PickerConstant.createGalleryUIIntent(
                 this,
                 CutSameMediaUtils.cutSameToOlaMediaItemList(items),
                 CutSameTemplateUtils.parseTemplateItem(templateItem)
@@ -367,7 +338,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             onPlayerDataOk()
             initTemplateData(templateUrl, mediaItemList, textItemList, getPlayerSurfaceView())
             onPlayerInitOk()
-
+            onPlayerPrepareOk()
         }
         window.decorView.setBackgroundColor(Color.BLACK)
     }
@@ -695,27 +666,19 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         )
         val upperLeftX: Float =
             ((width * scale / 2.0f - mediaItem.width / 2.0f) / (width * scale)).run {
-                getValidValue(
-                    this
-                )
+                getValidValue(this)
             }
         val upperLeftY: Float =
             ((height * scale / 2.0f - mediaItem.height / 2.0f) / (height * scale)).run {
-                getValidValue(
-                    this
-                )
+                getValidValue(this)
             }
         val lowerRightX: Float =
             ((width * scale / 2.0f + mediaItem.width / 2.0f) / (width * scale)).run {
-                getValidValue(
-                    this
-                )
+                getValidValue(this)
             }
         val lowerRightY: Float =
             ((height * scale / 2.0f + mediaItem.height / 2.0f) / (height * scale)).run {
-                getValidValue(
-                    this
-                )
+                getValidValue(this)
             }
         LogUtil.d(
             TAG, "checkScale: id=" + mediaItem.materialId

@@ -16,17 +16,6 @@ object FileUtil {
     private val mFormatter = Formatter(mFormatBuilder, Locale.getDefault())
 
     /**
-     * 校验文件是否有效
-     *
-     * @param path
-     * @return
-     */
-    fun check(path: String?): Boolean {
-        val file = File(path)
-        return file.exists() && file.isFile && file.length() > 0
-    }
-
-    /**
      * 把毫秒转换成：1：20：30这样的形式
      */
     fun stringForTime(timeMs: Long): String {

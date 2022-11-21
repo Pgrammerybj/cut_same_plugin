@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets
 
 class FileUtil {
     companion object {
+
         fun getExternalTmpSaveName(name: String = "", context: Context): String {
             val dir = context.getExternalFilesDir("tmp_save")
                 ?: File(context.filesDir.absolutePath, "tmp_save")
@@ -16,6 +17,19 @@ class FileUtil {
             }
             return dir.absolutePath + File.separator + name
         }
+
+
+        /**
+         * 校验文件是否有效
+         *
+         * @param path
+         */
+        @JvmStatic
+        fun check(path: String?): Boolean {
+            val file = File(path)
+            return file.exists() && file.isFile && file.length() > 0
+        }
+
 
         //读取json文件
         fun readJsonFile(fileName: String?): String {
@@ -103,6 +117,5 @@ class FileUtil {
             }
             return false
         }
-
     }
 }

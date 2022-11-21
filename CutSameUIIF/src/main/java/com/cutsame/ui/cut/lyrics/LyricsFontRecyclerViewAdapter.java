@@ -14,17 +14,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.cutsame.ui.R;
+import com.cutsame.ui.cut.lyrics.FontItemEntry.FontResource.FontItem;
+import com.cutsame.ui.utils.FileUtil;
 
+import java.io.File;
 import java.util.List;
 
 public class LyricsFontRecyclerViewAdapter extends RecyclerView.Adapter<LyricsFontRecyclerViewAdapter.ViewHolder> {
 
     private final Context mContext;
-    private final List<FontItemEntry> fontItemList;
+    private final String resourcePath;
+    private final List<FontItem> fontItemList;
 
-    public LyricsFontRecyclerViewAdapter(Context context, List<FontItemEntry> fontItemList) {
+    public LyricsFontRecyclerViewAdapter(Context context, List<FontItem> fontItemList, String resourcePath) {
         this.fontItemList = fontItemList;
         this.mContext = context;
+        this.resourcePath = resourcePath;
     }
 
     @NonNull
@@ -36,13 +41,20 @@ public class LyricsFontRecyclerViewAdapter extends RecyclerView.Adapter<LyricsFo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FontItemEntry itemEntry = fontItemList.get(position);
+        FontItem itemEntry = fontItemList.get(position);
         RequestOptions options = RequestOptions.bitmapTransform(new CircleCrop());
         //用来加载网络
-        Glide.with(this.mContext).load(itemEntry.getFontCover()).apply(options).into(holder.ivFontCover);
-        holder.tvFontName.setText(itemEntry.getFontName());
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(holder.tvFontName, position));
-        holder.unDownloadMask.setVisibility(itemEntry.isDownload ? View.GONE : View.VISIBLE);
+        Glide.with(this.mContext).load(resourcePath + File.separator + itemEntry.getIcon()).apply(options).into(holder.ivFontCover);
+        holder.tvFontName.setText(itemEntry.getName());
+        String ttfPath = ttfFilePath(itemEntry.getPath(), itemEntry.getName());
+        boolean fontExist =  FileUtil.check(ttfPath);
+        holder.unDownloadMask.setVisibility(fontExist ? View.GONE : View.VISIBLE);
+        holder.ivDownloadFont.setVisibility(fontExist ? View.GONE : View.VISIBLE);
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(ttfPath, position));
+    }
+
+    private String ttfFilePath(String path, String name){
+        return resourcePath + File.separator + path + File.separator + name + ".ttf";
     }
 
     @Override

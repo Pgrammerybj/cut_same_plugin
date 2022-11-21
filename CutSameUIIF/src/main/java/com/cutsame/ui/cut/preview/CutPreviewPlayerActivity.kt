@@ -1,12 +1,10 @@
 package com.cutsame.ui.cut.preview
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.RectF
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.SurfaceView
 import android.view.View
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -88,7 +86,6 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
 
     override fun onPlayerDataOk() {
         super.onPlayerDataOk()
-        LogUtil.d(TAG, "onPlayerDataOk hasInitUi $hasInitUi")
         if (hasInitUi) {
             return
         }
@@ -342,11 +339,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
                 return size
             }
 
-            override fun selectTextItem(
-                data: PlayerTextEditItemData?,
-                pos: Int,
-                seekDone: ((ret: Int) -> Unit)?
-            ) {
+            override fun selectTextItem(data: PlayerTextEditItemData?, pos: Int, seekDone: ((ret: Int) -> Unit)?) {
                 if (data == null) {
                     return
                 }
@@ -365,28 +358,13 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
                 }
             }
 
-            override fun getItemFrameBitmap(
-                times: IntArray?,
-                width: Int,
-                height: Int,
-                listener: PlayerTextItemThumbBitmapListener?
-            ) {
+            override fun getItemFrameBitmap(times: IntArray?, width: Int, height: Int, listener: PlayerTextItemThumbBitmapListener?) {
                 if (times == null || times.isEmpty()) {
                     listener?.frameBitmap("", null)
                     return
                 }
-                cutSamePlayer?.getVideoFrameWithTime(
-                    times,
-                    width,
-                    height,
-                    object : GetImageListener {
-                        override fun onGetImageData(
-                            bytes: ByteArray?,
-                            pts: Int,
-                            width: Int,
-                            height: Int,
-                            score: Float
-                        ) {
+                cutSamePlayer?.getVideoFrameWithTime(times, width, height, object : GetImageListener {
+                        override fun onGetImageData(bytes: ByteArray?, pts: Int, width: Int, height: Int, score: Float) {
                             if (bytes != null) {
                                 val bmp =
                                     Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -401,29 +379,14 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
             }
         })
 
-        playerTextEditController.setScaleListener(object :
-            PlayerAnimateHelper.PlayerSurfaceScaleListener {
-            override fun scaleEnd(
-                targetScaleW: Float,
-                targetScaleH: Float,
-                targetTranx: Int,
-                targetTranY: Int,
-                isScaleDown: Boolean
-            ) {
+        playerTextEditController.setScaleListener(object : PlayerAnimateHelper.PlayerSurfaceScaleListener {
+            override fun scaleEnd(targetScaleW: Float, targetScaleH: Float, targetTranx: Int, targetTranY: Int, isScaleDown: Boolean) {
                 if (!isScaleDown) {
                     cutSamePlayer?.start()
                 }
             }
 
-            override fun scale(
-                scaleW: Float,
-                scaleH: Float,
-                tranX: Int,
-                tranY: Int,
-                faction: Float,
-                isScaleDown: Boolean
-            ) {
-            }
+            override fun scale(scaleW: Float, scaleH: Float, tranX: Int, tranY: Int, faction: Float, isScaleDown: Boolean) {}
         })
 
         val mutableTextSegments = cutSamePlayer?.getTextItems()?.filter { it.mutable }
@@ -433,7 +396,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
     /**
      * ViewPager滑动监听
      */
-    var mPageListener: OnPageChangeListener = object : OnPageChangeListener {
+    private var mPageListener: OnPageChangeListener = object : OnPageChangeListener {
         override fun onPageScrolled(
             position: Int,
             positionOffset: Float,
@@ -441,9 +404,7 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         ) {
         }
 
-        @SuppressLint("LongLogTag")
         override fun onPageSelected(currentPosition: Int) {
-            Log.i("jackyang_onPageSelected", "当前页面是=$currentPosition")
             if (currentPosition == 1) {
                 if (templatePlayerErrorCode == TemplateError.SUCCESS) {
                     if (cutSamePlayer?.getTextItems()?.filter { it.mutable }.isNullOrEmpty()) {
