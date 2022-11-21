@@ -252,7 +252,6 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
             if (!moveProgress) {
                 floatSliderView.currPosition = progress.toFloat()
             }
-            // TODO: 2022/10/14 移动到视频组件内部
             playerMaterialVideoView.onPlayerProgress(progress)
         }
     }

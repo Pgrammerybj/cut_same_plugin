@@ -39,8 +39,8 @@ class ColorCircleView : View {
         canvas.drawCircle(radius.toFloat(), radius.toFloat(), radius.toFloat(), fillPaint)
     }
 
-    fun setColor(@ColorInt color: Int) {
-        fillColor = color
+    fun setColor(@ColorInt color: Long) {
+        fillColor = color.toInt()
         fillPaint.color = fillColor
     }
 

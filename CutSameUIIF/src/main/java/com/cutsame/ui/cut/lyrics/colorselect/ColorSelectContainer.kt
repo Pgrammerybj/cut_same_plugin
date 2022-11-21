@@ -9,7 +9,7 @@ import com.ola.chat.picker.utils.SizeUtil
 
 class ColorSelectContainer : AutoCenterScrollView {
 
-    private var colorList: List<Int>? = null
+    private var colorList: List<Long>? = null
     private lateinit var linearLayoutContainer: LinearLayout
 
     private var colorItemViewLeftMargin = SizeUtil.dp2px(0F)
@@ -36,7 +36,7 @@ class ColorSelectContainer : AutoCenterScrollView {
     }
 
     //@drawable/selector_lyric_color_press
-    fun setColorList(colorList: List<Int>) {
+    fun setColorList(colorList: List<Long>) {
         this.colorList = colorList
         linearLayoutContainer.removeAllViews()
         this.colorList?.forEach { colorItem ->
@@ -67,5 +67,5 @@ class ColorSelectContainer : AutoCenterScrollView {
 }
 
 interface OnColorSelectedListener {
-    fun onColorSelected(colorItem: Int)
+    fun onColorSelected(colorItem: Long)
 }

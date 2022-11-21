@@ -25,6 +25,13 @@ public class LyricsFontRecyclerViewAdapter extends RecyclerView.Adapter<LyricsFo
     private final Context mContext;
     private final String resourcePath;
     private final List<FontItem> fontItemList;
+    private int activePosition = -1;
+
+
+    public void setActivePosition(int activePosition) {
+        this.activePosition = activePosition;
+        notifyDataSetChanged();
+    }
 
     public LyricsFontRecyclerViewAdapter(Context context, List<FontItem> fontItemList, String resourcePath) {
         this.fontItemList = fontItemList;
@@ -47,13 +54,18 @@ public class LyricsFontRecyclerViewAdapter extends RecyclerView.Adapter<LyricsFo
         Glide.with(this.mContext).load(resourcePath + File.separator + itemEntry.getIcon()).apply(options).into(holder.ivFontCover);
         holder.tvFontName.setText(itemEntry.getName());
         String ttfPath = ttfFilePath(itemEntry.getPath(), itemEntry.getName());
-        boolean fontExist =  FileUtil.check(ttfPath);
+        boolean fontExist = FileUtil.check(ttfPath);
         holder.unDownloadMask.setVisibility(fontExist ? View.GONE : View.VISIBLE);
         holder.ivDownloadFont.setVisibility(fontExist ? View.GONE : View.VISIBLE);
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(ttfPath, position));
+        holder.itemView.setActivated(position == activePosition);
+        holder.itemView.setOnClickListener(v -> {
+                    setActivePosition(position);
+                    onItemClickListener.onItemClick(ttfPath, position);
+                }
+        );
     }
 
-    private String ttfFilePath(String path, String name){
+    private String ttfFilePath(String path, String name) {
         return resourcePath + File.separator + path + File.separator + name + ".ttf";
     }
 

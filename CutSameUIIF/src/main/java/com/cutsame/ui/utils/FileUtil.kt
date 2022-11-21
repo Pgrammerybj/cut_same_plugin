@@ -2,7 +2,6 @@ package com.cutsame.ui.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Environment
 import java.io.*
 import java.nio.charset.StandardCharsets
 
@@ -82,6 +81,25 @@ class FileUtil {
             }
         }
 
+        fun copyFileToDraft(srcFilePath: String, dstDirPath: String, dstFileName: String): Boolean {
+            if (srcFilePath.isEmpty())
+                return false
+
+            val srcFile = File(srcFilePath)
+            val dstFile = File(dstDirPath + File.separator + dstFileName)
+            val defaultFile = File(dstDirPath + File.separator + dstFileName + ".temp")
+            if (dstFile.exists()) {
+                dstFile.renameTo(defaultFile)
+            }
+            //开始拷贝字体文件
+            val copySuccess = copyFile(srcFile, dstFile)
+            if (!copySuccess)
+                return false
+            //修改拷贝的字体文件为默认文件名yonghuaiti.ttf
+            defaultFile.delete()
+            return true
+        }
+
         @JvmStatic
         fun copyFile(srcFile: File, dstFile: File): Boolean {
             if (srcFile.exists() && srcFile.isFile) {
@@ -92,14 +110,9 @@ class FileUtil {
                     dstFile.delete()
                 }
                 try {
-                    val byteNumber = 2048
-                    val buffer = ByteArray(byteNumber)
-                    val input = BufferedInputStream(
-                        FileInputStream(srcFile)
-                    )
-                    val output = BufferedOutputStream(
-                        FileOutputStream(dstFile)
-                    )
+                    val buffer = ByteArray(4096)
+                    val input = BufferedInputStream(FileInputStream(srcFile))
+                    val output = BufferedOutputStream(FileOutputStream(dstFile))
                     while (true) {
                         val count = input.read(buffer)
                         if (count == -1) {
@@ -116,6 +129,129 @@ class FileUtil {
                 }
             }
             return false
+        }
+
+        fun copyDir(dirPath: String?, newDirPath: String?) {
+            if (dirPath == null || dirPath.isEmpty() || newDirPath == null || newDirPath.isEmpty()) {
+                return
+            }
+            try {
+                val file = File(dirPath)
+                if (!file.exists() && !file.isDirectory) {
+                    return
+                }
+                val childFile = file.listFiles()
+                if (childFile == null || childFile.isEmpty()) {
+                    return
+                }
+                val newFile = File(newDirPath)
+                newFile.mkdirs()
+                for (fileTemp in childFile) {
+                    if (fileTemp.isDirectory) {
+                        copyDir(fileTemp.path, newDirPath + "/" + fileTemp.name)
+                    } else {
+                        copyFile(fileTemp.path, newDirPath)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun copyFile(filePath: String?, newDirPath: String?) {
+            if (filePath == null || filePath.isEmpty()) {
+                return
+            }
+            try {
+                val file = File(filePath)
+                if (!file.exists()) {
+                    return
+                }
+                //判断目录是否存在，如果不存在，则创建
+                val newDir = File(newDirPath)
+                if (!newDir.exists()) {
+                    newDir.mkdirs()
+                }
+                //创建目标文件
+                val newFile: File? = newFile(newDirPath, file.name)
+                val inputStream: InputStream = FileInputStream(file)
+                val fos = FileOutputStream(newFile)
+                val buffer = ByteArray(4096)
+                var byteCount: Int
+                while (inputStream.read(buffer).also { byteCount = it } !== -1) {
+                    fos.write(buffer, 0, byteCount)
+                }
+                fos.flush()
+                inputStream.close()
+                fos.close()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+
+
+        private fun newFile(filePath: String?, fileName: String?): File? {
+            if (filePath == null || filePath.isEmpty() || fileName == null || fileName.isEmpty()) {
+                return null
+            }
+            try {
+                //判断目录是否存在，如果不存在，递归创建目录
+                val dir = File(filePath)
+                if (!dir.exists()) {
+                    dir.mkdirs()
+                }
+
+                //组织文件路径
+                val sbFile = java.lang.StringBuilder(filePath)
+                if (!filePath.endsWith("/")) {
+                    sbFile.append("/")
+                }
+                sbFile.append(fileName)
+
+                //创建文件并返回文件对象
+                val file = File(sbFile.toString())
+                if (!file.exists()) {
+                    file.createNewFile()
+                }
+                return file
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+            return null
+        }
+
+        fun removeFile(filePath: String?) {
+            if (filePath == null || filePath.isEmpty()) {
+                return
+            }
+            try {
+                val file = File(filePath)
+                if (file.exists()) {
+                    removeFile(file)
+                }
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        private fun removeFile(file: File) {
+            //如果是文件直接删除
+            if (file.isFile) {
+                file.delete()
+                return
+            }
+            //如果是目录，递归判断，如果是空目录，直接删除，如果是文件，遍历删除
+            if (file.isDirectory) {
+                val childFile = file.listFiles()
+                if (childFile == null || childFile.isEmpty()) {
+                    file.delete()
+                    return
+                }
+                for (f in childFile) {
+                    removeFile(f)
+                }
+                file.delete()
+            }
         }
     }
 }

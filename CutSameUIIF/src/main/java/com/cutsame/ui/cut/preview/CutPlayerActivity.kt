@@ -59,13 +59,13 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
 
     //内置的歌曲默认动效和字体
     val SUBTITLE_EFFECT_FILE =
-        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdian"
+        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdian"
     //默认的经典
     val SUBTITLE_TEXT_FONT_PATH =
-        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdianfont"
+        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdianfont"
     //全量的字体列表，注意动态替换SUBTITLE_TEXT_FONT_PATH中的.ttf一个文件即可
     val LYRICS_STYLE_FONT_PATH =
-        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/text_font"
+        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/text_font"
 
     var cutSameSource: CutSameSource? = null
     var cutSamePlayer: CutSamePlayer? = null

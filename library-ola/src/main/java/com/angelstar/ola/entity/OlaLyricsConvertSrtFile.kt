@@ -43,7 +43,7 @@ object OlaLyricsConvertSrtFile {
         )
 
         //将对应的asset文件也一并copy
-        FileUtil.copyAssets(mContext.assets, "default", localResourcePath)
+        FileUtil.copyAssets(mContext.assets, "lyricStyle", localResourcePath)
         return AudioParam(
             audioName = lyricName,
             audioPath = audioPath + "ola_jackyang_lyrics",

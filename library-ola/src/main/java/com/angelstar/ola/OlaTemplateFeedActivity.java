@@ -216,7 +216,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
     private ArrayList<VideoItemView> createVideoItem(List<TemplateItem> bannerData) {
         if (bannerData == null || bannerData.size() == 0) {
-            //todo:如果是debug直接抛出错误，线上打log报警
             return null;
         }
         ArrayList<VideoItemView> itemList = new ArrayList<>();

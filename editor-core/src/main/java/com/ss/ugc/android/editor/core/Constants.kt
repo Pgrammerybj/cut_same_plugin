@@ -77,7 +77,7 @@ class TrackType {
 
 class LocalSubtitleStickerPath {
     companion object {
-        const val SUBTITLE_JINGDIAN = "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdian"
-        const val SUBTITLE_JINGDIAN_FONT_PATH = "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/default/jingdianfont"
+        const val SUBTITLE_JINGDIAN = "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdian"
+        const val SUBTITLE_JINGDIAN_FONT_PATH = "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdianfont"
     }
 }
