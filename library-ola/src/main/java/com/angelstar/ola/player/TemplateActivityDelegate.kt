@@ -45,7 +45,6 @@ class TemplateActivityDelegate(
     override fun onCreate() {
         nleEditorContext = EditViewModelFactory.viewModelProvider(activity).get(NLEEditorContext::class.java)
         nleEditorContext?.getNLEEditor()?.addConsumer(nleEditorListener)//往nleEditor中加入 监听器
-//        nleEditorContext.addConsumer(nleEditorListener)  //往nleEditor中加入 监听器
         initNLEPlayer()//1️⃣
         registerEvent()
     }
@@ -70,7 +69,7 @@ class TemplateActivityDelegate(
         nleEditorContext?.getMainTrack()?.clearSlot()
         nleEditorContext?.editor?.initMainTrack(select)
         //导入歌曲音频和歌词贴纸
-        nleEditorContext?.editor?.addAudioTrack(audioParam)
+//        nleEditorContext?.editor?.addAudioTrack(audioParam)
         nleEditorContext?.editor?.addLyricsStickerTrack(audioParam)
         //原预览视频静音
         nleEditorContext?.editor?.closeOriVolume()

@@ -6,6 +6,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,8 +26,8 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
     private ImageView mIvVideoCover;
     //当前视频播放状态
     private ImageView mIvVideState;
-    //当前视频时长
-    private TextView mTvVideoTime;
+    //编辑当前音频
+    private RelativeLayout mRlAudioClip;
     //视频编辑按钮
     private TextView mTvEditVideo;
     //surfaceView的插入视图
@@ -52,7 +53,7 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
         FrameLayout cardView = (FrameLayout) inflate(context, R.layout.layout_item_video, this);
         mIvVideoCover = cardView.findViewById(R.id.iv_video_cover);
         mIvVideState = cardView.findViewById(R.id.iv_video_player_state);
-        mTvVideoTime = cardView.findViewById(R.id.tv_video_time);
+        mRlAudioClip = cardView.findViewById(R.id.rl_audio_clip);
         mTvEditVideo = cardView.findViewById(R.id.tv_edit_video);
         mFlSurfaceViewContainer = cardView.findViewById(R.id.fl_surfaceView_container);
     }
@@ -60,9 +61,9 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
     public VideoItemView bindData(String url, String videoFilePath) {
         Glide.with(this.context).load(url).into(mIvVideoCover);
         this.videoFilePath = videoFilePath;
-        mTvVideoTime.setText("00:30");
         mIvVideState.setOnClickListener(this);
         mTvEditVideo.setOnClickListener(this);
+        mRlAudioClip.setOnClickListener(this);
         return this;
     }
 
@@ -97,6 +98,7 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
     public interface OnClickPlayStateListener{
         void onVideoClick(View view);
         void onEditVideoClick(View view);
+        void onClipAudioClick(View view);
     }
 
     @Override
@@ -106,6 +108,8 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
             mOnClickPlayStateListener.onVideoClick(v);
         } else if (id == R.id.tv_edit_video) {
             mOnClickPlayStateListener.onEditVideoClick(v);
+        }else if (id == R.id.rl_audio_clip){
+            mOnClickPlayStateListener.onClipAudioClick(v);
         }
     }
 }

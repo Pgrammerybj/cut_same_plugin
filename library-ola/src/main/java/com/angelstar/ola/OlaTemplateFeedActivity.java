@@ -46,6 +46,7 @@ import com.cutsame.solution.template.model.TemplateItem;
 import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
 import com.cutsame.ui.utils.JsonHelper;
+import com.danikula.videocache.BuildConfig;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ola.chat.picker.utils.MTUtils;
@@ -70,8 +71,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private SurfaceView mSurfaceView;
 
     private FloatSliderView mFloatSliderView;
-    private TextView mTvCurrentPlayTime;
-    private TextView mTvVideoTotalTime;
+    private TextView mTvCurrentPlayTime, mTvVideoTotalTime, mSongName;
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
@@ -201,9 +201,10 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
     private void initView() {
         OlaBannerView mBannerView = findViewById(R.id.banner_view);
+        mSongName = findViewById(R.id.tv_current_song_name);
         mBannerView.setIndicator(new RectangleIndicator(this));
         mBannerView.setScrollPageListener(this);
-
+        mSongName.setText(mAudioMixingEntry.getSongName());
         // TODO: 2022/11/7 mock 模版网络数据 
         OlaTemplateResponse olaTemplateResponse = JsonHelper.fromJson(MockJson.TEMPLATE_ITEM_JSON, OlaTemplateResponse.class);
 
@@ -212,6 +213,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         }
         List<TemplateItem> templateItemList = olaTemplateResponse.getList();
         mBannerView.setBannerData(createVideoItem(templateItemList), mSurfaceView);
+        findViewById(R.id.iv_templation_page_back).setOnClickListener(v -> finish());
     }
 
     private ArrayList<VideoItemView> createVideoItem(List<TemplateItem> bannerData) {
@@ -261,6 +263,11 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                         cutSameIntent.setPackage(getPackageName());
                         startActivity(cutSameIntent);
                     }
+                }
+
+                @Override
+                public void onClipAudioClick(View view) {
+                    Toast.makeText(OlaTemplateFeedActivity.this, "编辑音频组件", Toast.LENGTH_SHORT).show();
                 }
             });
             itemList.add(videoItemView);
@@ -336,9 +343,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         mScaleSlideBar.setPosition(mAudioMixingEntry.getTunerModel().getAiIndex());
 
-        mScaleSlideBar.setOnGbSlideBarListener(position -> {
-            BbEffectCoreImpl.INSTANCE.setParameters("{\"che.audio.ainoise.level\":" + (position - 1) + "}");
-        });
+        mScaleSlideBar.setOnGbSlideBarListener(position -> BbEffectCoreImpl.INSTANCE.setParameters("{\"che.audio.ainoise.level\":" + (position - 1) + "}"));
 
         SpaceItemDecoration spaceItemDecoration = new SpaceItemDecoration(0, 0, 0, SizeUtil.INSTANCE.dp2px(7));
 

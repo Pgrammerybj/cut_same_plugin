@@ -34,25 +34,25 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical">-->
 
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@mipmap/draft_box" />
+<!--        <ImageView-->
+<!--            android:layout_width="36dp"-->
+<!--            android:layout_height="36dp"-->
+<!--            android:src="@mipmap/draft_box" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="存草稿"
-            android:textColor="#66ffffff"
-            android:textSize="12sp" />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="存草稿"-->
+<!--            android:textColor="#66ffffff"-->
+<!--            android:textSize="12sp" />-->
+<!--    </LinearLayout>-->
 
 
 </RelativeLayout>
