@@ -15,12 +15,14 @@ class BbEffectCoreEventHandler(handle: Handler) {
     val eventHandler = object : BBEffectEventHandler {
 
         override fun onAudioRouteChanged(routing: Int) {
+            Log.i(TAG, "onAudioRouteChanged - routing: $routing")
         }
 
         override fun onStateChanged(state: Int) {
             val obtain = Message.obtain()
             obtain.what = STATE_CHANGED
             obtain.arg1 = state
+            Log.i(TAG, "onStateChanged - state: $state")
             handle.sendMessage(obtain)
         }
 
@@ -48,10 +50,15 @@ class BbEffectCoreEventHandler(handle: Handler) {
         }
 
         override fun onProductProgress(progress: Float) {
-            Log.i("Ola-audio", "onProductProgress: $progress")
+            Log.i(TAG, "onProductProgress: $progress")
         }
 
         override fun onAudioVolumeIndication(p0: Int, p1: Long) {
+            Log.i(TAG, "onAudioVolumeIndication: $p0,$p1")
         }
+    }
+
+    companion object {
+        private const val TAG = "Ola-Audio"
     }
 }

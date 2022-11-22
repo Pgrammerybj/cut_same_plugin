@@ -20,10 +20,10 @@ public class AudioMixingEntry {
     private String voiceFilePath;
     private String mixingFilePath;
     private int audioProfile;
-    private int startTimeMs;
-    private int endTimeMs;
-    private int durationMs;
-    private int totalDurationMs;
+    private long startTimeMs = 0;
+    private long endTimeMs = 0;
+    private long durationMs = 0;
+    private long totalDurationMs = 0;
     private TunerModel tunerModel;
     private String effectJson;
     private List<LyricList> lyricList;
@@ -89,7 +89,7 @@ public class AudioMixingEntry {
         this.audioProfile = audioProfile;
     }
 
-    public int getStartTimeMs() {
+    public long getStartTimeMs() {
         return startTimeMs;
     }
 
@@ -97,7 +97,7 @@ public class AudioMixingEntry {
         this.startTimeMs = startTimeMs;
     }
 
-    public int getEndTimeMs() {
+    public long getEndTimeMs() {
         return endTimeMs;
     }
 
@@ -105,7 +105,7 @@ public class AudioMixingEntry {
         this.endTimeMs = endTimeMs;
     }
 
-    public int getDurationMs() {
+    public long getDurationMs() {
         return durationMs;
     }
 
@@ -113,7 +113,7 @@ public class AudioMixingEntry {
         this.durationMs = durationMs;
     }
 
-    public int getTotalDurationMs() {
+    public long getTotalDurationMs() {
         return totalDurationMs;
     }
 

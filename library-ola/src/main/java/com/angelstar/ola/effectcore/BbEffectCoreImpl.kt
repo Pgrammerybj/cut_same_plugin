@@ -2,20 +2,27 @@ package com.angelstar.ola.effectcore
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
+import com.angelstar.ola.BuildConfig
 import com.angelstar.ola.entity.AudioMixingEntry.TunerModel
+import com.angelstar.ola.interfaces.ITemplateAudioPlayListener
+import com.angelstar.ola.utils.ThreadUtils
 import com.voice.core.BBEffectCore
+import java.util.*
 
 @SuppressLint("StaticFieldLeak")
 object BbEffectCoreImpl : BbEffectInterface {
 
     private var bbEffectCore: BBEffectCore? = null
-    private var audioIsPlay:Boolean = false
-    private var audioIsInit:Boolean = false
+    private var audioIsPlay: Boolean = false
+    private var audioIsInit: Boolean = false
     private lateinit var appCtx: Context
     var currentReverbIndex: Int = -1
     var currentEqualizerIndex: Int = -1
     var currentBoardEffectIndex: Int = -1
     private lateinit var handler: BbEffectCoreEventHandler
+    private lateinit var timer: Timer
+    private lateinit var audioProgressListener: ITemplateAudioPlayListener
 
     override fun createEffectCore(applicationContext: Context, handler: BbEffectCoreEventHandler) {
         appCtx = applicationContext
@@ -61,6 +68,8 @@ object BbEffectCoreImpl : BbEffectInterface {
 
     override fun start() {
         bbEffectCore!!.start()
+        //开始调用定时器
+        startSchedule()
     }
 
     override fun stop() {
@@ -136,7 +145,22 @@ object BbEffectCoreImpl : BbEffectInterface {
             bbEffectCore!!.setEventHandler(null)
             bbEffectCore!!.release()
             bbEffectCore = null
+            timer = Timer()
         }
+    }
+
+    private fun startSchedule() {
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                val currentProgress: Int = bbEffectCore!!.audioMixingCurrentPosition
+                if (BuildConfig.DEBUG) {
+                    Log.i("startSchedule", "currentProgress:$currentProgress")
+                }
+                ThreadUtils.uiHandler.post {
+                    audioProgressListener.onPlayTimeChanged(currentProgress.toFloat())
+                }
+            }
+        }, 0, 200)
     }
 
     /**
@@ -230,5 +254,9 @@ object BbEffectCoreImpl : BbEffectInterface {
         val reverbFormat = String.format("%-3s", reverb).replace(" ", "0")
         val equalizerFormat = String.format("%-3s", equalizer).replace(" ", "0")
         return (reverbFormat + equalizerFormat).toInt()
+    }
+
+    fun setAudioProgressListener(audioProgressListener: ITemplateAudioPlayListener) {
+        this.audioProgressListener = audioProgressListener;
     }
 }

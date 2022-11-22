@@ -1,6 +1,7 @@
 package com.angelstar.ola;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -32,11 +33,13 @@ import com.angelstar.ola.effectcore.BbEffectCoreImpl;
 import com.angelstar.ola.entity.AudioMixingEntry;
 import com.angelstar.ola.entity.OlaLyricsConvertSrtFile;
 import com.angelstar.ola.entity.OlaTemplateResponse;
+import com.angelstar.ola.interfaces.ITemplateAudioPlayListener;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ola.utils.SizeUtil;
+import com.angelstar.ola.view.AudioCropSeekBar;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
 import com.angelstar.ybj.xbanner.OlaBannerView;
@@ -46,7 +49,6 @@ import com.cutsame.solution.template.model.TemplateItem;
 import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
 import com.cutsame.ui.utils.JsonHelper;
-import com.danikula.videocache.BuildConfig;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ola.chat.picker.utils.MTUtils;
@@ -56,12 +58,15 @@ import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.api.params.AudioParam;
+import com.ss.ugc.android.editor.core.utils.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.disposables.Disposable;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
@@ -71,7 +76,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private SurfaceView mSurfaceView;
 
     private FloatSliderView mFloatSliderView;
-    private TextView mTvCurrentPlayTime, mTvVideoTotalTime, mSongName;
+    private TextView mTvCurrentPlayTime;
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
@@ -83,6 +88,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private AudioMixingEntry mAudioMixingEntry;
     private MixerRecyclerViewAdapter adapter;
     private AudioParam audioParam;
+    //默认高亮部分为歌词其实时间+30秒
+    float DEFAULT_HIGH_DURATION = 30 * 1000;
+    private boolean audioClipMenuIsOpen = false;
 
     private final ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
@@ -93,17 +101,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         @Override
         public void onPlayTimeChanged(String curPlayerTime, String totalPlayerTime, boolean isPause) {
-            mTvCurrentPlayTime.setText(String.format("%s", curPlayerTime));
-            mTvVideoTotalTime.setText(String.format("%s", totalPlayerTime));
-            if (nleEditorContext != null && nleEditorContext.getPlayer().isPlaying() && nleEditorContext.getPlayer().totalDuration() != 0) {
-                //视频播放时动态更新全屏状态下的进度条
-                float position = 100 * nleEditorContext.getPlayer().curPosition() / nleEditorContext.getPlayer().totalDuration();
-                if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "curPlayerTime:" + 100 * nleEditorContext.getPlayer().curPosition() + " | totalPlayerTime:" + nleEditorContext.getPlayer().totalDuration());
-                }
-                mFloatSliderView.setCurrPosition(position);
-            }
-
             if (isPause) {
                 mVideoItemView.getVideStateView().setImageResource(R.mipmap.icon_video_play);
             }
@@ -115,15 +112,24 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         public void handleMessage(Message msg) {
             if (msg.what == 10001) {
                 switch (msg.arg1) {
-                    case BbEffectConstants.stateAudioEffectFinish:
+                    case BbEffectConstants.stateAudioFinish:
                         Toast.makeText(OlaTemplateFeedActivity.this, "我收到播放完成的消息啦", Toast.LENGTH_SHORT).show();
                         //播放完成后，重置到开头继续播放
                         BbEffectCoreImpl.INSTANCE.setAudioMixingPosition(0);
+                        break;
+                    case BbEffectConstants.stateAudioPlaying:
+                        //开始或者恢复播放
+                        break;
+                    case BbEffectConstants.stateAudioStop:
+                        //播放暂停
                         break;
                 }
             }
         }
     };
+    private AudioCropSeekBar audioCropSeekBar;
+    private float endEditTime;
+    private float startEditTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,11 +152,11 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 //            TemplateItem templateItem = templateItems.get(0);
 //            Log.i(TAG, "onChanged: 模版数据已经回来" + templateItems.size() + " | title;" + templateItem.getTitle());
 //        });
-        //初始化调音台
+
+        initPlayerView();
         intiAudioMixing();
         initActivityDelegate();
         initView();
-        initPlayerView();
     }
 
     /**
@@ -160,6 +166,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         String mixingFilePath = getExternalCacheDir().getAbsolutePath() + "/accompaniment_bea2c80d430f89100b643c8422193120.mp3";
         String voiceFilePath = getExternalCacheDir().getAbsolutePath() + "/record_287_2022-11-09-11-27-04.pcm";
 
+        BbEffectCoreImpl.INSTANCE.createEffectCore(getApplicationContext(), new BbEffectCoreEventHandler(mHandler));
         BbEffectCoreImpl.INSTANCE.createEffectCore(getApplicationContext(), new BbEffectCoreEventHandler(mHandler));
         BbEffectCoreImpl.INSTANCE.initialize(2);
         BbEffectCoreImpl.INSTANCE.setAudioEffectDataSource(mAudioMixingEntry.getEffectJson());
@@ -190,6 +197,18 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         BbEffectCoreImpl.INSTANCE.setAudioProfile(mAudioMixingEntry.getAudioProfile());
         //先暂时这样吧，后续还需要优化结构和时机
         BbEffectCoreImpl.INSTANCE.start(); //需要和视频同步播放
+        BbEffectCoreImpl.INSTANCE.setAudioProgressListener(new ITemplateAudioPlayListener() {
+            @Override
+            public void onPlayTimeChanged(float progress) {
+                if (null != mFloatSliderView && null != mTvCurrentPlayTime) {
+                    mTvCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
+                    mFloatSliderView.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
+                    if (audioClipMenuIsOpen) {
+                        audioCropSeekBar.setProgress(mAudioMixingEntry.getEndTimeMs(), progress);
+                    }
+                }
+            }
+        });
     }
 
     private void initActivityDelegate() {
@@ -201,7 +220,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
     private void initView() {
         OlaBannerView mBannerView = findViewById(R.id.banner_view);
-        mSongName = findViewById(R.id.tv_current_song_name);
+        TextView mSongName = findViewById(R.id.tv_current_song_name);
         mBannerView.setIndicator(new RectangleIndicator(this));
         mBannerView.setScrollPageListener(this);
         mSongName.setText(mAudioMixingEntry.getSongName());
@@ -268,11 +287,31 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 @Override
                 public void onClipAudioClick(View view) {
                     Toast.makeText(OlaTemplateFeedActivity.this, "编辑音频组件", Toast.LENGTH_SHORT).show();
+                    showAudioClipMenu();
                 }
             });
             itemList.add(videoItemView);
         }
         return itemList;
+    }
+
+    /**
+     * 音频剪辑面板
+     */
+    private void showAudioClipMenu() {
+        audioClipMenuIsOpen = true;
+        BottomSheetDialog answerSheetDialog = new BottomSheetDialog(this, R.style.MixerBottomSheetDialogTheme);
+        @SuppressLint("InflateParams")
+        View inflate = LayoutInflater.from(this).inflate(R.layout.layout_audio_crop_seek, null, false);
+        answerSheetDialog.setContentView(inflate);
+        answerSheetDialog.setCanceledOnTouchOutside(true);
+        answerSheetDialog.setCancelable(true);
+        answerSheetDialog.show();
+        answerSheetDialog.setOnCancelListener(dialog -> audioClipMenuIsOpen = false);
+        //设置透明背景
+        answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        audioCropSeekBar = inflate.findViewById(R.id.audio_clip_seekbar);
+        audioCropSeekBar.setAudioDuration(endEditTime);
     }
 
     private String downloadVideo(TemplateItem bannerData) {
@@ -310,9 +349,25 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private void initPlayerView() {
         mFloatSliderView = findViewById(R.id.temp_video_player_seekbar);
         mTvCurrentPlayTime = findViewById(R.id.tv_current_play_time);
-        mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
+        TextView mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
         mMixerRecyclerView = findViewById(R.id.recyclerview_video_mixer);
+        mTvVideoTotalTime.setText(FileUtil.INSTANCE.stringForTime(mAudioMixingEntry.getEndTimeMs()));
+        calculateAudioHighPart(DEFAULT_HIGH_DURATION);
         initRecyclerView();
+    }
+
+    /**
+     * 初始化的时候进度条高亮部分
+     */
+    private void calculateAudioHighPart(float defaultHighDuration) {
+        List<AudioMixingEntry.SingTimeLyricList> singTimeLyricList = mAudioMixingEntry.getSingTimeLyricList();
+        //用户录制的歌词出现时间
+        startEditTime = singTimeLyricList.get(0).getStartTime();
+        long songTotalDuration = mAudioMixingEntry.getEndTimeMs();
+        //用户录制的歌词最后出现时间
+        endEditTime = Math.min(startEditTime + defaultHighDuration, songTotalDuration);
+        //录制的完整歌曲长度
+        mFloatSliderView.setAudioHighlight(startEditTime / songTotalDuration, endEditTime / songTotalDuration);
     }
 
     private void initRecyclerView() {
@@ -449,6 +504,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private void startPlay(ImageView videStateView) {
         if (null != nleEditorContext) {
             nleEditorContext.getPlayer().play();
+            calculateAudioHighPart(nleEditorContext.getPlayer().totalDuration());
             if (null != videStateView) {
                 videStateView.setImageResource(R.mipmap.icon_video_stop);
             }

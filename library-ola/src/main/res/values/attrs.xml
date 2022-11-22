@@ -9,6 +9,8 @@
         <attr name="lineWidth" format="dimension" />
         <attr name="fillWidth" format="boolean" />
         <attr name="floatingBottom" format="boolean" />
+        <attr name="audioHighlightStart" format="dimension"/>
+        <attr name="audioHighlightEnd" format="dimension"/>
     </declare-styleable>
 
 
@@ -28,6 +30,11 @@
         <attr name="slide_textColor" format="color|reference" />
         <attr name="slide_text_margin" format="dimension|reference" />
 
+    </declare-styleable>
+
+    <declare-styleable name="CropSeekBar">
+        <attr name="audio_slide_out_h" format="dimension" />
+        <attr name="audio_radio" format="dimension" />
     </declare-styleable>
 
 </resources>
