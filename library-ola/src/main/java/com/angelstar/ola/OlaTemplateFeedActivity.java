@@ -63,6 +63,7 @@ import com.ss.ugc.android.editor.core.utils.FileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.disposables.Disposable;
 import kotlin.Unit;
@@ -76,7 +77,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private SurfaceView mSurfaceView;
 
     private FloatSliderView mFloatSliderView;
-    private TextView mTvCurrentPlayTime;
+    private TextView mTvCurrentPlayTime,audioChooseTime;
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
@@ -311,7 +312,15 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         //设置透明背景
         answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
         audioCropSeekBar = inflate.findViewById(R.id.audio_clip_seekbar);
+        audioChooseTime = inflate.findViewById(R.id.tv_choose_time);
         audioCropSeekBar.setAudioDuration(endEditTime);
+        //已选取时间的回调
+        audioCropSeekBar.setOnSeekChange(aLong -> {
+            long selectTime = (audioCropSeekBar.getRightSlideSecond() - audioCropSeekBar.getLeftSlideSecond()) / 1000;
+            String format = String.format(Locale.getDefault(), getString(R.string.audio_clip_choose_time), selectTime);
+            audioChooseTime.setText(format);
+            return Unit.INSTANCE;
+        });
     }
 
     private String downloadVideo(TemplateItem bannerData) {

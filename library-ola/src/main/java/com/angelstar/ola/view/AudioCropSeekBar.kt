@@ -39,7 +39,7 @@ class AudioCropSeekBar : FrameLayout {
     lateinit var seekBar: CropSeekBar
     private var coverRectF = RectF()
     private var picW = 180f//每张封面宽度--这并不是最终值，会根据控件长度调整
-    var originAudioDuration: Long = 10000L//视频时长
+    var originAudioDuration: Long = 10000L//默认视频时长
     var onSeekChange: (progress: Long) -> Unit = { }//当进度发生变化
     var onSectionChange: (left: Float, right: Float) -> Unit = { _, _ -> }
     var onTouchChange: (isTouch: Boolean) -> Unit = {}
@@ -210,5 +210,4 @@ class AudioCropSeekBar : FrameLayout {
         }
         seekBar.invalidate()
     }
-
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="audio_clip_menu_title">截取音乐部分</string>
+    <string name="audio_clip_choose_time">已选取%ds</string>
 </resources>

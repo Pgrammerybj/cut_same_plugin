@@ -14,8 +14,6 @@ import java.util.*
 object BbEffectCoreImpl : BbEffectInterface {
 
     private var bbEffectCore: BBEffectCore? = null
-    private var audioIsPlay: Boolean = false
-    private var audioIsInit: Boolean = false
     private lateinit var appCtx: Context
     var currentReverbIndex: Int = -1
     var currentEqualizerIndex: Int = -1
@@ -61,8 +59,6 @@ object BbEffectCoreImpl : BbEffectInterface {
     override fun setAudioProfile(profile: Int) {
         if (profile > 0) {
             bbEffectCore!!.setAudioProfile(profile)
-        } else {
-            //error
         }
     }
 
@@ -74,6 +70,11 @@ object BbEffectCoreImpl : BbEffectInterface {
 
     override fun stop() {
         bbEffectCore!!.stop()
+        stopSchedule()
+    }
+
+    private fun stopSchedule() {
+        timer.cancel()
     }
 
     override fun resume() {
@@ -91,16 +92,12 @@ object BbEffectCoreImpl : BbEffectInterface {
     override fun adjustAudioMixingVolume(volume: Int) {
         if (volume >= 0) {
             bbEffectCore!!.adjustAudioMixingVolume(volume)
-        } else {
-            //error
         }
     }
 
     override fun adjustRecordingSignalVolume(volume: Int) {
         if (volume >= 0) {
             bbEffectCore!!.adjustRecordingSignalVolume(volume)
-        } else {
-            //error
         }
     }
 
@@ -119,16 +116,12 @@ object BbEffectCoreImpl : BbEffectInterface {
     override fun adjustPlaybackSignalVolume(volume: Int) {
         if (volume >= 0) {
             bbEffectCore!!.adjustPlaybackSignalVolume(volume)
-        } else {
-            //error
         }
     }
 
     override fun setInEarMonitoringVolume(volume: Int) {
         if (volume >= 0) {
             bbEffectCore!!.setInEarMonitoringVolume(volume)
-        } else {
-            //error
         }
     }
 
@@ -257,6 +250,6 @@ object BbEffectCoreImpl : BbEffectInterface {
     }
 
     fun setAudioProgressListener(audioProgressListener: ITemplateAudioPlayListener) {
-        this.audioProgressListener = audioProgressListener;
+        this.audioProgressListener = audioProgressListener
     }
 }
