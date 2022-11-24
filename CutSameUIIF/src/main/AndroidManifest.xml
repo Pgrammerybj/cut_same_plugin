@@ -35,16 +35,6 @@
                 <action android:name="com.ss.android.ugc.cut_ui.PLAY" />
             </intent-filter>
         </activity>
-        <!-- 剪同款视频/图片压缩页 -->
-        <activity
-            android:name=".cut.process.CutCompressActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Cut.Transparent">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="com.ss.android.ugc.cut_ui.COMPRESS" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".cut.export.ExportActivity"
             android:screenOrientation="portrait"

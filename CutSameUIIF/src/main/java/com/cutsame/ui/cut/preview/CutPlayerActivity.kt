@@ -63,9 +63,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     //默认的经典
     val SUBTITLE_TEXT_FONT_PATH =
         "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdianfont"
-    //全量的字体列表，注意动态替换SUBTITLE_TEXT_FONT_PATH中的.ttf一个文件即可
-    val LYRICS_STYLE_FONT_PATH =
-        "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/text_font"
 
     var cutSameSource: CutSameSource? = null
     var cutSamePlayer: CutSamePlayer? = null
@@ -123,7 +120,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
 
 
     private lateinit var templateItem: TemplateItem
-//    private lateinit var audioParam: AudioParam
 
     private var isPlayingOnPause = false
     var isForeground = true // 此页面是否在前台
@@ -178,7 +174,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             return
         }
         isForeground = true
-        cutSamePlayer?.registerPlayerStateListener(playerStateListener)
+//        cutSamePlayer?.registerPlayerStateListener(playerStateListener)
         compileNextIntent = null
         if (isPlayingOnPause) {
             cutSamePlayer?.start()
@@ -194,14 +190,15 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         } else {
             isPlayingOnPause = false
         }
-        cutSamePlayer?.unRegisterPlayerStateListener(playerStateListener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cutSameSource?.release()
         cutSameSource = null
-
+        cutSamePlayer?.let{
+            it.unRegisterPlayerStateListener(playerStateListener)
+        }
         cutSamePlayer?.release()
         cutSamePlayer = null
     }
@@ -286,6 +283,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             }
         if (pickerIntent != null) {
             startActivityForResult(pickerIntent, REQUEST_CODE_PICKER)
+            overridePendingTransition(R.anim.abc_fade_in,0)
             return true
         }
 
@@ -366,6 +364,9 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             screenTransformY = -0.1f
         )
         cutSamePlayer?.preparePlay(mediaItemList, textItemList, subtitleInfo)
+        cutSamePlayer?.let{
+            it.registerPlayerStateListener(playerStateListener)
+        }
     }
 
     private fun mergeMediaItemList(
@@ -436,7 +437,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
                     }
                 } else {
                     LogUtil.d(TAG, "REQUEST_CODE_PICKER resultCode != ok,or data==null, finish")
-                    overridePendingTransition(0, R.anim.abc_slide_out_bottom)
+                    overridePendingTransition(0, com.ola.chat.picker.R.anim.abc_fade_out)
                     finish()
                 }
             }

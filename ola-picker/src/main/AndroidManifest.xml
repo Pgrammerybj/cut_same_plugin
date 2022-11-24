@@ -11,7 +11,7 @@
             android:name=".GalleryCutPickerActivity"
             android:label="@string/picker_common_title_all"
             android:screenOrientation="portrait"
-            android:theme="@style/Picker.Transparent">
+            android:theme="@style/Picker.Transparent_False">
             <intent-filter>
                 <action android:name="com.ola.chat.picker.process.PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />

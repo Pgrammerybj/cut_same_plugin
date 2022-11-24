@@ -1,7 +1,6 @@
 package com.angelstar.ola;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ import com.angelstar.ola.effectcore.BbEffectCoreImpl;
 import com.angelstar.ola.entity.AudioMixingEntry;
 import com.angelstar.ola.entity.OlaLyricsConvertSrtFile;
 import com.angelstar.ola.entity.OlaTemplateResponse;
-import com.angelstar.ola.interfaces.ITemplateAudioPlayListener;
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener;
 import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;

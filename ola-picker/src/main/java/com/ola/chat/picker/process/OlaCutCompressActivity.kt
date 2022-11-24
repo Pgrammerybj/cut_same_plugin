@@ -30,9 +30,6 @@ class OlaCutCompressActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        overridePendingTransition(0, 0)
-
         if (Build.VERSION.SDK_INT >= 21) {
             window.statusBarColor = Color.TRANSPARENT
             window.navigationBarColor = Color.TRANSPARENT
@@ -62,21 +59,22 @@ class OlaCutCompressActivity : AppCompatActivity() {
 
                     override fun onProgress(progress: Int) {
                         updateProgress(progress)
+                        Log.e(TAG," progress: $progress")
                     }
 
                     override fun onSuccess(mediaItems: ArrayList<MediaItem>?) {
-                        Log.d(TAG,"compressSource onSuccess")
+                        Log.e(TAG,"compressSource onSuccess")
                         compressSuccess = true
                         val dataIntent = Intent().apply {
                             PickerConstant.setCompressResultData(this, mediaItems!!)
                         }
                         setResult(Activity.RESULT_OK, dataIntent)
                         finish()
+                        overridePendingTransition(0,R.anim.abc_fade_out)
                     }
                 })
             }
         }
-
         nextFakeProgress()
     }
 

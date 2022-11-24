@@ -158,36 +158,7 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         )
         //picking
         pickingListAdapter = PickingListAdapter(galleryPickerViewModel, this)
-        pickingRecyclerView.layoutManager = object : LinearLayoutManager(this, HORIZONTAL, false) {
-            override fun smoothScrollToPosition(
-                recyclerView: RecyclerView,
-                state: RecyclerView.State?,
-                position: Int
-            ) {
-                val linearSmoothScroller = object : LinearSmoothScroller(recyclerView.context) {
-                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
-                        return super.calculateSpeedPerPixel(displayMetrics) * 6
-                    }
-
-                    // scroll to center
-                    override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
-                        val layoutManager = this.layoutManager
-                        return if (layoutManager != null && layoutManager.canScrollHorizontally()) {
-                            val params = view.layoutParams as RecyclerView.LayoutParams
-                            val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
-                            val right = layoutManager.getDecoratedRight(view) + params.rightMargin
-                            val start = layoutManager.paddingLeft
-                            val end = layoutManager.width - layoutManager.paddingRight
-                            return start + (end - start) / 2 - (right - left) / 2 - left
-                        } else {
-                            0
-                        }
-                    }
-                }
-                linearSmoothScroller.targetPosition = position
-                startSmoothScroll(linearSmoothScroller)
-            }
-        }
+        pickingRecyclerView.layoutManager = UniversalHorizontalLayoutManager(this)
         pickingRecyclerView.setHasFixedSize(true)
         pickingRecyclerView.addItemDecoration(SpaceItemDecoration(0, 0, 0, SizeUtil.dp2px(8F)))
         pickingRecyclerView.adapter = pickingListAdapter
@@ -337,27 +308,22 @@ class GalleryCutPickerActivity : PermissionActivity(), PickerCallback {
         val model = galleryPickerViewModel
         val items = model.processPickItem.value!!
         if (TextUtils.isEmpty(templateItem.template_url)) {
-            Toast.makeText(this, R.string.cutsame_compose_need_template_url, Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(this, R.string.cutsame_compose_need_template_url, Toast.LENGTH_SHORT).show()
             return
         }
 
-        //ArrayList(items)
         val catSameMediaItemList = CutSameMediaUtils.olaMediaItemListToCutSame(ArrayList(items))
 
         val compressUIIntent = PickerConstant.createCompressUIIntent(this, catSameMediaItemList, templateItem.template_url)
         if (compressUIIntent == null) {
-            Log.d(TAG, "compressUIIntent==null, finish")
             val intent = Intent().apply {
                 PickerConstant.setGalleryPickResultData(this, catSameMediaItemList)
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
         } else {
-            startActivityForResult(
-                compressUIIntent,
-                REQUEST_COMPRESS
-            )
+            startActivityForResult(compressUIIntent, REQUEST_COMPRESS)
+            overridePendingTransition(R.anim.abc_fade_in,0)
         }
     }
 
