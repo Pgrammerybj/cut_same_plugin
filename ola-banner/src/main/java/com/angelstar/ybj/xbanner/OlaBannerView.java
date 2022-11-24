@@ -112,7 +112,7 @@ public class OlaBannerView extends FrameLayout {
         bannerParams.gravity = CENTER_HORIZONTAL;
         addView(mBannerViewPager, bannerParams);
         mBannerUrlList = new ArrayList<>();
-        mAdapter = new VideoPagerAdapter(context, mBannerUrlList);
+        mAdapter = new VideoPagerAdapter(mBannerUrlList);
         mBannerViewPager.setAdapter(mAdapter);
         mBannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
         mBannerViewPager.setPageTransformer(true, new ScalePageTransformer());

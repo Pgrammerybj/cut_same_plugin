@@ -1,14 +1,9 @@
 package com.angelstar.ybj.xbanner;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
@@ -20,15 +15,13 @@ import java.util.ArrayList;
  */
 public class VideoPagerAdapter extends PagerAdapter {
 
-    private final Context mContext;
     /**
      * 轮播图地址集合
      */
     private final ArrayList<VideoItemView> mBannerUrlList;
 
-    public VideoPagerAdapter(Context context, ArrayList<VideoItemView> bannerUrlList) {
+    public VideoPagerAdapter(ArrayList<VideoItemView> bannerUrlList) {
         this.mBannerUrlList = bannerUrlList;
-        this.mContext = context;
     }
 
     @Override
@@ -51,12 +44,6 @@ public class VideoPagerAdapter extends PagerAdapter {
             return container;
         }
         VideoItemView videoItemView = mBannerUrlList.get(getRealPosition(position));
-        videoItemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "点击了：" + getRealPosition(position), Toast.LENGTH_SHORT).show();
-            }
-        });
         //为了保证安全先移除
         ViewGroup viewGroup = (ViewGroup) videoItemView.getParent();
         if (null != viewGroup) {
