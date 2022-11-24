@@ -1,4 +1,4 @@
-package com.angelstar.ola.view
+package com.angelstar.ola.view.audioclip
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,9 +12,9 @@ import com.angelstar.ola.R
  * @package    pgrammer.ybj@outlook.com
  * @author     yangbaojiang
  * @date       2022/10/16
- * @des        视频裁剪区域选择View
+ * @Describe        视频裁剪区域选择View
  */
-class CropSeekBar2 : View {
+class CropSeekBar : View {
     constructor(context: Context) : super(context) {
         initView(context, null)
     }
@@ -23,7 +23,11 @@ class CropSeekBar2 : View {
         initView(context, attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         initView(context, attrs)
     }
 
@@ -33,13 +37,17 @@ class CropSeekBar2 : View {
     var slideOutH = 0f//进度滑块越界高度
     private var midSlideW = 12f//中间滑块宽度
     private var radio = 30f//圆角角度
-    val slidePadding = 100//两侧滑块外边距
+    val slidePadding = 0//两侧滑块外边距
 
     var midProgress = 0f//中间滑块的x坐标
     var seekLeft = 0f//左测滑块的x坐标
     var seekRight = 0f//右测滑块的x坐标
-    var maxInterval = 60L * 1000//最大区间-时长ms
-    var minInterval = 10L * 1000//最小区间-时长ms
+    var maxInterval = 30f * 1000//最大区间-时长ms
+    var minInterval = 15f * 1000//最小区间-时长ms
+    var minClipX = 0f
+    var maxClipX = 0f
+
+    var audioDuration: Float = 0f
 
     private val strokeLinePaint = Paint()
     private val slidePaint = Paint()
@@ -49,8 +57,8 @@ class CropSeekBar2 : View {
     private val leftSlideTouchRectF = RectF()//左滑块有效触摸范围
     private val rightSlideTouchRectF = RectF()//右滑块有效触摸范围
     private var isMoveSlide: Boolean = false
-    var onChangeProgress: (progress: Float) -> Unit = { progress -> }
-    var onSectionChange: (left: Float, right: Float) -> Unit = { left, right -> }
+    var onChangeProgress: (progress: Float) -> Unit = { }
+    var onSectionChange: (left: Float, right: Float) -> Unit = { _, _ -> }
 
     private fun initView(context: Context, attrs: AttributeSet?) {
         setWillNotDraw(false)
@@ -68,13 +76,12 @@ class CropSeekBar2 : View {
         slidePaint.isAntiAlias = true
         slidePaint.color = Color.parseColor("#18D8B5")
         slidePaint.style = Paint.Style.FILL
-
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         seekLeft = slidePadding.toFloat() + slideW / 2
         seekRight = width - slidePadding.toFloat() - slideW / 2
-        midProgress = slidePadding.toFloat() + slideW + midSlideW / 2
+        midProgress = getDefaultMid()
         super.onLayout(changed, left, top, right, bottom)
     }
 
@@ -91,7 +98,7 @@ class CropSeekBar2 : View {
         rightSlideTouchRectF.bottom = height.toFloat() - slideOutH
 
         //绘制播放进度滑块
-        progressRectF.left = midProgress - midSlideW/2
+        progressRectF.left = midProgress - midSlideW / 2
         progressRectF.top = strokeW //进度条需要再边框内部
         progressRectF.right = midProgress + midSlideW / 2
         progressRectF.bottom = height.toFloat() - strokeW
@@ -157,7 +164,7 @@ class CropSeekBar2 : View {
         //滑块绘制结束/////////////////////////////////
 
         //绘制中间进度指示条
-        canvas.drawRect(progressRectF,slidePaint)
+        canvas.drawRect(progressRectF, slidePaint)
         super.onDraw(canvas)
     }
 
@@ -166,6 +173,7 @@ class CropSeekBar2 : View {
     private val SCROLL_MODE_RIGHT = 2//右滑块
     private val SCROLL_MODE_PROGRESS = 3//播放进度滑块
     private var scrollMode = SCROLL_MODE_NONE
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
@@ -190,19 +198,25 @@ class CropSeekBar2 : View {
 
             }
             MotionEvent.ACTION_MOVE -> {
-                val minW = (width - slidePadding * 2 - slideW * 2) * (minInterval.toFloat() / maxInterval)
                 when (scrollMode) {
+                    //允许的最小时长15秒最大时长30秒
                     SCROLL_MODE_LEFT -> {
-                        seekLeft = if (event.x > slidePadding) {
-                            if (seekRight - event.x - slideW > minW) { //判断最小区间
-                                event.x
+                        //手指滑动后的区间
+                        val sliderRange = seekRight - event.x - slideW
+                        seekLeft = if (sliderRange > minClipX && sliderRange < maxClipX) {
+                            //满足择取当前的event.x
+                            event.x
+                        } else {
+                            //拖拽的距离超过区间需要重新计算
+                            if (sliderRange < minClipX) {
+                                //比最小还小
+                                seekRight - minClipX - slideW
                             } else {
-                                seekRight - minW - slideW
+                                //比最大的还大
+                                seekRight - maxClipX - slideW
                             }
-                        } else {//回到默认位置
-                            slidePadding.toFloat() + slideW / 2
                         }
-                        midProgress = seekLeft + slideW / 2 + midSlideW / 2
+                        midProgress = getDefaultMid()
                         isMoveSlide = true
                         onSectionChange(seekLeft, seekRight)
                         onChangeProgress(midProgress)
@@ -210,14 +224,24 @@ class CropSeekBar2 : View {
                         return true
                     }
                     SCROLL_MODE_RIGHT -> {
-                        seekRight = if (event.x < width - slidePadding) {
-                            if (event.x - seekLeft - slideW > minW) { //判断最小区间
+                        //手指滑动后的区间
+                        val sliderRange = event.x - seekLeft - slideW
+                        seekRight = if (event.x < width) {
+                            if (sliderRange > minClipX && sliderRange < maxClipX) {
+                                //满足区间内
                                 event.x
                             } else {
-                                seekLeft + minW + slideW
+                                //拖拽的距离超过区间需要重新计算
+                                if (sliderRange < minClipX) {
+                                    //比最小还小
+                                    seekLeft + minClipX
+                                } else {
+                                    //比最大的还大
+                                    seekLeft + maxClipX
+                                }
                             }
                         } else {
-                            width - slidePadding.toFloat() - slideW / 2
+                            width - slideW / 2
                         }
                         midProgress = seekRight - slideW / 2 - midSlideW / 2
                         isMoveSlide = true
@@ -247,4 +271,26 @@ class CropSeekBar2 : View {
         }
         return super.onTouchEvent(event)
     }
+
+    fun setDefaultClipInterval(startEditX: Float, endEditX: Float, trackWidth: Float) {
+        //初始化成功滑块的左右坐标
+        seekLeft = startEditX
+        seekRight = endEditX
+        midProgress = getDefaultMid()
+        minClipX = (minInterval / audioDuration) * trackWidth
+        maxClipX = (maxInterval / audioDuration) * trackWidth
+        this.invalidate()
+    }
+
+    fun setDuration(audioDuration: Float) {
+        this.audioDuration = audioDuration
+    }
+
+    /**
+     * 默认位置的中间滑块位置
+     */
+    fun getDefaultMid():Float{
+        return seekLeft + slideW / 2 + midSlideW / 2
+    }
+
 }

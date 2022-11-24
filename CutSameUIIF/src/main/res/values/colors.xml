@@ -3,14 +3,15 @@
     <color name="text_white">#ffffff</color>
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
-    <color name="theme_color">#F0BF42</color>
+    <color name="theme_color">#FBCD60</color>
     <color name="white">#ffffff</color>
     <color name="app_green">#1CC9AA</color>
     <color name="transparent_50p">#80000000</color><!--50%透明度-->
 
 
-    <color name="style_slider_line">#a7c3b5</color>
+    <color name="style_slider_line">#80ffffff</color>
+    <color name="style_slider_border_line">#26e0e0e0</color>
     <color name="light_grey">#C4C4C4</color>
-    <!--    <color name="line_choose_color">#94d6b6</color>-->
-    <color name="line_choose_color">#FBCD60</color>
+    <color name="line_choose_color">#6618d8b5</color>
+    <color name="line_choose_border_color">#ff18d8b5</color>
 </resources>

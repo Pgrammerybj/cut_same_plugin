@@ -36,11 +36,12 @@
 
     <!-- 视频播放进度条-->
     <include
+        android:id="@+id/mixer_audio_seekbar"
         layout="@layout/layout_template_video_seekbar"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginTop="22dp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <!--人声音量-->
     <include
@@ -51,6 +52,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp" />
+
     <!--伴奏音量-->
     <include
         android:id="@+id/seekbar_mixer_accompany"
@@ -123,6 +125,5 @@
         android:background="@null"
         android:paddingHorizontal="20dp"
         android:scrollbars="none" />
-
 
 </LinearLayout>

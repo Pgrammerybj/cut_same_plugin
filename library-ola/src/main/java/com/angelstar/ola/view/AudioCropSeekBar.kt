@@ -18,7 +18,7 @@ import java.math.BigDecimal
  * @date       2022/10/16
  * @des        音频裁剪
  */
-class AudioCropSeekBar : FrameLayout {
+class AudioCropSeekBar2 : FrameLayout {
     constructor(context: Context) : super(context) {
         initView(context)
     }
@@ -36,7 +36,7 @@ class AudioCropSeekBar : FrameLayout {
     }
 
     lateinit var coverView: LinearLayout
-    lateinit var seekBar: CropSeekBar
+    lateinit var seekBar: CropSeekBar2
     private var coverRectF = RectF()
     private var picW = 180f//每张封面宽度--这并不是最终值，会根据控件长度调整
     var originAudioDuration: Long = 10000L//默认视频时长
@@ -49,7 +49,7 @@ class AudioCropSeekBar : FrameLayout {
 
     private fun initView(context: Context) {
         coverView = LinearLayout(context)
-        seekBar = CropSeekBar(context).apply {
+        seekBar = CropSeekBar2(context).apply {
             layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         }
         addView(coverView)

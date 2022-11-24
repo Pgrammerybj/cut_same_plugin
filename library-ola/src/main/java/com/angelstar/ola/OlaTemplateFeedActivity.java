@@ -1,7 +1,6 @@
 package com.angelstar.ola;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -39,9 +38,9 @@ import com.angelstar.ola.interfaces.SimpleSeekBarListener;
 import com.angelstar.ola.player.IPlayerActivityDelegate;
 import com.angelstar.ola.player.TemplateActivityDelegate;
 import com.angelstar.ola.utils.SizeUtil;
-import com.angelstar.ola.view.AudioCropSeekBar;
 import com.angelstar.ola.view.FloatSliderView;
 import com.angelstar.ola.view.ScaleSlideBar;
+import com.angelstar.ola.view.audioclip.AudioCropSeekBar;
 import com.angelstar.ybj.xbanner.OlaBannerView;
 import com.angelstar.ybj.xbanner.VideoItemView;
 import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
@@ -67,7 +66,6 @@ import java.util.Locale;
 
 import io.reactivex.disposables.Disposable;
 import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
@@ -131,6 +129,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private AudioCropSeekBar audioCropSeekBar;
     private float endEditTime;
     private float startEditTime;
+    private long songTotalDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,15 +197,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         BbEffectCoreImpl.INSTANCE.setAudioProfile(mAudioMixingEntry.getAudioProfile());
         //先暂时这样吧，后续还需要优化结构和时机
         BbEffectCoreImpl.INSTANCE.start(); //需要和视频同步播放
-        BbEffectCoreImpl.INSTANCE.setAudioProgressListener(new ITemplateAudioPlayListener() {
-            @Override
-            public void onPlayTimeChanged(float progress) {
-                if (null != mFloatSliderView && null != mTvCurrentPlayTime) {
-                    mTvCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
-                    mFloatSliderView.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
-                    if (audioClipMenuIsOpen) {
-                        audioCropSeekBar.setProgress(mAudioMixingEntry.getEndTimeMs(), progress);
-                    }
+        BbEffectCoreImpl.INSTANCE.setAudioProgressListener(progress -> {
+            if (null != mFloatSliderView && null != mTvCurrentPlayTime) {
+                mTvCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
+                mFloatSliderView.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
+                if (audioClipMenuIsOpen) {
+                    audioCropSeekBar.setProgress(mAudioMixingEntry.getEndTimeMs(), progress);
                 }
             }
         });
@@ -287,7 +283,6 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
                 @Override
                 public void onClipAudioClick(View view) {
-                    Toast.makeText(OlaTemplateFeedActivity.this, "编辑音频组件", Toast.LENGTH_SHORT).show();
                     showAudioClipMenu();
                 }
             });
@@ -297,7 +292,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     /**
-     * 音频剪辑面板
+     * 音频剪辑面板，此处需要优化，直接初始化好，等点击的时候直接show即可
      */
     private void showAudioClipMenu() {
         audioClipMenuIsOpen = true;
@@ -313,14 +308,15 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
         audioCropSeekBar = inflate.findViewById(R.id.audio_clip_seekbar);
         audioChooseTime = inflate.findViewById(R.id.tv_choose_time);
-        audioCropSeekBar.setAudioDuration(endEditTime);
         //已选取时间的回调
         audioCropSeekBar.setOnSeekChange(aLong -> {
-            long selectTime = (audioCropSeekBar.getRightSlideSecond() - audioCropSeekBar.getLeftSlideSecond()) / 1000;
+            int selectTime = Math.round(audioCropSeekBar.getClipAudioTimerMS() / 1000);
             String format = String.format(Locale.getDefault(), getString(R.string.audio_clip_choose_time), selectTime);
             audioChooseTime.setText(format);
             return Unit.INSTANCE;
         });
+        //将音频的初始化参数传入到剪辑器
+        audioCropSeekBar.setClipEditTime(startEditTime,endEditTime,songTotalDuration);
     }
 
     private String downloadVideo(TemplateItem bannerData) {
@@ -372,7 +368,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         List<AudioMixingEntry.SingTimeLyricList> singTimeLyricList = mAudioMixingEntry.getSingTimeLyricList();
         //用户录制的歌词出现时间
         startEditTime = singTimeLyricList.get(0).getStartTime();
-        long songTotalDuration = mAudioMixingEntry.getEndTimeMs();
+        songTotalDuration = mAudioMixingEntry.getEndTimeMs();
         //用户录制的歌词最后出现时间
         endEditTime = Math.min(startEditTime + defaultHighDuration, songTotalDuration);
         //录制的完整歌曲长度
@@ -438,6 +434,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         });
     }
 
+    /**
+     * 提前初始化，点击的时候再show，避免多次点击创建
+     */
     private void showMixerMenu() {
         BottomSheetDialog answerSheetDialog = new BottomSheetDialog(this, R.style.MixerBottomSheetDialogTheme);
         @SuppressLint("InflateParams") View inflate = LayoutInflater.from(this).inflate(R.layout.layout_mixer_menu, null, false);

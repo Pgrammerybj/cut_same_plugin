@@ -44,6 +44,7 @@ class FloatSliderView @JvmOverloads constructor(
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val handlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
 
     private var lineStart: Float = 0F
@@ -106,7 +107,7 @@ class FloatSliderView @JvmOverloads constructor(
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.SliderView).apply {
-            //当前进度进度条颜色（美团黄）
+            //当前进度进度条颜色
             lineColor = getColor(
                 R.styleable.SliderView_lineColor,
                 resources.getColor(R.color.style_slider_line)
@@ -134,6 +135,10 @@ class FloatSliderView @JvmOverloads constructor(
         }
 
         linePaint.style = Paint.Style.FILL_AND_STROKE
+
+        //进度条的边框
+        strokePaint.style = Paint.Style.STROKE
+        strokePaint.strokeWidth = 1f
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -195,6 +200,9 @@ class FloatSliderView @JvmOverloads constructor(
         linePaint.color = lineHintColor;
         val oval = RectF(lineStart, moveY, lineEnd, lineWidth.toFloat() + moveY)
         canvas.drawRoundRect(oval, roundRectRadius, roundRectRadius, linePaint)
+        //总进度的边框（#26e0e0e0）
+        strokePaint.color = resources.getColor(R.color.style_slider_border_line)
+        canvas.drawRoundRect(oval, roundRectRadius, roundRectRadius, strokePaint)
 
         val progressStart = when {
             0 < minValue -> {
@@ -214,11 +222,16 @@ class FloatSliderView @JvmOverloads constructor(
             canvas.drawRoundRect(oval3, roundRectRadius, roundRectRadius, linePaint)
         }
 
-        // 歌曲选中区域（94d6b6）
+        // 歌曲选中区域
         linePaint.color = lineChooseColor
-        val startEditTime: Float = if (lineEnd * audioHighlightStart == 0F) lineStart else lineEnd * audioHighlightStart
-        val oval2 = RectF(startEditTime, moveY, (lineEnd * audioHighlightEnd), lineWidth.toFloat() + moveY)
+        val startEditTime: Float =
+            if (lineEnd * audioHighlightStart == 0F) lineStart else lineEnd * audioHighlightStart
+        val oval2 =
+            RectF(startEditTime, moveY, (lineEnd * audioHighlightEnd), lineWidth.toFloat() + moveY)
         canvas.drawRoundRect(oval2, roundRectRadius, roundRectRadius, linePaint)
+        //边框
+        strokePaint.color = resources.getColor(R.color.line_choose_border_color)
+        canvas.drawRoundRect(oval2, roundRectRadius, roundRectRadius, strokePaint)
 
         //圆球进度
         handlePaint.color = Color.WHITE

@@ -2,14 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_sheet_dialog_bg"
+    android:background="@drawable/shape_sheet_audio_clip_dialog_bg"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="22dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="22dp">
+        android:layout_height="40dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,25 +27,42 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_choose_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#ff313131" />
+
+    <RelativeLayout
+        android:layout_width="33dp"
+        android:layout_height="21dp"
         android:layout_gravity="center_horizontal"
-        android:text="0s"
-        android:textColor="#fff"
-        android:textSize="18sp" />
+        android:layout_marginTop="12dp"
+        android:background="@mipmap/icon_crop_bubble_bg">
+
+        <TextView
+            android:id="@+id/tv_choose_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="0s"
+            android:lines="1"
+            android:textColor="#ffffff"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="50dp">
 
-        <com.angelstar.ola.view.AudioCropSeekBar
+        <com.angelstar.ola.view.audioclip.AudioCropSeekBar
             android:id="@+id/audio_clip_seekbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </FrameLayout>
 
 </LinearLayout>
