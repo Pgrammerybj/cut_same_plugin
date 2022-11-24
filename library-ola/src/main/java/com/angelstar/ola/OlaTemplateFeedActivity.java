@@ -1,6 +1,7 @@
 package com.angelstar.ola;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -74,8 +75,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private IPlayerActivityDelegate editorActivityDelegate;
     private SurfaceView mSurfaceView;
 
-    private FloatSliderView mFloatSliderView;
-    private TextView mTvCurrentPlayTime,audioChooseTime;
+    private FloatSliderView mFloatSliderView,mMixerSeekbar;
+    private TextView mTvCurrentPlayTime, audioChooseTime, mCurrentPlayTime;
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
     private RecyclerView mMixerRecyclerView;
@@ -90,6 +91,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     //默认高亮部分为歌词其实时间+30秒
     float DEFAULT_HIGH_DURATION = 30 * 1000;
     private boolean audioClipMenuIsOpen = false;
+    private boolean mixerMenuIsOpen = false;
 
     private final ITemplateVideoStateListener videoStateListener = new ITemplateVideoStateListener() {
 
@@ -204,6 +206,10 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 if (audioClipMenuIsOpen) {
                     audioCropSeekBar.setProgress(mAudioMixingEntry.getEndTimeMs(), progress);
                 }
+                if(mixerMenuIsOpen){
+                    mCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
+                    mMixerSeekbar.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
+                }
             }
         });
     }
@@ -316,7 +322,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             return Unit.INSTANCE;
         });
         //将音频的初始化参数传入到剪辑器
-        audioCropSeekBar.setClipEditTime(startEditTime,endEditTime,songTotalDuration);
+        audioCropSeekBar.setClipEditTime(startEditTime, endEditTime, songTotalDuration);
     }
 
     private String downloadVideo(TemplateItem bannerData) {
@@ -354,8 +360,8 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private void initPlayerView() {
         mFloatSliderView = findViewById(R.id.temp_video_player_seekbar);
         mTvCurrentPlayTime = findViewById(R.id.tv_current_play_time);
-        TextView mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
         mMixerRecyclerView = findViewById(R.id.recyclerview_video_mixer);
+        TextView mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
         mTvVideoTotalTime.setText(FileUtil.INSTANCE.stringForTime(mAudioMixingEntry.getEndTimeMs()));
         calculateAudioHighPart(DEFAULT_HIGH_DURATION);
         initRecyclerView();
@@ -443,13 +449,20 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         answerSheetDialog.setContentView(inflate);
         answerSheetDialog.setCanceledOnTouchOutside(true);
         answerSheetDialog.setCancelable(true);
+        answerSheetDialog.setOnCancelListener(dialog -> mixerMenuIsOpen = false);
         answerSheetDialog.show();
+        mixerMenuIsOpen = true;
         //设置透明背景
         answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
 
         mScaleSlideBar = inflate.findViewById(R.id.scale_slide_bar);
         mRcMenuReverb = inflate.findViewById(R.id.recyclerview_mixer_reverb);
         mRcMenuEqualizer = inflate.findViewById(R.id.recyclerview_mixer_equalizer);
+        mCurrentPlayTime = inflate.findViewById(R.id.tv_current_play_time);
+        mMixerSeekbar = inflate.findViewById(R.id.temp_video_player_seekbar);
+        mMixerSeekbar.setAudioHighlight(startEditTime / songTotalDuration, endEditTime / songTotalDuration);
+        TextView audioTotalTime = inflate.findViewById(R.id.tv_total_video_time);
+        audioTotalTime.setText(FileUtil.INSTANCE.stringForTime(mAudioMixingEntry.getEndTimeMs()));
         FrameLayout mSeekBarMixerPeople = inflate.findViewById(R.id.seekbar_mixer_people);
         FrameLayout mSeekBarMixerAccompany = inflate.findViewById(R.id.seekbar_mixer_accompany);
         initMixerSeekBar(mSeekBarMixerPeople, mSeekBarMixerAccompany);
