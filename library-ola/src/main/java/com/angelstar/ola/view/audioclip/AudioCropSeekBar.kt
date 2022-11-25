@@ -36,8 +36,10 @@ class AudioCropSeekBar : FrameLayout {
     lateinit var scrollTrackView: ScrollTrackView
     private var coverRectF = RectF()
     private var mVideoDuration = 0 * 1000f//音频总时长
-    private var mStartEditTimer = 0 * 1000f // 开始编辑的时间点
-    private var mEndEditTimer = 0 * 1000f //结束编辑的时间点
+    @kotlin.jvm.JvmField
+    var mStartEditTimer = 0 * 1000f // 开始编辑的时间点
+    @kotlin.jvm.JvmField
+    var mEndEditTimer = 0 * 1000f //结束编辑的时间点
 
 
     var onSeekChange: (progress: Long) -> Unit = { }//当进度发生变化

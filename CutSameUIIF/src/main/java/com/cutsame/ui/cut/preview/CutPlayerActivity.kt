@@ -139,7 +139,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         val templateItem = intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
         audioParam = intent.getParcelableExtra(ARG_CUT_SAME_AUDIO_PARAM)
         if (templateItem == null || templateItem.templateUrl.isEmpty() || templateItem.md5.isEmpty()) {
-            LogUtil.e(TAG, "onCreate templateItem == null，return")
             finish()
             return
         }
@@ -174,7 +173,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             return
         }
         isForeground = true
-//        cutSamePlayer?.registerPlayerStateListener(playerStateListener)
         compileNextIntent = null
         if (isPlayingOnPause) {
             cutSamePlayer?.start()
@@ -224,7 +222,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         val textItemList = mutableTextItemList
         if (textItemList != null) {
             val index = textItemList.indexOfFirst { it.materialId == materialId }
-            LogUtil.d(TAG, "updateTextItem materialId = $materialId, index=$index")
             if (index != -1) {
                 val errorCode = cutSamePlayer?.updateText(materialId, text)
                     ?: TemplateError.PLAYER_STATE_ERROR
@@ -261,7 +258,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             onClipStart(item)
             return true
         }
-        LogUtil.d(TAG, "createClipUIIntent == null, can not launchClip")
         return false
     }
 
@@ -270,8 +266,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
      * @return 是否真的唤起了
      */
     private fun launchPicker(itemList: ArrayList<MediaItem>, videoCache: String): Boolean {
-        LogUtil.d(TAG, "launchPicker")
-
         val pickerIntent =
             PickerConstant.createGalleryUIIntent(
                 this,
@@ -286,8 +280,6 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             overridePendingTransition(R.anim.abc_fade_in,0)
             return true
         }
-
-        LogUtil.d(TAG, "can not launchPicker, pickerIntent==null")
         return false
     }
 
@@ -350,11 +342,11 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         cutSamePlayer = CutSameSolution.createCutSamePlayer(videoSurfaceView, templateUrl)
         val subtitleInfo = SubtitleInfo(
             audioName = audioParam?.audioName!!,
-            audioDuration = 20277000,
-            startTime = 0,
-            endTime = 20277000,
-            timeClipStart = 0,
-            timeClipEnd = 20277000,
+            audioDuration = (audioParam!!.timeClipEnd - audioParam!!.timeClipStart),
+            startTime = audioParam!!.startTime,
+            endTime = (audioParam!!.timeClipEnd - audioParam!!.timeClipStart),
+            timeClipStart = audioParam!!.startTime,
+            timeClipEnd = (audioParam!!.timeClipEnd - audioParam!!.timeClipStart),
             audioFilePath = "",
             subtitleSrtFile = FileUtil.readJsonFile(audioParam?.srtPath),
             subtitleEffectFile = SUBTITLE_EFFECT_FILE,

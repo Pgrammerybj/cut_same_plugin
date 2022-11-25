@@ -73,7 +73,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private IPlayerActivityDelegate editorActivityDelegate;
     private SurfaceView mSurfaceView;
 
-    private FloatSliderView mFloatSliderView,mMixerSeekbar;
+    private FloatSliderView mFloatSliderView, mMixerSeekbar;
     private TextView mTvCurrentPlayTime, audioChooseTime, mCurrentPlayTime;
     //当前获得焦点的View
     private VideoItemView mVideoItemView;
@@ -204,7 +204,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                 if (audioClipMenuIsOpen) {
                     audioCropSeekBar.setProgress(mAudioMixingEntry.getEndTimeMs(), progress);
                 }
-                if(mixerMenuIsOpen){
+                if (mixerMenuIsOpen) {
                     mCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
                     mMixerSeekbar.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
                 }
@@ -278,6 +278,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
                         return;
                     }
                     String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
+                    //在进入视频编辑前先将audioParam里面的clipStart和clipEnd时间更新
+                    audioParam.setTimeClipStart((long) startEditTime * 1000);
+                    audioParam.setTimeClipEnd((long) endEditTime*1000);
                     Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, audioParam, videoCache);
                     if (cutSameIntent != null) {
                         cutSameIntent.setPackage(getPackageName());
@@ -312,6 +315,12 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         answerSheetDialog.getWindow().findViewById(R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
         audioCropSeekBar = inflate.findViewById(R.id.audio_clip_seekbar);
         audioChooseTime = inflate.findViewById(R.id.tv_choose_time);
+        inflate.findViewById(R.id.iv_clip_audio_confirm).setOnClickListener(v -> {
+            //更新音频的裁剪起始时间
+            startEditTime = audioCropSeekBar.mStartEditTimer;
+            endEditTime = audioCropSeekBar.mEndEditTimer;
+            answerSheetDialog.dismiss();
+        });
         //已选取时间的回调
         audioCropSeekBar.setOnSeekChange(aLong -> {
             int selectTime = Math.round(audioCropSeekBar.getClipAudioTimerMS() / 1000);

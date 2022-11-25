@@ -12,14 +12,14 @@ data class AudioParam(
     var audioName: String?,
     var audioPath: String,
     var audioId: String? = null,
-    val startTime: Long = 0L,
-    val endTime: Long = 0L,
-    val isMoveTrack: Boolean = false,
-    val isFromRecord: Boolean = false,
-    val isAudioEffect: Boolean = false,
-    val timeClipStart: Long = 0L,
-    val timeClipEnd: Long = 0L,
-    val extraId: String? = null,
-    val notifySlotChanged: Boolean = true,
-    val srtPath: String? = null
-): Parcelable
+    var startTime: Long = 0L,
+    var endTime: Long = 0L,
+    var isMoveTrack: Boolean = false,
+    var isFromRecord: Boolean = false,
+    var isAudioEffect: Boolean = false,
+    var timeClipStart: Long = 0L,
+    var timeClipEnd: Long = 0L,
+    var extraId: String? = null,
+    var notifySlotChanged: Boolean = true,
+    var srtPath: String? = null
+) : Parcelable

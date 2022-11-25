@@ -47,7 +47,10 @@ object OlaLyricsConvertSrtFile {
         return AudioParam(
             audioName = lyricName,
             audioPath = audioPath + "ola_jackyang_lyrics",
-            startTime = 0,
+            startTime = audioMixingEntry.startTimeMs,
+            endTime = audioMixingEntry.endTimeMs * 1000,
+            timeClipStart = audioMixingEntry.startTimeMs,
+            timeClipEnd = audioMixingEntry.endTimeMs * 1000,
             isAudioEffect = false,
             srtPath = "$audioPath$lyricName.json"
         )

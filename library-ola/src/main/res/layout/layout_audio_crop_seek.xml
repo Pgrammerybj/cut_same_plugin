@@ -18,6 +18,7 @@
             android:textSize="15sp" />
 
         <ImageView
+            android:id="@+id/iv_clip_audio_confirm"
             android:layout_width="18dp"
             android:layout_height="15dp"
             android:layout_alignParentEnd="true"
