@@ -11,13 +11,13 @@ assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
 apply from: "$flutterSdkPath/packages/flutter_tools/gradle/app_plugin_loader.gradle"
 
 //火山基础SDK
-include ':aar_cutsamef'
-include ':aar_list'
-include ':aar_nleeditor_ck'
-include ':aar_vesdk'
+include ':LocalRepo:aar_cutsamef'
+include ':LocalRepo:aar_nleeditor_ck'
+include ':LocalRepo:aar_vesdk'
 //Ola音频播放器
 include ':LocalRepo:aar_effect_core'
 include ':LocalRepo:aar_karaoke'
+
 //Ola业务组件库
 include ':library-ola'
 include ':ola-banner'
