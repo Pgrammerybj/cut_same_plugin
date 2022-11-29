@@ -2,7 +2,6 @@ package com.cutsame.ui
 
 import android.content.Context
 import android.content.Intent
-import com.bytedance.ies.cutsame.util.Size
 import com.cutsame.solution.template.model.TemplateItem
 import com.ss.android.ugc.cut_ui.MediaItem
 import com.ss.ugc.android.editor.core.api.params.AudioParam
@@ -11,7 +10,7 @@ import com.ss.ugc.android.editor.core.api.params.AudioParam
 object CutSameUiIF {
 
     private const val INTERFACE_PLAYER = "com.ss.android.ugc.cut_ui.PLAY"
-    const val ARG_CUT_TEMPLATE_URL = "arg_cut_template_url"
+    const val ARG_CUT_COVER_URL = "arg_cut_cover_url"
 
     // 模板的预览视频
     const val ARG_CUT_TEMPLATE_VIDEO_PATH = "arg_cut_template_video_path"
@@ -112,17 +111,14 @@ object CutSameUiIF {
     }
 
     private const val INTERFACE_EXPORT = "com.ss.android.ugc.cut_ui.EXPORT"
-    private const val ARG_DATA_EXPORT_CANVAS_SIZE = "arg_data_export_canvas_size"
 
     fun createExportUIIntent(
         context: Context,
-        templateUrl: String,
-        canvasSize: Size
+        coverPath: String
     ): Intent? {
         val intent = Intent(INTERFACE_EXPORT)
         intent.setPackage(context.packageName)
-        intent.putExtra(ARG_CUT_TEMPLATE_URL, templateUrl)
-        intent.putExtra(ARG_DATA_EXPORT_CANVAS_SIZE, canvasSize)
+        intent.putExtra(ARG_CUT_COVER_URL, coverPath)
         return if (checkIntent(context, intent)) {
             intent
         } else {

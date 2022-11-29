@@ -36,6 +36,7 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
     private FrameLayout mFlSurfaceViewContainer;
     //下载到本地的文件路径
     public String videoFilePath;
+    public String videoCover;
 
     public VideoItemView(@NonNull Context context) {
         this(context, null);
@@ -62,7 +63,7 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
 
     public VideoItemView bindData(String url, String videoFilePath,boolean isLocal) {
         Glide.with(this.context).load(isLocal?new File(url):url).into(mIvVideoCover);
-//        Glide.with(this.context).load(url).into(mIvVideoCover);
+        this.videoCover = url;
         this.videoFilePath = videoFilePath;
         mIvVideState.setOnClickListener(this);
         mTvEditVideo.setOnClickListener(this);

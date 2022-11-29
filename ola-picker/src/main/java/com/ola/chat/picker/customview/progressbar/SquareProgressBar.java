@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.ola.chat.picker.R;
 import com.ola.chat.picker.utils.SizeUtil;
+
+import java.io.File;
 
 /**
  * @Author：yangbaojiang
@@ -28,6 +31,7 @@ public class SquareProgressBar extends RelativeLayout {
     private boolean opacity = false;
     private boolean greyscale;
     private boolean isFadingOnProgress = false;
+    private Context mContext;
 
     /**
      * New SquareProgressBar.
@@ -39,8 +43,8 @@ public class SquareProgressBar extends RelativeLayout {
      */
     public SquareProgressBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        LayoutInflater mInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mContext = context;
+        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mInflater.inflate(R.layout.progressbarview, this, true);
         bar = findViewById(R.id.squareProgressBar1);
         imageView = findViewById(R.id.imageView1);
@@ -56,6 +60,7 @@ public class SquareProgressBar extends RelativeLayout {
      */
     public SquareProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.mContext = context;
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mInflater.inflate(R.layout.progressbarview, this, true);
@@ -72,6 +77,7 @@ public class SquareProgressBar extends RelativeLayout {
      */
     public SquareProgressBar(Context context) {
         super(context);
+        this.mContext = context;
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mInflater.inflate(R.layout.progressbarview, this, true);
@@ -408,6 +414,15 @@ public class SquareProgressBar extends RelativeLayout {
     public void setImageBitmap(Bitmap bitmap) {
         imageView.setImageBitmap(bitmap);
     }
+
+    public void setImageFile(String filePath) {
+        if (filePath.contains("http://") || filePath.contains("https://")) {
+            Glide.with(mContext).load(filePath).into(imageView);
+        } else {
+            Glide.with(mContext).load(new File(filePath)).into(imageView);
+        }
+    }
+
 
     /**
      * Set the status of the indeterminate mode. The default is false. You can

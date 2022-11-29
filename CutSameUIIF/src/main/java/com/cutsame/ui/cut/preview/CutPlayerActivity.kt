@@ -314,15 +314,15 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     /**
      * 批量更新素材 -- 视频合成
      */
-    fun launchCompile() {
-        cutSamePlayer?.pause()
-        val createExportUIIntent = CutSameUiIF.createExportUIIntent(
-            this,
-            templateItem.templateUrl,
-            cutSamePlayer!!.getConfigCanvasSize()
-        )
-        startActivityForResult(createExportUIIntent, REQUEST_CODE_NEXT)
-    }
+//    fun launchCompile() {
+//        cutSamePlayer?.pause()
+//        val createExportUIIntent = CutSameUiIF.createExportUIIntent(
+//            this,
+//            templateItem.templateUrl,
+//            cutSamePlayer!!.getConfigCanvasSize()
+//        )
+//        startActivityForResult(createExportUIIntent, REQUEST_CODE_NEXT)
+//    }
 
     /**
      * 编辑好的视频，插入到模版首页列表中

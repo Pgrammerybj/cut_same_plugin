@@ -57,6 +57,7 @@ import com.ola.download.RxNetDownload;
 import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
+import com.ss.ugc.android.editor.core.NLEEditorInstance;
 import com.ss.ugc.android.editor.core.api.params.AudioParam;
 
 import org.jetbrains.annotations.NotNull;
@@ -70,6 +71,7 @@ import io.reactivex.disposables.Disposable;
 import kotlin.Unit;
 
 import static com.cutsame.ui.cut.preview.CutPlayerActivityKt.REQUEST_CODE_NEXT;
+import static com.ss.ugc.android.editor.core.NLEEditorInstance.KEY_NLE_EDITOR_CONTEXT;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
@@ -563,10 +565,9 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
      * 合成导出素材
      */
     private void exportMaterial(){
-            Intent createExportUIIntent = CutSameUiIF.INSTANCE.createExportUIIntent(
-                    this,
-                    templateItemList.get(currentRealPosition).getTemplateUrl(),
-                    new com.bytedance.ies.cutsame.util.Size(SizeUtil.INSTANCE.dp2px(260f),SizeUtil.INSTANCE.dp2px(460f)));
+        NLEEditorInstance.mInstance().put(KEY_NLE_EDITOR_CONTEXT,nleEditorContext);
+        Intent createExportUIIntent = CutSameUiIF.INSTANCE.createExportUIIntent(
+                    this,coverPath);
             startActivityForResult(createExportUIIntent, REQUEST_CODE_NEXT);
         }
 
@@ -608,6 +609,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     public void onPageSelected(int position, VideoItemView videoItemView) {
         this.mVideoItemView = videoItemView;
         currentRealPosition = position;
+        coverPath =  videoItemView.videoCover;
         //切换ViewPager前先恢复播放器参数
         if (null != nleEditorContext && null != editorActivityDelegate) {
             //切换视频后，应该从有歌词的位置开始播放，这个seekTo(0)目前不准确

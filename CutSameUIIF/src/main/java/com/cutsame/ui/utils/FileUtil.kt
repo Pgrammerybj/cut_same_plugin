@@ -34,6 +34,18 @@ class FileUtil {
             return dir.absolutePath + File.separator + name
         }
 
+        /**
+         * 导出的视频路径
+         */
+        fun getExternalExportVideoSavePath(name: String = "", context: Context): String {
+            val dir = context.getExternalFilesDir("export_video")
+                ?: File(context.filesDir.absolutePath, "export_video")
+            if (!dir.exists()) {
+                dir.mkdirs()
+            }
+            return dir.absolutePath + File.separator + name
+        }
+
 
         /**
          * 把毫秒转换成：1：20：30这样的形式
