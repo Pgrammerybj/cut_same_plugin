@@ -7,26 +7,33 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.ArrayList;
 
+import static com.angelstar.ybj.xbanner.OlaBannerView.MAX_VALUE;
+
 /**
  * @Author：yangbaojiang
  * @Date: 2022/9/27 11:08
  * @E-Mail: pgrammer.ybj@outlook.com
- * TODO:内部Adapter，包装setAdapter传进来的adapter，设置getCount返回Integer.MAX_VALUE
+ * TODO:内部Adapter，包装setAdapter传进来的adapter，设置getCount返回MAX_VALUE
  */
 public class VideoPagerAdapter extends PagerAdapter {
 
     /**
      * 轮播图地址集合
      */
-    private final ArrayList<VideoItemView> mBannerUrlList;
+    private ArrayList<VideoItemView> mBannerUrlList;
 
     public VideoPagerAdapter(ArrayList<VideoItemView> bannerUrlList) {
         this.mBannerUrlList = bannerUrlList;
     }
 
+    public void updateBannerUrlLis(ArrayList<VideoItemView> bannerUrlList){
+        this.mBannerUrlList = bannerUrlList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return MAX_VALUE;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.angelstar.ola.player
 
+import android.content.Intent
 import com.angelstar.ola.interfaces.ITemplateVideoStateListener
 import com.ss.ugc.android.editor.core.NLEEditorContext
 
@@ -26,4 +27,6 @@ interface IPlayerActivityDelegate {
      * 插入-替换本地视频素材
      */
     fun importVideoMedia(filePathList: List<String>) {}
+
+    fun restoreDraftContent(draftModelPath: String) {}
 }

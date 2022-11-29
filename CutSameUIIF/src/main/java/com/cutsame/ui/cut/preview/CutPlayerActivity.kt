@@ -2,8 +2,10 @@ package com.cutsame.ui.cut.preview
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.SurfaceView
 import android.widget.Toast
@@ -23,10 +25,12 @@ import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.CutSameUiIF.ARG_CUT_SAME_AUDIO_PARAM
 import com.cutsame.ui.CutSameUiIF.ARG_TEMPLATE_ITEM
 import com.cutsame.ui.R
+import com.cutsame.ui.cut.videoedit.customview.VideoFrameHelper
 import com.cutsame.ui.exten.FastMain
 import com.cutsame.ui.utils.CutSameTemplateUtils
 import com.cutsame.ui.utils.FileUtil
 import com.cutsame.ui.utils.ScreenUtil.isScreenOn
+import com.cutsame.ui.utils.SizeUtil
 import com.google.gson.Gson
 import com.ola.chat.picker.entry.ImagePickConfig
 import com.ola.chat.picker.utils.CutSameMediaUtils
@@ -37,6 +41,7 @@ import com.ss.android.ugc.cut_ui.MediaItem
 import com.ss.android.ugc.cut_ui.SubtitleInfo
 import com.ss.android.ugc.cut_ui.TextItem
 import com.ss.ugc.android.editor.core.api.params.AudioParam
+import kotlinx.android.synthetic.main.activity_export.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.io.File
@@ -60,6 +65,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
     //内置的歌曲默认动效和字体
     val SUBTITLE_EFFECT_FILE =
         "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdian"
+
     //默认的经典
     val SUBTITLE_TEXT_FONT_PATH =
         "/storage/emulated/0/Android/data/com.starify.ola.android/files/assets/LocalResource/lyricStyle/jingdian/jingdianfont"
@@ -136,7 +142,8 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         overridePendingTransition(0, 0)
         supportActionBar?.hide()
 
-        val templateItem = intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
+        val templateItem =
+            intent.getParcelableExtra<TemplateItem>(ARG_TEMPLATE_ITEM)?.also { templateItem = it }
         audioParam = intent.getParcelableExtra(ARG_CUT_SAME_AUDIO_PARAM)
         if (templateItem == null || templateItem.templateUrl.isEmpty() || templateItem.md5.isEmpty()) {
             finish()
@@ -194,9 +201,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         super.onDestroy()
         cutSameSource?.release()
         cutSameSource = null
-        cutSamePlayer?.let{
-            it.unRegisterPlayerStateListener(playerStateListener)
-        }
+        cutSamePlayer?.unRegisterPlayerStateListener(playerStateListener)
         cutSamePlayer?.release()
         cutSamePlayer = null
     }
@@ -277,7 +282,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             }
         if (pickerIntent != null) {
             startActivityForResult(pickerIntent, REQUEST_CODE_PICKER)
-            overridePendingTransition(R.anim.abc_fade_in,0)
+            overridePendingTransition(R.anim.abc_fade_in, 0)
             return true
         }
         return false
@@ -289,10 +294,10 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         }
 
         val galleryUIIntent = PickerConstant.createGalleryUIIntent(
-                this,
-                CutSameMediaUtils.cutSameToOlaMediaItemList(items),
-                CutSameTemplateUtils.parseTemplateItem(templateItem)
-            )?.putExtras(intent)
+            this,
+            CutSameMediaUtils.cutSameToOlaMediaItemList(items),
+            CutSameTemplateUtils.parseTemplateItem(templateItem)
+        )?.putExtras(intent)
         if (galleryUIIntent == null) {
             Toast.makeText(
                 this,
@@ -319,6 +324,43 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         startActivityForResult(createExportUIIntent, REQUEST_CODE_NEXT)
     }
 
+    /**
+     * 编辑好的视频，插入到模版首页列表中
+     */
+    fun jumpTemplatePageInsertModel() {
+        //获取到当前编辑态的NLEModelString
+        val nleModelStr = cutSamePlayer?.getModelData()
+        //将NLEModelString写入文件，待模版首页读取草稿文件
+        nleModelStr?.let {
+            val writeFilePath =
+                FileUtil.writeTxtToFile(it, this.filesDir.absolutePath, "model_data.txt")
+            if (TextUtils.isEmpty(writeFilePath)) {
+                Toast.makeText(this, "NLEModel写入文件失败！", Toast.LENGTH_SHORT).show()
+                return
+            }
+            val jumpToOlaTemplateListIntent =
+                CutSameUiIF.jumpToOlaTemplateListIntent(this, writeFilePath, getVideoCover())
+            startActivity(jumpToOlaTemplateListIntent)
+            //跳转和关闭页面
+            cutSamePlayer?.pause()
+            finish()
+        }
+    }
+
+    private fun getVideoCover(): String {
+        val previewWidth = SizeUtil.dp2px(260f)
+        val coverPath: String =
+            FileUtil.getExternalTmpSaveName(FileUtil.CUTSAME_VIDEO_COVER, applicationContext)
+        cutSamePlayer?.getSpecificImage(100, previewWidth, previewWidth * 16 / 9) { bitmap ->
+            FileUtil.saveBmpToFile(
+                bitmap,
+                File(coverPath),
+                Bitmap.CompressFormat.JPEG
+            )
+        }
+        return coverPath
+    }
+
     private fun initTemplateWhileDataReady(
         templateUrl: String,
         mediaItemList: ArrayList<MediaItem>?,
@@ -340,13 +382,14 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
         videoSurfaceView: SurfaceView
     ) {
         cutSamePlayer = CutSameSolution.createCutSamePlayer(videoSurfaceView, templateUrl)
+        val duration = audioParam!!.timeClipEnd - audioParam!!.timeClipStart
         val subtitleInfo = SubtitleInfo(
             audioName = audioParam?.audioName!!,
-            audioDuration = (audioParam!!.timeClipEnd - audioParam!!.timeClipStart),
+            audioDuration = duration,
             startTime = audioParam!!.startTime,
-            endTime = (audioParam!!.timeClipEnd - audioParam!!.timeClipStart),
+            endTime = audioParam!!.startTime + duration,
             timeClipStart = audioParam!!.startTime,
-            timeClipEnd = (audioParam!!.timeClipEnd - audioParam!!.timeClipStart),
+            timeClipEnd = audioParam!!.startTime + duration,
             audioFilePath = "",
             subtitleSrtFile = FileUtil.readJsonFile(audioParam?.srtPath),
             subtitleEffectFile = SUBTITLE_EFFECT_FILE,
@@ -356,9 +399,7 @@ abstract class CutPlayerActivity : AppCompatActivity(), CoroutineScope {
             screenTransformY = -0.1f
         )
         cutSamePlayer?.preparePlay(mediaItemList, textItemList, subtitleInfo)
-        cutSamePlayer?.let{
-            it.registerPlayerStateListener(playerStateListener)
-        }
+        cutSamePlayer?.registerPlayerStateListener(playerStateListener)
     }
 
     private fun mergeMediaItemList(

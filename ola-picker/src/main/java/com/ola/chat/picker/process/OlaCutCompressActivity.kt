@@ -59,11 +59,10 @@ class OlaCutCompressActivity : AppCompatActivity() {
 
                     override fun onProgress(progress: Int) {
                         updateProgress(progress)
-                        Log.e(TAG," progress: $progress")
                     }
 
                     override fun onSuccess(mediaItems: ArrayList<MediaItem>?) {
-                        Log.e(TAG,"compressSource onSuccess")
+                        Log.i(TAG,"compressSource onSuccess")
                         compressSuccess = true
                         val dataIntent = Intent().apply {
                             PickerConstant.setCompressResultData(this, mediaItems!!)

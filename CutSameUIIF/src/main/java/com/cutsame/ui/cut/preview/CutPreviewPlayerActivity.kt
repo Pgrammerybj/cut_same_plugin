@@ -170,7 +170,8 @@ class CutPreviewPlayerActivity : CutPlayerActivity() {
         }
 
         exportView.setGlobalDebounceOnClickListener {
-            launchCompile()
+//            launchCompile()
+            jumpTemplatePageInsertModel()
         }
 
         editLayoutBackIv.setGlobalDebounceOnClickListener {

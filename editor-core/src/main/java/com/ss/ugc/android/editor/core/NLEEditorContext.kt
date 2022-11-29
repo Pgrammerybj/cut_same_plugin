@@ -34,6 +34,7 @@ class NLEEditorContext(activity: FragmentActivity) : BaseViewModel(activity), IE
     override var editor: IEditor = DefaultEditor(this)
     override var hasInitialized: Boolean = false
     override var nleMediaConfig: NLEMediaConfig? = null
+//    override var nleModel:NLEModel = editor.getNleModel()
 
     override fun getMainTrack(): NLETrack {
         return if (nleModel.mainTrack == null) {
@@ -69,6 +70,10 @@ class NLEEditorContext(activity: FragmentActivity) : BaseViewModel(activity), IE
             player.init(nleSession.playerApi)
             hasInitialized = true
         }
+    }
+
+    override fun restoreDraft(data: String): NLEError {
+        return getNLEEditor().restore(data)
     }
 
     override fun onResume() {

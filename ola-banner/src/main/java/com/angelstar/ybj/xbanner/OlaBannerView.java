@@ -33,7 +33,7 @@ import static android.view.Gravity.CENTER_HORIZONTAL;
  **/
 public class OlaBannerView extends FrameLayout {
 
-    private static final int MAX_VALUE = Integer.MAX_VALUE;
+    public static final int MAX_VALUE = 200;
 
     /**
      * 轮播图ViewPager
@@ -114,7 +114,7 @@ public class OlaBannerView extends FrameLayout {
         mBannerUrlList = new ArrayList<>();
         mAdapter = new VideoPagerAdapter(mBannerUrlList);
         mBannerViewPager.setAdapter(mAdapter);
-        mBannerViewPager.setCurrentItem(Integer.MAX_VALUE / 2);
+        mBannerViewPager.setCurrentItem(MAX_VALUE / 2);
         mBannerViewPager.setPageTransformer(true, new ScalePageTransformer());
         mBannerViewPager.addOnPageChangeListener(mPageListener);
         if (mIsMargin) {
@@ -187,15 +187,14 @@ public class OlaBannerView extends FrameLayout {
     /**
      * 设置Banner图片地址数据
      */
-    public void setBannerData(final ArrayList<VideoItemView> bannerData, final SurfaceView mSurfaceView) {
-        int currentPos = MAX_VALUE / 2 - (MAX_VALUE / 2) % getRealCount(bannerData);
+    public void setBannerData(final ArrayList<VideoItemView> bannerData, final SurfaceView mSurfaceView, boolean fromCutSame) {
+        int currentPos = MAX_VALUE / 2 - (MAX_VALUE / 2) % getRealCount(bannerData) - (fromCutSame ? 1 : 0);
         this.mSurfaceView = mSurfaceView;
-        mBannerViewPager.setCurrentItem(currentPos);
         mBannerUrlList.clear();
         mBannerUrlList.addAll(bannerData);
+        mBannerViewPager.setCurrentItem(currentPos);
         mIndicator.setCellCount(bannerData.size());
-
-        if (bannerData.size() != 0) {
+        if (bannerData.size() != 0 && !fromCutSame) {
             //首次进入mSurfaceView应添加到默认显示的条目0
             final VideoItemView videoItemView = bannerData.get(0);
             Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
@@ -207,8 +206,7 @@ public class OlaBannerView extends FrameLayout {
                 }
             });
         }
-
-        mAdapter.notifyDataSetChanged();
+        mAdapter.updateBannerUrlLis(mBannerUrlList);
     }
 
     /**

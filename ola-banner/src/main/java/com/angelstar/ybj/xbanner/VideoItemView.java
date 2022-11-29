@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+
 /**
  * @Author：yangbaojiang
  * @Date: 2022/9/27 17:51
@@ -58,8 +60,9 @@ public class VideoItemView extends FrameLayout implements View.OnClickListener {
         mFlSurfaceViewContainer = cardView.findViewById(R.id.fl_surfaceView_container);
     }
 
-    public VideoItemView bindData(String url, String videoFilePath) {
-        Glide.with(this.context).load(url).into(mIvVideoCover);
+    public VideoItemView bindData(String url, String videoFilePath,boolean isLocal) {
+        Glide.with(this.context).load(isLocal?new File(url):url).into(mIvVideoCover);
+//        Glide.with(this.context).load(url).into(mIvVideoCover);
         this.videoFilePath = videoFilePath;
         mIvVideState.setOnClickListener(this);
         mTvEditVideo.setOnClickListener(this);

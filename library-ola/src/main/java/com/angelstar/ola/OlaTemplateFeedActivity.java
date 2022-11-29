@@ -18,6 +18,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,7 @@ import com.angelstar.ybj.xbanner.indicator.RectangleIndicator;
 import com.cutsame.solution.template.model.TemplateItem;
 import com.cutsame.ui.CutSameUiIF;
 import com.cutsame.ui.template.play.PlayCacheServer;
+import com.cutsame.ui.utils.FileUtil;
 import com.cutsame.ui.utils.JsonHelper;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -56,7 +58,8 @@ import com.ola.download.callback.DownloadCallback;
 import com.ola.download.utils.CommonUtils;
 import com.ss.ugc.android.editor.core.NLEEditorContext;
 import com.ss.ugc.android.editor.core.api.params.AudioParam;
-import com.ss.ugc.android.editor.core.utils.FileUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,6 +68,8 @@ import java.util.Locale;
 
 import io.reactivex.disposables.Disposable;
 import kotlin.Unit;
+
+import static com.cutsame.ui.cut.preview.CutPlayerActivityKt.REQUEST_CODE_NEXT;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {
 
@@ -95,12 +100,14 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
 
         @Override
         public void onPlayViewActivate(Boolean activate) {
-            mVideoItemView.setActivated(activate);
+            if (null != mVideoItemView) {
+                mVideoItemView.setActivated(activate);
+            }
         }
 
         @Override
         public void onPlayTimeChanged(String curPlayerTime, String totalPlayerTime, boolean isPause) {
-            if (isPause) {
+            if (isPause && null != mVideoItemView) {
                 mVideoItemView.getVideStateView().setImageResource(R.mipmap.icon_video_play);
             }
         }
@@ -130,12 +137,17 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     private float endEditTime;
     private float startEditTime;
     private long songTotalDuration;
+    private List<TemplateItem> templateItemList;
+    private OlaBannerView mBannerView;
+    private String draftModelPath;
+    private String coverPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MTUtils.makeStatusBarTransparent(this);
         setContentView(R.layout.activity_ola_template_homepage);
+
         //视频缓存框架
         httpProxyCacheServer = PlayCacheServer.INSTANCE.getProxy(getApplicationContext());
         mSurfaceView = new SurfaceView(this);
@@ -157,6 +169,38 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         intiAudioMixing();
         initActivityDelegate();
         initView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //保存，用户选取的模版Id，当用户从剪同款回来之后需要复用其原始模版数据
+        outState.putInt("currentRealPosition", currentRealPosition);
+        Log.i(TAG, "onSaveInstanceState-currentRealPosition=" + currentRealPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentRealPosition = savedInstanceState.getInt("currentRealPosition", 0);
+        Log.i(TAG, "onRestoreInstanceState-currentRealPosition=" + currentRealPosition);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i(TAG, "onNewIntent-currentRealPosition=" + currentRealPosition);
+        //先创建新建的卡片视图，添加到原有的轮播图后面
+        coverPath = intent.getStringExtra(CutSameUiIF.ARG_DATA_COVER_FILE_PATH);
+        draftModelPath = intent.getStringExtra(CutSameUiIF.ARG_DATA_NLE_MODEL_FILE_PATH);
+        TemplateItem templateItem = templateItemList.get(currentRealPosition);
+        templateItemList.add(templateItem);
+        ArrayList<VideoItemView> videoItem = createVideoItem(templateItemList);
+        mBannerView.setBannerData(videoItem, mSurfaceView, true);
+
+//        if (null != editorActivityDelegate) {
+//            editorActivityDelegate.restoreDraftContent(draftModelPath);
+//        }
     }
 
     /**
@@ -199,13 +243,13 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         BbEffectCoreImpl.INSTANCE.start(); //需要和视频同步播放
         BbEffectCoreImpl.INSTANCE.setAudioProgressListener(progress -> {
             if (null != mFloatSliderView && null != mTvCurrentPlayTime) {
-                mTvCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
+                mTvCurrentPlayTime.setText(FileUtil.stringForTime((long) progress));
                 mFloatSliderView.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
                 if (audioClipMenuIsOpen) {
                     audioCropSeekBar.setProgress(mAudioMixingEntry.getEndTimeMs(), progress);
                 }
                 if (mixerMenuIsOpen) {
-                    mCurrentPlayTime.setText(FileUtil.INSTANCE.stringForTime((long) progress));
+                    mCurrentPlayTime.setText(FileUtil.stringForTime((long) progress));
                     mMixerSeekbar.setCurrPosition(100 * progress / mAudioMixingEntry.getEndTimeMs());
                 }
             }
@@ -220,7 +264,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     private void initView() {
-        OlaBannerView mBannerView = findViewById(R.id.banner_view);
+        mBannerView = findViewById(R.id.banner_view);
         TextView mSongName = findViewById(R.id.tv_current_song_name);
         mBannerView.setIndicator(new RectangleIndicator(this));
         mBannerView.setScrollPageListener(this);
@@ -231,9 +275,10 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         if (null == olaTemplateResponse || olaTemplateResponse.getList().size() == 0) {
             return;
         }
-        List<TemplateItem> templateItemList = olaTemplateResponse.getList();
-        mBannerView.setBannerData(createVideoItem(templateItemList), mSurfaceView);
+        templateItemList = olaTemplateResponse.getList();
+        mBannerView.setBannerData(createVideoItem(templateItemList), mSurfaceView, false);
         findViewById(R.id.iv_templation_page_back).setOnClickListener(v -> finish());
+        findViewById(R.id.tv_export_material).setOnClickListener(v -> exportMaterial());
     }
 
     private ArrayList<VideoItemView> createVideoItem(List<TemplateItem> bannerData) {
@@ -251,51 +296,60 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
             //后台视频下载，下载策略和时机后续再优化
             String videoFilePath = downloadVideo(templateItem);
             VideoItemView videoItemView = new VideoItemView(this);
-            videoItemView.bindData(templateItem.getCover().getUrl(), videoFilePath);
-            videoItemView.setOnClickPlayListener(new VideoItemView.OnClickPlayStateListener() {
-                @Override
-                public void onVideoClick(View view) {
-                    //点击视频播放/暂停按钮
-                    if (mVideoItemView.getVideStateView().isActivated()) {
-                        nleEditorContext.getPlayer().pause();
-                        BbEffectCoreImpl.INSTANCE.pause();
-                    } else {
-                        startPlay(videoItemView.getVideStateView());
-                        BbEffectCoreImpl.INSTANCE.resume();
-                    }
-                }
-
-                @Override
-                public void onEditVideoClick(View view) {
-                    //点击视频编辑按钮
-                    TemplateItem templateItem = bannerData.get(currentRealPosition);
-                    if (null == templateItem
-                            || templateItem.getFragmentCount() == 0
-                            || templateItem.getVideoInfo() == null
-                            || TextUtils.isEmpty(templateItem.getExtra())) {
-                        //后端下发的模版数据有误，上报异常监控
-                        Toast.makeText(OlaTemplateFeedActivity.this, "后端下发的模版数据有误，上报异常监控", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
-                    //在进入视频编辑前先将audioParam里面的clipStart和clipEnd时间更新
-                    audioParam.setTimeClipStart((long) startEditTime * 1000);
-                    audioParam.setTimeClipEnd((long) endEditTime*1000);
-                    Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, audioParam, videoCache);
-                    if (cutSameIntent != null) {
-                        cutSameIntent.setPackage(getPackageName());
-                        startActivity(cutSameIntent);
-                    }
-                }
-
-                @Override
-                public void onClipAudioClick(View view) {
-                    showAudioClipMenu();
-                }
-            });
+            if (!TextUtils.isEmpty(coverPath) && !TextUtils.isEmpty(draftModelPath) && (i == bannerData.size() - 1)) {
+                videoItemView.bindData(coverPath, videoFilePath, true);
+            } else {
+                videoItemView.bindData(templateItem.getCover().getUrl(), videoFilePath, false);
+            }
+            videoItemView.setOnClickPlayListener(setOnClickPlayStateListener(bannerData, videoItemView));
             itemList.add(videoItemView);
         }
         return itemList;
+    }
+
+    @NotNull
+    private VideoItemView.OnClickPlayStateListener setOnClickPlayStateListener(List<TemplateItem> bannerData, VideoItemView videoItemView) {
+        return new VideoItemView.OnClickPlayStateListener() {
+            @Override
+            public void onVideoClick(View view) {
+                //点击视频播放/暂停按钮
+                if (mVideoItemView.getVideStateView().isActivated()) {
+                    nleEditorContext.getPlayer().pause();
+                    BbEffectCoreImpl.INSTANCE.pause();
+                } else {
+                    startPlay(videoItemView.getVideStateView());
+                    BbEffectCoreImpl.INSTANCE.resume();
+                }
+            }
+
+            @Override
+            public void onEditVideoClick(View view) {
+                //点击视频编辑按钮
+                TemplateItem templateItem = bannerData.get(currentRealPosition);
+                if (null == templateItem
+                        || templateItem.getFragmentCount() == 0
+                        || templateItem.getVideoInfo() == null
+                        || TextUtils.isEmpty(templateItem.getExtra())) {
+                    //后端下发的模版数据有误，上报异常监控
+                    Toast.makeText(OlaTemplateFeedActivity.this, "后端下发的模版数据有误，上报异常监控", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String videoCache = httpProxyCacheServer.getProxyUrl(templateItem.getVideoInfo().getUrl());
+                //在进入视频编辑前先将audioParam里面的clipStart和clipEnd时间更新
+                audioParam.setTimeClipStart((long) startEditTime * 1000);
+                audioParam.setTimeClipEnd((long) endEditTime * 1000);
+                Intent cutSameIntent = CutSameUiIF.INSTANCE.createCutUIIntent(OlaTemplateFeedActivity.this, templateItem, audioParam, videoCache);
+                if (cutSameIntent != null) {
+                    cutSameIntent.setPackage(getPackageName());
+                    startActivity(cutSameIntent);
+                }
+            }
+
+            @Override
+            public void onClipAudioClick(View view) {
+                showAudioClipMenu();
+            }
+        };
     }
 
     /**
@@ -369,7 +423,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mTvCurrentPlayTime = findViewById(R.id.tv_current_play_time);
         mMixerRecyclerView = findViewById(R.id.recyclerview_video_mixer);
         TextView mTvVideoTotalTime = findViewById(R.id.tv_total_video_time);
-        mTvVideoTotalTime.setText(FileUtil.INSTANCE.stringForTime(mAudioMixingEntry.getEndTimeMs()));
+        mTvVideoTotalTime.setText(FileUtil.stringForTime(mAudioMixingEntry.getEndTimeMs()));
         calculateAudioHighPart(DEFAULT_HIGH_DURATION);
         initRecyclerView();
     }
@@ -469,7 +523,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         mMixerSeekbar = inflate.findViewById(R.id.temp_video_player_seekbar);
         mMixerSeekbar.setAudioHighlight(startEditTime / songTotalDuration, endEditTime / songTotalDuration);
         TextView audioTotalTime = inflate.findViewById(R.id.tv_total_video_time);
-        audioTotalTime.setText(FileUtil.INSTANCE.stringForTime(mAudioMixingEntry.getEndTimeMs()));
+        audioTotalTime.setText(FileUtil.stringForTime(mAudioMixingEntry.getEndTimeMs()));
         FrameLayout mSeekBarMixerPeople = inflate.findViewById(R.id.seekbar_mixer_people);
         FrameLayout mSeekBarMixerAccompany = inflate.findViewById(R.id.seekbar_mixer_accompany);
         initMixerSeekBar(mSeekBarMixerPeople, mSeekBarMixerAccompany);
@@ -505,6 +559,17 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         });
     }
 
+    /**
+     * 合成导出素材
+     */
+    private void exportMaterial(){
+            Intent createExportUIIntent = CutSameUiIF.INSTANCE.createExportUIIntent(
+                    this,
+                    templateItemList.get(currentRealPosition).getTemplateUrl(),
+                    new com.bytedance.ies.cutsame.util.Size(SizeUtil.INSTANCE.dp2px(260f),SizeUtil.INSTANCE.dp2px(460f)));
+            startActivityForResult(createExportUIIntent, REQUEST_CODE_NEXT);
+        }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -530,7 +595,7 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
     }
 
     private void startPlay(ImageView videStateView) {
-        if (null != nleEditorContext) {
+        if (null != nleEditorContext && null != nleEditorContext.nleSession.getDataSource()) {
             nleEditorContext.getPlayer().play();
             calculateAudioHighPart(nleEditorContext.getPlayer().totalDuration());
             if (null != videStateView) {
@@ -547,11 +612,15 @@ public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBan
         if (null != nleEditorContext && null != editorActivityDelegate) {
             //切换视频后，应该从有歌词的位置开始播放，这个seekTo(0)目前不准确
             BbEffectCoreImpl.INSTANCE.setAudioMixingPosition(0);
-            List<String> filePathList = new ArrayList<>();
-            filePathList.add(mVideoItemView.videoFilePath);
-            editorActivityDelegate.importVideoMedia(filePathList);
-            nleEditorContext.getPlayer().resume();
-            startPlay(videoItemView.getVideStateView());
+            if (null != editorActivityDelegate && !TextUtils.isEmpty(coverPath) && !TextUtils.isEmpty(draftModelPath) && position == templateItemList.size() - 1) {
+                editorActivityDelegate.restoreDraftContent(draftModelPath);
+            } else {
+                List<String> filePathList = new ArrayList<>();
+                filePathList.add(mVideoItemView.videoFilePath);
+                editorActivityDelegate.importVideoMedia(filePathList);
+                nleEditorContext.getPlayer().resume();
+                startPlay(videoItemView.getVideStateView());
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ open class BaseNLEHandler(protected val editorContext: IEditorContext) {
             }
         }
     }
+
     protected val nleEditor: NLEEditor by lazy {
         editorContext.getNLEEditor()
     }

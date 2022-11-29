@@ -1,13 +1,30 @@
 package com.cutsame.ui.utils
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.graphics.Bitmap
+import android.util.Log
 import java.io.*
 import java.nio.charset.StandardCharsets
+import java.util.*
 
 class FileUtil {
     companion object {
 
+        //转换成字符串的时间
+        private val mFormatBuilder = StringBuilder()
+        private val mFormatter = Formatter(mFormatBuilder, Locale.getDefault())
+
+        private const val LOCAL_RESOURCE = "LocalResource"
+        const val CUTSAME_VIDEO_COVER = "cutsame_video_cover.jpg"
+
+        fun getLocalResourcePath(mContext: Context): String {
+            return mContext.getExternalFilesDir("assets")?.absolutePath + File.separator + LOCAL_RESOURCE
+        }
+
+        /**
+         * 在APP退出的时候注意清理这个文件夹里面的内容
+         */
         fun getExternalTmpSaveName(name: String = "", context: Context): String {
             val dir = context.getExternalFilesDir("tmp_save")
                 ?: File(context.filesDir.absolutePath, "tmp_save")
@@ -19,6 +36,32 @@ class FileUtil {
 
 
         /**
+         * 把毫秒转换成：1：20：30这样的形式
+         */
+        @JvmStatic
+        fun stringForTime(timeMs: Long): String {
+            val totalSeconds = (timeMs / 1000).toInt()
+            val seconds = totalSeconds % 60
+            val minutes = totalSeconds / 60 % 60
+            val hours = totalSeconds / 3600
+            mFormatBuilder.setLength(0)
+            return if (hours > 0) {
+                mFormatter.format(
+                    "%d:%02d:%02d",
+                    hours,
+                    minutes,
+                    seconds
+                ).toString()
+            } else {
+                mFormatter.format(
+                    "%02d:%02d",
+                    minutes,
+                    seconds
+                ).toString()
+            }
+        }
+
+        /**
          * 校验文件是否有效
          *
          * @param path
@@ -28,7 +71,6 @@ class FileUtil {
             val file = File(path)
             return file.exists() && file.isFile && file.length() > 0
         }
-
 
         //读取json文件
         fun readJsonFile(fileName: String?): String {
@@ -189,7 +231,6 @@ class FileUtil {
             }
         }
 
-
         private fun newFile(filePath: String?, fileName: String?): File? {
             if (filePath == null || filePath.isEmpty() || fileName == null || fileName.isEmpty()) {
                 return null
@@ -251,6 +292,105 @@ class FileUtil {
                     removeFile(f)
                 }
                 file.delete()
+            }
+        }
+
+        // 将字符串写入到文本文件中
+        fun writeTxtToFile(strContent: String, filePath: String, fileName: String): String {
+            //生成文件夹之后，再生成文件，不然会出错
+            makeFilePath(filePath, fileName)
+            val strFilePath = filePath + File.separator + fileName
+            try {
+                val file = File(strFilePath)
+                if (file.exists()) {
+                    file.delete()
+                }
+                file.createNewFile()
+                val raf = RandomAccessFile(file, "rw")
+                raf.seek(file.length())
+                raf.write(strContent.toByteArray())
+                raf.close()
+                return strFilePath
+            } catch (e: Exception) {
+                //igoner
+            }
+            return ""
+        }
+
+        //生成文件
+        private fun makeFilePath(filePath: String?, fileName: String?): File? {
+            var file: File? = null
+            makeRootDirectory(filePath)
+            try {
+                file = File(filePath, fileName)
+                if (!file.exists()) {
+                    file.createNewFile()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return file
+        }
+
+        //生成文件夹
+        private fun makeRootDirectory(filePath: String?) {
+            val file: File
+            try {
+                file = File(filePath)
+                if (!file.exists()) {
+                    file.mkdir()
+                }
+            } catch (e: Exception) {
+                Log.i("error:", e.toString() + "")
+            }
+        }
+
+        /**
+         * 递归拷贝Asset目录中的文件到rootDir中
+         * Recursively copy the files in the Asset directory to rootDir
+         * @param assets
+         * @param path  assets 下的path  eg: resource/duet.bundle/duet.json
+         * @param dstRootDir
+         * @throws IOException
+         */
+        @Throws(IOException::class)
+        fun copyAssets(assets: AssetManager, path: String, dstRootDir: String) {
+            if (isAssetsDir(assets, path)) {
+                val dir = File(dstRootDir + File.separator + path)
+                check(!(!dir.exists() && !dir.mkdirs())) { "mkdir failed" }
+                for (s in assets.list(path)!!) {
+                    copyAssets(assets, "$path/$s", dstRootDir)
+                }
+            } else {
+                val input = assets.open(path)
+                val dest = File(dstRootDir, path)
+                copyToFileOrThrow(input, dest)
+            }
+        }
+
+        private fun isAssetsDir(assets: AssetManager, path: String): Boolean {
+            try {
+                val files = assets.list(path)
+                return files != null && files.isNotEmpty()
+            } catch (e: IOException) {
+                Log.e("isAssetsDir", "isAssetsDir:", e)
+            }
+            return false
+        }
+
+        @Throws(IOException::class)
+        private fun copyToFileOrThrow(inputStream: InputStream, destFile: File) {
+            if (destFile.exists()) {
+                return
+            }
+            val file = destFile.parentFile
+            if (file != null && !file.exists()) {
+                file.mkdirs()
+            }
+            inputStream.use { input ->
+                destFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
             }
         }
     }

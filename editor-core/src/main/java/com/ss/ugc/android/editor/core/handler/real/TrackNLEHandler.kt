@@ -71,12 +71,12 @@ class TrackNLEHandler(editorContext: IEditorContext) : BaseNLEHandler(editorCont
                     // 添加index Mapping,主轨都是0
                 })
             }
-            nleModel.clearTrack() // TODO: 先全部清空，仅保持只有一条轨道
+            editorContext.nleModel.clearTrack() // TODO: 先全部清空，仅保持只有一条轨道
             // 添加轨道到model
-            nleModel.addTrack(nleMainTrack)
-            nleModel.mainTrack.setExtra(Constants.MAIN_TRACK_MUTE_ENABLE, "true") // 设置轨道区原声按钮enable
+            editorContext.nleModel.addTrack(nleMainTrack)
+//            nleModel.mainTrack.setExtra(Constants.MAIN_TRACK_MUTE_ENABLE, "true") // 设置轨道区原声按钮enable
             val fixedRatio: CanvasRatio = KVSettingsManager.get(FIXED_CANVAS_RATIO, ORIGINAL)
-            nleModel.canvasRatio = when (fixedRatio) {
+            editorContext.nleModel.canvasRatio = when (fixedRatio) {
                 is RATIO_9_16 -> 9F / 16F
                 is RATIO_3_4 -> 3F / 4F
                 is RATIO_1_1 -> 1F / 1F
@@ -97,7 +97,7 @@ class TrackNLEHandler(editorContext: IEditorContext) : BaseNLEHandler(editorCont
                 resourceFile = ""
                 resourceType = NLEResType.IMAGE
             }
-            nleModel.cover = NLEVideoFrameModel().apply {
+            editorContext.nleModel.cover = NLEVideoFrameModel().apply {
                 coverMaterial = NLEStyCanvas().apply {
                     type = NLECanvasType.VIDEO_FRAME
                     image = imageCover

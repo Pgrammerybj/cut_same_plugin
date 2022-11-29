@@ -8,8 +8,8 @@ import com.ss.ugc.android.editor.core.api.CommitLevel
 import com.ss.ugc.android.editor.core.api.params.AudioParam
 import com.ss.ugc.android.editor.core.handler.IAudioNLEHandler
 import com.ss.ugc.android.editor.core.publicUtils.MediaUtil
+import com.ss.ugc.android.editor.core.utils.AssetsUtils
 import com.ss.ugc.android.editor.core.utils.DLog
-import com.ss.ugc.android.editor.core.utils.FileUtil
 import java.util.concurrent.TimeUnit
 
 /**
@@ -184,7 +184,7 @@ class AudioNLEHandler(editorContext: IEditorContext) : BaseNLEHandler(editorCont
                     if (param.timeClipEnd == 0L) TimeUnit.MILLISECONDS.toMicros(duration.toLong()) else param.timeClipEnd
                 // 歌词内容，注意resourceFile 字段传入的是字符串
                 srtFile = NLEResourceNode().apply {
-                    resourceFile = FileUtil.readJsonFile(param.srtPath)
+                    resourceFile = AssetsUtils.readJsonFile(param.srtPath)
                     resourceType = NLEResType.SRT
                 }
                 // 歌词样式，resourceFile 传入的是歌词样式在SD卡上的路径

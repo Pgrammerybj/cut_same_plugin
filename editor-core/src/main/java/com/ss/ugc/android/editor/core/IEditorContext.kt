@@ -33,6 +33,11 @@ interface IEditorContext {
     fun getSelectedTrackSlot(): NLETrackSlot?
 
     /**
+     * 剪同款到模版首页，恢复NLEModel数据
+     */
+    fun restoreDraft(data: String): NLEError
+
+    /**
      * 环境变量接口
      */
     var envVariables: IEnvVariables

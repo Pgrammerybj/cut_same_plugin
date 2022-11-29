@@ -144,29 +144,6 @@ object PickerConstant {
         return intent.getParcelableArrayListExtra(ARG_DATA_COMPRESS_RESULT_MEDIA_ITEMS)
     }
 
-    private const val INTERFACE_MORE_EDITOR = "record_sdk_action_ve"
-    private const val ARG_DATA_MORE_EDITOR_FROM_BUSINESS = "extra_key_from_type"
-    private const val ARG_DATA_MORE_EDITOR_FROM_BUSINESS_CUTSAME = 100
-
-    /**
-     * 创建更多编辑页面的Intent
-     * @param
-     * @return
-     */
-    fun createMoreEditorUIIntent(context: Context): Intent? {
-        val intent = Intent(INTERFACE_MORE_EDITOR)
-        intent.putExtra(
-            ARG_DATA_MORE_EDITOR_FROM_BUSINESS,
-            ARG_DATA_MORE_EDITOR_FROM_BUSINESS_CUTSAME
-        )
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        return if (checkIntent(context, intent)) {
-            intent
-        } else {
-            null
-        }
-    }
-
     private fun checkIntent(context: Context, intent: Intent): Boolean {
         val queryIntentActivities = context.packageManager.queryIntentActivities(intent, 0)
         var size = 0

@@ -1,9 +1,9 @@
 package com.angelstar.ola.entity;
 
 import android.content.Context
+import com.cutsame.ui.utils.FileUtil
 import com.cutsame.ui.utils.JsonHelper
 import com.ss.ugc.android.editor.core.api.params.AudioParam
-import com.ss.ugc.android.editor.core.utils.FileUtil
 import java.io.File
 
 /**
@@ -15,8 +15,6 @@ import java.io.File
  */
 
 object OlaLyricsConvertSrtFile {
-
-    private const val LOCAL_RESOURCE = "LocalResource"
 
     fun startConvert(audioMixingEntry: AudioMixingEntry, mContext: Context): AudioParam? {
         if (audioMixingEntry.singTimeLyricList.size == 0) {
@@ -33,8 +31,8 @@ object OlaLyricsConvertSrtFile {
         val lyricsSrtEntry = LyricsSrtEntry(header, lyricsList)
         //2️⃣TODO：将实体装换成JSON写入文件
         val lyricsSrtString = JsonHelper.toJsonString(lyricsSrtEntry)
-        val localResourcePath = getLocalResourcePath(mContext)
-        val audioPath = getLocalResourcePath(mContext) + File.separator
+        val localResourcePath = FileUtil.getLocalResourcePath(mContext)
+        val audioPath = FileUtil.getLocalResourcePath(mContext) + File.separator
         val lyricName = audioMixingEntry.songName
         FileUtil.writeTxtToFile(
             lyricsSrtString,
@@ -57,7 +55,7 @@ object OlaLyricsConvertSrtFile {
     }
 
 
-    private fun getLocalResourcePath(mContext: Context): String {
-        return mContext.getExternalFilesDir("assets")?.absolutePath + File.separator + LOCAL_RESOURCE
-    }
+//    private fun getLocalResourcePath(mContext: Context): String {
+//        return mContext.getExternalFilesDir("assets")?.absolutePath + File.separator + LOCAL_RESOURCE
+//    }
 }

@@ -54,6 +54,36 @@ object CutSameUiIF {
         }
     }
 
+    private const val OLA_TEMPLATE_LIST = "com.angelstar.ola.process.OlaTemplateFeedActivity"
+    const val ARG_DATA_NLE_MODEL_FILE_PATH = "arg_data_nle_model_file_path"
+    const val ARG_DATA_COVER_FILE_PATH = "arg_data_cover_file_path"
+    const val ARG_DATA_MORE_EDITOR_FROM_BUSINESS = "extra_key_from_type"
+    const val ARG_DATA_MORE_EDITOR_FROM_BUSINESS_CUTSAME = 100
+
+    /**
+     * 跳转到模版列表页面的Intent
+     * @param writeFilePath 写入到本地的nleModel文件路径，使用后该文件将会删除
+     */
+    fun jumpToOlaTemplateListIntent(
+        context: Context,
+        writeFilePath: String,
+        coverPath: String
+    ): Intent? {
+        val intent = Intent(OLA_TEMPLATE_LIST)
+        intent.putExtra(ARG_DATA_NLE_MODEL_FILE_PATH, writeFilePath)
+        intent.putExtra(ARG_DATA_COVER_FILE_PATH, coverPath)
+        intent.putExtra(
+            ARG_DATA_MORE_EDITOR_FROM_BUSINESS,
+            ARG_DATA_MORE_EDITOR_FROM_BUSINESS_CUTSAME
+        )
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return if (checkIntent(context, intent)) {
+            intent
+        } else {
+            null
+        }
+    }
+
     private const val ARG_DATA_PICK_RESULT_MEDIA_ITEMS = "arg_data_pick_result_media_items"
     const val ARG_DATA_PRE_PICK_RESULT_MEDIA_ITEMS =
         "arg_data_pre_pick_result_media_items" //当前槽位信息，为了在素材选择页面在已选槽位上提醒"已选"。

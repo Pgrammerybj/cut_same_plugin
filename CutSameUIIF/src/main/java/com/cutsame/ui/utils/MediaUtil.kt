@@ -1,6 +1,5 @@
 package com.cutsame.ui.utils
 
-import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -12,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import androidx.annotation.RequiresPermission
 import androidx.annotation.WorkerThread
 import androidx.core.content.FileProvider
 import java.io.File
