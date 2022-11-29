@@ -1,6 +1,6 @@
-package com.angelstar.cutsame.cut_same_plugin_example;
+package com.ola.editor.kit_example;
 
-import com.angelstar.ola.APP;
+import com.ola.editor.kit.APP;
 
 /**
  * @Author：yangbaojiang
