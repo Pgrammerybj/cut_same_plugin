@@ -59,7 +59,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="50dp">
 
-        <com.angelstar.ola.view.audioclip.AudioCropSeekBar
+        <com.ola.editor.kit.view.audioclip.AudioCropSeekBar
             android:id="@+id/audio_clip_seekbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

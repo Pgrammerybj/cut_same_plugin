@@ -29,9 +29,22 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation rootProject.ext.support["recyclerview"]
     api rootProject.ext.support["appcompat"]
-
+//
     implementation project(":LocalRepo:aar_nleeditor_ck")
     implementation project(":LocalRepo:aar_vesdk")
+
+
+    //添加VESDK依赖
+//    api ("com.bytedance.ugc.framework.libs:vesdk:11.8.0.154-alpha-tob"){
+//        force = true
+//    }
+//    // 添加NLE SDK依赖
+//    api ("com.volcengine.ck.nle:NLEMediaPublic:4.0.0-rc.1"){
+//        force = true
+//    }
+//    api ("com.volcengine.ck.nle:NLEProcessor:4.0.0-rc.1"){
+//        force = true
+//    }
 
     api 'com.google.code.gson:gson:2.9.1'
     api "org.jetbrains.kotlin:kotlin-stdlib:${rootProject.ext.kotlin_version}"

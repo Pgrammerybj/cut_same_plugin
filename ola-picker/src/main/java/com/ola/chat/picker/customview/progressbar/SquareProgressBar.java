@@ -341,7 +341,6 @@ public class SquareProgressBar extends RelativeLayout {
 
     /**
      * Defines if the percent text should be shown or not. To modify the text
-     * checkout {@link #setPercentStyle(PercentStyle)}.
      *
      * @param showProgress true if it should or not.
      * @since 1.3.0
@@ -375,8 +374,6 @@ public class SquareProgressBar extends RelativeLayout {
     }
 
     /**
-     * Returns the {@link PercentStyle} of the percent text. Maybe returns the
-     * default value, check {@link #setPercentStyle(PercentStyle)} fo that.
      *
      * @return the percent style of the moment.
      */

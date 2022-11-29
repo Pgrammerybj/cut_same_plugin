@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.bytedance.ies.cutsame.cut_android.TemplateError
 import com.cutsame.solution.player.BasePlayer
 import com.cutsame.solution.player.GetImageListener
+
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.OnFloatSliderChangeListener
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener

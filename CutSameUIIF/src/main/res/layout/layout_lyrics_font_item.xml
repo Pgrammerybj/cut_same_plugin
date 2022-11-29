@@ -57,8 +57,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:textColor="@color/selector_font_text_press"
         android:textSize="13sp"
         tools:text="经典" />
+<!--    android:textColor="@color/selector_font_text_press"-->
+
 
 </LinearLayout>

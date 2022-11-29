@@ -73,7 +73,7 @@
         android:textSize="15sp" />
 
     <!--AI降噪-->
-    <com.angelstar.ola.view.ScaleSlideBar
+    <com.ola.editor.kit.view.ScaleSlideBar
         android:id="@+id/scale_slide_bar"
         android:layout_width="match_parent"
         android:layout_height="40dp"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.angelstar.ola">
+    package="com.ola.editor.kit">
 
     <application android:theme="@android:style/Theme.Light.NoTitleBar">
         <activity
@@ -9,7 +9,7 @@
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
-                <action android:name="com.angelstar.ola.process.OlaTemplateFeedActivity" />
+                <action android:name="com.ola.editor.kit.process.OlaTemplateFeedActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

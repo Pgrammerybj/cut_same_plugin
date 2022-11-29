@@ -16,9 +16,9 @@ public final class GeneratedPluginRegistrant {
   private static final String TAG = "GeneratedPluginRegistrant";
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
-      flutterEngine.getPlugins().add(new com.angelstar.cutsame.cut_same_plugin.CutSamePlugin());
+      flutterEngine.getPlugins().add(new com.ola.editor.kit.CutSamePlugin());
     } catch(Exception e) {
-      Log.e(TAG, "Error registering plugin cut_same_plugin, com.angelstar.cutsame.cut_same_plugin.CutSamePlugin", e);
+      Log.e(TAG, "Error registering plugin cut_same_plugin, com.ola.editor.kit.CutSamePlugin", e);
     }
   }
 }

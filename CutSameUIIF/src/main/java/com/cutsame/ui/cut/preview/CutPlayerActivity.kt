@@ -24,8 +24,8 @@ import com.cutsame.solution.template.model.TemplateItem
 import com.cutsame.ui.CutSameUiIF
 import com.cutsame.ui.CutSameUiIF.ARG_CUT_SAME_AUDIO_PARAM
 import com.cutsame.ui.CutSameUiIF.ARG_TEMPLATE_ITEM
+
 import com.cutsame.ui.R
-import com.cutsame.ui.cut.videoedit.customview.VideoFrameHelper
 import com.cutsame.ui.exten.FastMain
 import com.cutsame.ui.utils.CutSameTemplateUtils
 import com.cutsame.ui.utils.FileUtil

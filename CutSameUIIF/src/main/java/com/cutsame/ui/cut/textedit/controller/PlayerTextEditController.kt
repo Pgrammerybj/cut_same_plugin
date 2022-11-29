@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.bytedance.ies.cutsame.util.SizeUtil
+
 import com.cutsame.ui.R
 import com.cutsame.ui.customview.setGlobalDebounceOnClickListener
 import com.cutsame.ui.cut.textedit.*

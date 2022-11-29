@@ -50,8 +50,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation project(":CutSameUIIF")
-    implementation project(":ola-banner")
-    implementation project(":ola-download")
     implementation project(":editor-core")
     //Ola音频播放器
     implementation project(":LocalRepo:aar_effect_core")
@@ -63,4 +61,30 @@ dependencies {
     implementation rootProject.ext.dependencies["retrofit2_converter-gson"]
     implementation rootProject.ext.dependencies["videocache"]
     implementation rootProject.ext.dependencies["glide"]
+
+    //Retrofit+RxJava
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.google.code.gson:gson:2.10'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    api 'io.reactivex.rxjava2:rxjava:2.2.21'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //添加VESDK依赖
+//    api ("com.bytedance.ugc.framework.libs:vesdk:11.8.0.154-alpha-tob"){
+//        force = true
+//    }
+//    // 添加NLE SDK依赖
+//    api ("com.volcengine.ck.nle:NLEMediaPublic:4.0.0-rc.1"){
+//        force = true
+//    }
+//    api ("com.volcengine.ck.nle:NLEProcessor:4.0.0-rc.1"){
+//        force = true
+//    }
+
+//    api "com.bytedance.speechengine:speechengine_tts_online_tob:1.0.2-alpha.0"
+//    kapt "com.bytedance.news.common:service-manager-processor:1.0.9"
+//    api "com.bytedance.frameworks.baselib:ttnet:4.0.27.1-rc.9-tob"
+
 }

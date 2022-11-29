@@ -26,7 +26,7 @@ class NLEEditorContext(activity: FragmentActivity) : BaseViewModel(activity), IE
     override val nleModel: NLEModel
         get() = getNLEModel()
 
-    override lateinit var nleTemplateModel: NLETemplateModel
+//    override lateinit var nleTemplateModel: NLETemplateModel
 
     override var envVariables: IEnvVariables = LiveDataEnvVariables()
     override var editorClientChannel: IEditorClientChannel? = null

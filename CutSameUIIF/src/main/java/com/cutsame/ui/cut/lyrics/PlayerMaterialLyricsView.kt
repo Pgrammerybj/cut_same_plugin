@@ -7,7 +7,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.Toast
+
 import com.cutsame.ui.R
+
 import com.cutsame.ui.customview.SpacesItemDecoration
 import com.cutsame.ui.cut.lyrics.colorselect.OnColorSelectedListener
 import com.cutsame.ui.cut.preview.CutPlayerActivity

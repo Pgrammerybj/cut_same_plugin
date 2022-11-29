@@ -21,7 +21,7 @@
             android:layout_marginBottom="20dp" />
 
         <!-- 模版轮播-->
-        <com.angelstar.ybj.xbanner.OlaBannerView
+        <com.ola.editor.kit.banner.OlaBannerView
             android:id="@+id/banner_view"
             android:layout_width="match_parent"
             android:layout_height="480dp"

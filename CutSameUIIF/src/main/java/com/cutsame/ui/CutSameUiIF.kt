@@ -53,7 +53,7 @@ object CutSameUiIF {
         }
     }
 
-    private const val OLA_TEMPLATE_LIST = "com.angelstar.ola.process.OlaTemplateFeedActivity"
+    private const val OLA_TEMPLATE_LIST = "com.ola.editor.kit.process.OlaTemplateFeedActivity"
     const val ARG_DATA_NLE_MODEL_FILE_PATH = "arg_data_nle_model_file_path"
     const val ARG_DATA_COVER_FILE_PATH = "arg_data_cover_file_path"
     const val ARG_DATA_MORE_EDITOR_FROM_BUSINESS = "extra_key_from_type"

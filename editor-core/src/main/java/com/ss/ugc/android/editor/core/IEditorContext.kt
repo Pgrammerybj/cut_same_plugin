@@ -48,7 +48,7 @@ interface IEditorContext {
      */
     var editor: IEditor
     val nleModel: NLEModel
-    var nleTemplateModel: NLETemplateModel
+//    var nleTemplateModel: NLETemplateModel
 
     /**
      * 播放器接口

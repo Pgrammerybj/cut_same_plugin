@@ -60,7 +60,9 @@ dependencies {
     implementation rootProject.ext.dependencies["gson"]
 
     api project(":LocalRepo:aar_cutsamef")
+
     api project(":LocalRepo:aar_nleeditor_ck")
+
     api project(":ola-picker")
     api project(":editor-core")
 }
