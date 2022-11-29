@@ -1,8 +1,8 @@
 package com.ola.editor.kit.entity;
 
 import android.content.Context
-import com.cutsame.ui.utils.FileUtil
-import com.cutsame.ui.utils.JsonHelper
+import com.ola.editor.kit.cutsame.utils.FileUtil
+import com.ola.editor.kit.cutsame.utils.JsonHelper
 import com.ss.ugc.android.editor.core.api.params.AudioParam
 import java.io.File
 

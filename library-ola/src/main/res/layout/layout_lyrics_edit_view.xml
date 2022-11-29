@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><!--歌词展示区-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <com.ola.editor.kit.cutsame.cut.lyrics.colorselect.ColorSelectContainer
+        android:id="@+id/materialColorSelectContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/materialLyricsRecycleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+</LinearLayout>

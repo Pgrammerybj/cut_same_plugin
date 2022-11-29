@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:ignore="MissingDefaultResource">
+
+    <Space
+        android:id="@+id/glClipSurface"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/rl_title" />
+
+    <SurfaceView
+        android:id="@+id/clipSurface"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/controlPanel"
+        app:layout_constraintTop_toBottomOf="@+id/rl_title" />
+
+    <com.ola.editor.kit.cutsame.cut.videoedit.customview.CenterMaskView
+        android:id="@+id/clipMask"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:civLineColor="#ffffff"
+        app:civLineWidth="2dp"
+        app:civMaskColor="#FF0E0F1A"
+        app:layout_constraintBottom_toBottomOf="@id/clipSurface"
+        app:layout_constraintLeft_toLeftOf="@id/clipSurface"
+        app:layout_constraintRight_toRightOf="@id/clipSurface"
+        app:layout_constraintTop_toTopOf="@id/clipSurface" />
+
+    <com.ola.editor.kit.cutsame.cut.videoedit.customview.gesture.VideoEditorGestureLayout
+        android:id="@+id/editorGestureLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/clipSurface"
+        app:layout_constraintLeft_toLeftOf="@id/clipSurface"
+        app:layout_constraintRight_toRightOf="@id/clipSurface"
+        app:layout_constraintTop_toTopOf="@id/clipSurface" />
+
+
+    <!--Title标题-->
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:padding="10dp"
+            android:src="@mipmap/ic_back"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/bottomTitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/cutsame_edit_title_picture_cut"
+            android:textColor="@color/text_white"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/sureBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_clip_confirm"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="@string/cutsame_common_sure"
+            android:textColor="@color/text_white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!--视频播放按钮-->
+    <ImageView
+        android:id="@+id/playIv"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@mipmap/ic_video_playing"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/clipSurface"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/clipSurface"
+        tools:visibility="visible" />
+
+    <!--视频裁剪面板-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/controlPanel"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <View
+            android:id="@+id/base"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="26dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/timeClipLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:background="@drawable/bg_panel"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/clipTimeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:layout_marginBottom="23dp"
+                android:text="@string/cutsame_edit_multi_video_time_select"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toTopOf="@id/timeSelectView"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+
+            <com.ola.editor.kit.cutsame.cut.videoedit.customview.SingleSelectFrameView
+                android:id="@+id/timeSelectView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

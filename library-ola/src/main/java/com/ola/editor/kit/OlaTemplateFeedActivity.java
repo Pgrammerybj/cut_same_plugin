@@ -45,10 +45,10 @@ import com.ola.editor.kit.banner.OlaBannerView;
 import com.ola.editor.kit.banner.VideoItemView;
 import com.ola.editor.kit.banner.indicator.RectangleIndicator;
 import com.cutsame.solution.template.model.TemplateItem;
-import com.cutsame.ui.CutSameUiIF;
-import com.cutsame.ui.template.play.PlayCacheServer;
-import com.cutsame.ui.utils.FileUtil;
-import com.cutsame.ui.utils.JsonHelper;
+import com.ola.editor.kit.cutsame.CutSameUiIF;
+import com.ola.editor.kit.cutsame.PlayCacheServer;
+import com.ola.editor.kit.cutsame.utils.FileUtil;
+import com.ola.editor.kit.cutsame.utils.JsonHelper;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.ola.chat.picker.utils.MTUtils;
@@ -70,7 +70,7 @@ import java.util.Locale;
 import io.reactivex.disposables.Disposable;
 import kotlin.Unit;
 
-import static com.cutsame.ui.cut.preview.CutPlayerActivityKt.REQUEST_CODE_NEXT;
+import static com.ola.editor.kit.cutsame.cut.preview.CutPlayerActivityKt.REQUEST_CODE_NEXT;
 import static com.ss.ugc.android.editor.core.NLEEditorInstance.KEY_NLE_EDITOR_CONTEXT;
 
 public class OlaTemplateFeedActivity extends AppCompatActivity implements OlaBannerView.ScrollPageListener {

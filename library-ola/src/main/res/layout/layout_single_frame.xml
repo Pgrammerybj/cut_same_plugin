@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    tools:ignore="MissingDefaultResource">
+
+    <com.ola.editor.kit.cutsame.cut.videoedit.customview.ScrollListenerView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:scaleType="centerCrop"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.ola.editor.kit.cutsame.cut.videoedit.customview.ItemFrameView
+                android:id="@+id/itemFrameView"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp">
+
+            </com.ola.editor.kit.cutsame.cut.videoedit.customview.ItemFrameView>
+        </LinearLayout>
+
+    </com.ola.editor.kit.cutsame.cut.videoedit.customview.ScrollListenerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/ivRight"
+            android:layout_width="60dp"
+            android:layout_height="62dp"
+            android:layout_gravity="center_vertical"
+            android:background="#99161823" />
+
+        <View
+            android:id="@+id/vFrameCover"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_frames_box" />
+
+        <View
+            android:id="@+id/ivLeft"
+            android:layout_width="60dp"
+            android:layout_height="62dp"
+            android:background="#99161823" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivProgressLine"
+        android:layout_width="2dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="60dp"
+        android:src="@drawable/bg_frame_cut_line" />
+
+</RelativeLayout>
+

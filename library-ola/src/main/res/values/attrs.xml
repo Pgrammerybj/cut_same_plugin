@@ -11,7 +11,30 @@
         <attr name="floatingBottom" format="boolean" />
         <attr name="audioHighlightStart" format="dimension"/>
         <attr name="audioHighlightEnd" format="dimension"/>
+
+        <attr name="lineDefColor" format="color" />
+<!--        <attr name="lineHintColor" format="color" />-->
+<!--        <attr name="lineChooseColor" format="color" />-->
+<!--        <attr name="handleColor" format="color" />-->
+<!--        <attr name="handle_radius" format="dimension" />-->
+<!--        <attr name="lineWidth" format="dimension" />-->
+<!--        <attr name="fillWidth" format="boolean" />-->
+<!--        <attr name="floatingBottom" format="boolean" />-->
+        <attr name="showSubProgress" format="boolean">false</attr>
     </declare-styleable>
+
+
+<!--    <declare-styleable name="OlaSliderView">-->
+<!--        <attr name="lineDefColor" format="color" />-->
+<!--        <attr name="lineHintColor" format="color" />-->
+<!--        <attr name="lineChooseColor" format="color" />-->
+<!--        <attr name="handleColor" format="color" />-->
+<!--        <attr name="handle_radius" format="dimension" />-->
+<!--        <attr name="lineWidth" format="dimension" />-->
+<!--        <attr name="fillWidth" format="boolean" />-->
+<!--        <attr name="floatingBottom" format="boolean" />-->
+<!--        <attr name="showSubProgress" format="boolean">false</attr>-->
+<!--    </declare-styleable>-->
 
     <declare-styleable name="BannerView">
         <attr name="banner_page_margin" format="dimension" />
@@ -45,14 +68,30 @@
     </declare-styleable>
 
     <declare-styleable name="ScrollTrackView">
-        <attr name="background_color" format="color"></attr>
-        <attr name="foreground_color" format="color"></attr>
-        <attr name="space_size" format="dimension"></attr>
-        <attr name="track_item_width" format="dimension"></attr>
+        <attr name="background_color" format="color"/>
+        <attr name="foreground_color" format="color"/>
+        <attr name="space_size" format="dimension"/>
+        <attr name="track_item_width" format="dimension"/>
         <attr name="track_fragment_count" format="integer"/>
         <attr name="auto_run" format="boolean"/>
         <attr name="cut_duration" format="integer"/>
         <attr name="loop_run" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="CenterMaskView">
+        <attr name="civLineColor" format="color" />
+        <attr name="civLineWidth" format="dimension" />
+        <attr name="civMaskColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CircularProgressView">
+        <attr name="backWidth" format="dimension" />    <!--背景圆环宽度-->
+        <attr name="progWidth" format="dimension" />    <!--进度圆环宽度-->
+        <attr name="backColor" format="color" />        <!--背景圆环颜色-->
+        <attr name="progColor" format="color" />        <!--进度圆环颜色-->
+        <attr name="progStartColor" format="color" />   <!--进度圆环开始颜色-->
+        <attr name="progFirstColor" format="color" />   <!--进度圆环结束颜色-->
+        <attr name="progress1" format="integer" />       <!--圆环进度-->
     </declare-styleable>
 
 </resources>

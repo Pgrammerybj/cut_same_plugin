@@ -22,6 +22,6 @@ include ':LocalRepo:aar_karaoke'
 include ':library-ola'
 include ':ola-picker'
 //剪同款库
-include ':CutSameUIIF'
+//include ':CutSameUIIF'
 //基础编辑
 include ':editor-core'

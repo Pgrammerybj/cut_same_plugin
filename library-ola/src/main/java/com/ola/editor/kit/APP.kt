@@ -10,8 +10,8 @@ import com.cutsame.solution.AuthorityConfig
 import com.cutsame.solution.CutSameSolution
 import com.cutsame.solution.EffectFetcherConfig
 import com.cutsame.solution.TemplateFetcherConfig
-import com.cutsame.ui.ApiUtil
-import com.cutsame.ui.AppContext
+import com.ola.editor.kit.cutsame.ApiUtil
+import com.ola.editor.kit.cutsame.AppContext
 import com.ss.android.ugc.cut_log.LogConfig
 import com.ss.android.ugc.cut_log.LogIF
 import com.ss.android.ugc.cut_log.LogWrapper

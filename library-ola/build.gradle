@@ -49,7 +49,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation project(":CutSameUIIF")
+//    implementation project(":CutSameUIIF")
     implementation project(":editor-core")
     //Ola音频播放器
     implementation project(":LocalRepo:aar_effect_core")
@@ -62,29 +62,25 @@ dependencies {
     implementation rootProject.ext.dependencies["videocache"]
     implementation rootProject.ext.dependencies["glide"]
 
+//    CutSame
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${rootProject.ext.kotlin_version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${rootProject.ext.kotlinx_coroutines}"
+    implementation rootProject.ext.support["recyclerview"]
+    implementation rootProject.ext.support["constraint-layout"]
+    implementation rootProject.ext.support["swiperefreshlayout"]
+    implementation rootProject.ext.support["androidx-lifecycle"]
+    implementation rootProject.ext.dependencies["lottie"]
+    implementation rootProject.ext.dependencies["gson"]
+
+    api project(":LocalRepo:aar_cutsamef")
+    api project(":LocalRepo:aar_nleeditor_ck")
+
+    api project(":ola-picker")
+    api project(":editor-core")
+
+
     //Retrofit+RxJava
     api 'com.squareup.retrofit2:retrofit:2.9.0'
-    api 'com.google.code.gson:gson:2.10'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'io.reactivex.rxjava2:rxjava:2.2.21'
-    api 'com.squareup.retrofit2:converter-gson:2.9.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    api 'com.squareup.retrofit2:converter-gson:2.9.0'
-
-    //添加VESDK依赖
-//    api ("com.bytedance.ugc.framework.libs:vesdk:11.8.0.154-alpha-tob"){
-//        force = true
-//    }
-//    // 添加NLE SDK依赖
-//    api ("com.volcengine.ck.nle:NLEMediaPublic:4.0.0-rc.1"){
-//        force = true
-//    }
-//    api ("com.volcengine.ck.nle:NLEProcessor:4.0.0-rc.1"){
-//        force = true
-//    }
-
-//    api "com.bytedance.speechengine:speechengine_tts_online_tob:1.0.2-alpha.0"
-//    kapt "com.bytedance.news.common:service-manager-processor:1.0.9"
-//    api "com.bytedance.frameworks.baselib:ttnet:4.0.27.1-rc.9-tob"
-
 }

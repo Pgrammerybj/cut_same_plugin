@@ -1,16 +1,15 @@
 package com.ola.editor.kit.player
 
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.view.SurfaceView
 import androidx.fragment.app.FragmentActivity
-import com.ola.editor.kit.interfaces.ITemplateVideoStateListener
 import com.bytedance.ies.nle.editor_jni.NLEEditorListener
 import com.bytedance.ies.nle.editor_jni.NLEModel
 import com.bytedance.ies.nle.editor_jni.NLESegmentVideo
-import com.cutsame.ui.CutSameUiIF
-import com.cutsame.ui.utils.FileUtil
+import com.ola.editor.kit.cutsame.CutSameUiIF
+import com.ola.editor.kit.cutsame.utils.FileUtil
+import com.ola.editor.kit.interfaces.ITemplateVideoStateListener
 import com.ss.ugc.android.editor.core.Constants
 import com.ss.ugc.android.editor.core.Constants.Companion.STATE_PAUSE
 import com.ss.ugc.android.editor.core.Constants.Companion.STATE_PLAY
